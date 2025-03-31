@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEC01-BP05 セキュリティ管理のスコープを縮小する</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    
+    :root {
+      --ui-color-1: #1B6C8C;
+      --ui-color-2: #BF8136;
+      --ui-color-3: #F2E8E4;
+      --ui-color-4: #260101;
+      --ui-color-5: #BF5656;
+    }
+    
+    body {
+      font-family: 'Zen Kurenaido', sans-serif;
+      background-color: #FFF8F5;
+      color: #333333;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 2000px;
+      margin: 0 auto;
+    }
+    
+    /* ヘッダースタイル */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+      padding: 20px;
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    
+    .title h1 {
+      font-size: 36px;
+      color: var(--ui-color-1);
+      margin: 15px 0;
+      line-height: 1.2;
+    }
+    
+    .date {
+      font-size: 14px;
+      color: #777777;
+    }
+    
+    /* セクションレイアウト */
+    .section-layout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+    
+    /* カードスタイル */
+    .section-card {
+      flex: 1;
+      min-width: 220px;
+      max-width: 450px;
+      background-color: white;
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInScale 0.5s ease-out;
+    }
+    
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    /* カード内アイコンコンテナ */
+    .mega-icon-container {
+      text-align: center;
+      margin: 15px 0;
+    }
+    
+    /* カードコンテンツ */
+    .card-content {
+      padding: 0 10px 15px;
+    }
+    
+    /* キーワードリスト */
+    .keyword-list {
+      margin: 15px 0;
+      padding: 0;
+      list-style-type: none;
+    }
+    
+    .keyword-list li {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .keyword-list li i {
+      margin-right: 8px;
+      color: var(--ui-color-2);
+      min-width: 16px;
+      margin-top: 4px;
+    }
+    
+    /* キーワードタグ */
+    .keyword-tag {
+      background-color: var(--ui-color-3);
+      color: var(--ui-color-4);
+      padding: 3px 8px;
+      border-radius: 5px;
+      margin-right: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    .risk-tag {
+      background-color: #FFAA33;
+      color: var(--ui-color-4);
+      padding: 3px 10px;
+      border-radius: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    /* 手書き風吹き出し */
+    .speech-bubble {
+      position: relative;
+      background: #fff;
+      border: 3px solid var(--ui-color-1);
+      border-radius: 20px;
+      padding: 10px 15px;
+      margin: 15px 5px;
+      font-family: 'Yomogi', cursive;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+      transform: rotate(-1deg);
+    }
+    
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -13px;
+      left: 20px;
+      border-width: 12px 8px 0;
+      border-style: solid;
+      border-color: var(--ui-color-1) transparent;
+      display: block;
+      width: 0;
+    }
+    
+    /* 吹き出しバリエーション */
+    .speech-bubble.right::after {
+      left: auto;
+      right: 20px;
+      transform: rotate(15deg);
+    }
+    
+    .speech-bubble.top::after {
+      bottom: auto;
+      top: -13px;
+      border-width: 0 8px 12px;
+      transform: rotate(-5deg);
+    }
+    
+    .speech-bubble.variant-1 {
+      background: #FFF9E3;
+      border-color: var(--ui-color-2);
+      transform: rotate(1deg);
+    }
+    
+    .speech-bubble.variant-1::after {
+      border-color: var(--ui-color-2) transparent;
+    }
+    
+    .speech-bubble.variant-2 {
+      background: #FFE9E9;
+      border-color: var(--ui-color-5);
+      transform: rotate(-2deg);
+    }
+    
+    .speech-bubble.variant-2::after {
+      border-color: var(--ui-color-5) transparent;
+    }
+    
+    /* 手書き文字 */
+    .handwritten {
+      font-family: 'Yomogi', cursive;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #333;
+    }
+    
+    /* サービスボックス */
+    .service-box {
+      background-color: #f0f8ff;
+      border: 1px solid #d0e5ff;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .service-icon {
+      margin-right: 10px;
+      color: var(--ui-color-1);
+      font-size: 24px;
+      min-width: 30px;
+      text-align: center;
+    }
+    
+    .service-content {
+      flex-grow: 1;
+    }
+    
+    .service-name {
+      font-weight: bold;
+      color: var(--ui-color-1);
+      margin-bottom: 5px;
+    }
+    
+    /* 実装ステップボックス */
+    .step-box {
+      border-left: 4px solid var(--ui-color-1);
+      padding-left: 12px;
+      margin: 10px 0;
+    }
+    
+    /* 比較表 */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    
+    .comparison-table th,
+    .comparison-table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .comparison-table th {
+      background-color: var(--ui-color-3);
+      font-weight: bold;
+    }
+    
+    .comparison-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    
+    /* カテゴリボックス */
+    .category-box {
+      margin: 15px 0;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      border-left: 4px solid var(--ui-color-1);
+    }
+    
+    .category-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: var(--ui-color-1);
+    }
+    
+    /* レスポンシブ対応 */
+    @media (max-width: 1600px) {
+      .section-card {
+        min-width: 280px;
+      }
+    }
+    
+    @media (max-width: 1200px) {
+      .section-card {
+        min-width: 320px;
+      }
+    }
+    
+    @media (max-width: 900px) {
+      .section-card {
+        min-width: 380px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .section-layout {
+        flex-direction: column;
+      }
+      
+      .section-card {
+        width: 100%;
+        min-width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ヘッダー -->
+    <div class="header">
+      <div class="title">
+        <i class="fa-solid fa-compress fa-7x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
+        <h1>SEC01-BP05 セキュリティ管理のスコープを縮小する</h1>
+      </div>
+      <div class="date">2025年3月29日</div>
+    </div>
+    
+    <!-- セクション1: 概要 -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-arrows-to-circle fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
+          <h2>概要</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+              <span>特定の統制の管理を AWS に移行する<span class="keyword-tag">マネージドサービス</span>を利用</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-arrow-down-wide-short" aria-hidden="true"></i>
+              <span><span class="keyword-tag">セキュリティの範囲</span>を縮小できるか判断</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-server" aria-hidden="true"></i>
+              <span><span class="keyword-tag">インフラストラクチャのプロビジョニング</span>、<span class="keyword-tag">ソフトウェアのセットアップ</span>、<span class="keyword-tag">パッチ適用</span>、<span class="keyword-tag">バックアップ</span>などの負担軽減</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-gauge-simple-high" aria-hidden="true"></i>
+              <span>セキュリティメンテナンスの<span class="keyword-tag">タスクを軽減</span></span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble">
+          <span class="handwritten">
+            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+            マネージドサービスで
+            <br>
+            自分たちの管理範囲を減らして
+            <br>
+            セキュリティの負担を軽くしよう！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション2: 期待される成果 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-check-double fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
+          <h2>期待される成果</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+              <span>ワークロードに適した AWS サービスを選ぶときに<span class="keyword-tag">セキュリティ管理の範囲</span>を考慮</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-scale-balanced" aria-hidden="true"></i>
+              <span><span class="keyword-tag">管理オーバーヘッド</span>と<span class="keyword-tag">メンテナンスタスク</span>のコスト（<span class="keyword-tag">総保有コスト（TCO）</span>）を比較検討</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-file-contract" aria-hidden="true"></i>
+              <span>統制の評価と検証の手順に<span class="keyword-tag">AWS の統制とコンプライアンスの文書</span>を組み込み</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-1 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-calculator fa-lg" style="color: var(--ui-color-2);"></i>
+            コスト比較には管理の手間も
+            <br>
+            含めて考えよう！
+            <br>
+            見えないコストも重要だよ
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション3: アンチパターン -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 3s;" aria-hidden="true"></i>
+          <h2>一般的なアンチパターン</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>選択したサービスの<span class="keyword-tag">責任共有モデル</span>をしっかりと理解しないままデプロイ</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>データベースやその他のテクノロジーを、<span class="keyword-tag">同等のマネージドサービスを評価</span>することなく仮想マシンでホスト</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>比較する際に<span class="keyword-tag">総保有コスト（TCO）</span>に<span class="keyword-tag">セキュリティ管理タスク</span>を考慮していない</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-2">
+          <span class="handwritten">
+            <i class="fa-solid fa-triangle-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+            「いつも通り」の方法が
+            <br>
+            必ずしも最適とは限らない！
+            <br>
+            マネージドサービスの可能性を探ろう
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション4: メリット -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-2); animation: fa-spin 6s linear infinite;" aria-hidden="true"></i>
+          <h2>このベストプラクティスを活用するメリット</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
+              <span>運用上の<span class="keyword-tag">セキュリティ統制</span>を管理する全体的な<span class="keyword-tag">負担を軽減</span></span>
+            </li>
+            <li>
+              <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
+              <span><span class="keyword-tag">セキュリティリスク</span>と<span class="keyword-tag">総保有コスト</span>を減少</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-business-time" aria-hidden="true"></i>
+              <span>セキュリティタスクに費やしていた時間を<span class="keyword-tag">ビジネスに付加価値</span>をもたらすタスクに使用</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-file-contract" aria-hidden="true"></i>
+              <span>一部の<span class="keyword-tag">統制要件</span>を AWS に移し、<span class="keyword-tag">コンプライアンス要件のスコープ</span>を縮小</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-thumbs-up fa-lg" style="color: var(--ui-color-2);"></i>
+            管理の負担減らして
+            <br>
+            コア業務に集中できる！
+            <br>
+            コンプライアンスも楽になるよ
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- セクション5: リスクレベル -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: #FFAA33; animation: fa-beat-fade 2s infinite;" aria-hidden="true"></i>
+          <h2>リスクレベル</h2>
+        </div>
+        
+        <div class="card-content" style="text-align: center;">
+          <p style="font-size: 24px; margin: 20px 0;">
+            <span class="risk-tag">中</span>
+          </p>
+          <p>このベストプラクティスを活用しない場合のリスクレベル</p>
+        </div>
+        
+        <div class="speech-bubble right">
+          <span class="handwritten">
+            <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-2);"></i>
+            リスクレベルは「中」！
+            <br>
+            マネージドサービス活用は
+            <br>
+            大きなメリットがあるよ
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション6: 責任共有モデル -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-handshake fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
+          <h2>責任共有モデルの理解</h2>
+        </div>
+        
+        <div class="card-content">
+          <p>マネージドサービスを活用するには、責任共有モデルにおける自社の責任範囲が狭くなることを理解することが重要です。</p>
+          
+          <div class="comparison-table">
+            <tr>
+              <th>サービスタイプ</th>
+              <th>AWS の責任</th>
+              <th>お客様の責任</th>
+            </tr>
+            <tr>
+              <td><span class="keyword-tag">EC2</span></td>
+              <td>ハードウェア、ネットワーク、基盤設備</td>
+              <td>OS、アプリケーション、データ、パッチ適用、セキュリティ設定など</td>
+            </tr>
+            <tr>
+              <td><span class="keyword-tag">RDS</span></td>
+              <td>ハードウェア、OS、データベースエンジン、バックアップ、パッチ適用</td>
+              <td>データ、アクセス管理、セキュリティグループなど</td>
+            </tr>
+            <tr>
+              <td><span class="keyword-tag">Lambda</span></td>
+              <td>ハードウェア、OS、ランタイム環境、スケーリング、パッチ適用</td>
+              <td>コード、ロジック、IAM権限など</td>
+            </tr>
+            <tr>
+              <td><span class="keyword-tag">DynamoDB</span></td>
+              <td>インフラ、データベースエンジン、スケーリング、バックアップ、パッチ適用</td>
+              <td>データ、アクセス管理、暗号化設定など</td>
+            </tr>
+          </div>
+          
+          <p style="margin-top: 15px;">サービスの種類によって責任範囲が異なり、マネージドサービスを使用することで、お客様側の責任範囲を大幅に削減できます。</p>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-handshake fa-lg" style="color: var(--ui-color-2);"></i>
+            マネージドサービスほど
+            <br>
+            AWSが担当する範囲が広がって
+            <br>
+            自分たちの負担が減るんだ！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション7: 主要なAWSマネージドサービス -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-cloud fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
+          <h2>主要なAWSマネージドサービス</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="service-box">
+            <div class="service-icon">
+              <i class="fa-solid fa-database" aria-hidden="true"></i>
+            </div>
+            <div class="service-content">
+              <div class="service-name">Amazon RDS</div>
+              <p>リレーショナルデータベースの管理を AWS に任せることで、パッチ適用、バックアップ、高可用性の設定などの負担を軽減</p>
+            </div>
+          </div>
+          
+          <div class="service-box">
+            <div class="service-icon">
+              <i class="fa-solid fa-cubes" aria-hidden="true"></i>
+            </div>
+            <div class="service-content">
+              <div class="service-name">Amazon EKS/ECS</div>
+              <p>コンテナのオーケストレーションサービスを使用して、Kubernetes や Docker クラスターの管理負荷を軽減</p>
+            </div>
+          </div>
+          
+          <div class="service-box">
+            <div class="service-icon">
+              <i class="fa-solid fa-bolt-lightning" aria-hidden="true"></i>
+            </div>
+            <div class="service-content">
+              <div class="service-name">AWS Lambda</div>
+              <p>サーバーレスコンピューティングにより、インフラストラクチャ管理の負担をゼロに</p>
+            </div>
+          </div>
+          
+          <div class="service-box">
+            <div class="service-icon">
+              <i class="fa-solid fa-table-cells" aria-hidden="true"></i>
+            </div>
+            <div class="service-content">
+              <div class="service-name">Amazon DynamoDB</div>
+              <p>フルマネージド NoSQL データベースでスケーリング、パッチ適用、バックアップなどの負担を軽減</p>
+            </div>
+          </div>
+          
+          <div class="service-box">
+            <div class="service-icon">
+              <i class="fa-solid fa-upload" aria-hidden="true"></i>
+            </div>
+            <div class="service-content">
+              <div class="service-name">Amazon S3</div>
+              <p>高い耐久性と可用性を持つストレージサービスで、スケーリングやレプリケーションを管理</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-cloud fa-lg" style="color: var(--ui-color-5);"></i>
+            同等の機能を自分で構築するよりも
+            <br>
+            マネージドサービスの方が
+            <br>
+            安全で手間いらず！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション8: 総保有コストの考慮 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-coins fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite linear;" aria-hidden="true"></i>
+          <h2>総保有コスト（TCO）の考慮</h2>
+        </div>
+        
+        <div class="card-content">
+          <p>マネージドサービスと自己管理環境を比較する際は、以下の要素を含めた総保有コスト（TCO）を評価することが重要です：</p>
+          
+          <div class="category-box">
+            <div class="category-title"><i class="fa-solid fa-money-bill" style="margin-right: 5px;"></i>直接コスト</div>
+            <ul class="keyword-list" style="margin-top: 10px;">
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">インフラストラクチャ</span>のコスト（EC2インスタンス、ストレージなど）</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">ライセンス</span>費用</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">マネージドサービス</span>料金</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="category-box">
+            <div class="category-title"><i class="fa-solid fa-person-digging" style="margin-right: 5px;"></i>運用コスト</div>
+            <ul class="keyword-list" style="margin-top: 10px;">
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">構築・設定</span>にかかる時間と労力</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">パッチ適用</span>と<span class="keyword-tag">アップデート</span>の管理</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">バックアップ</span>と<span class="keyword-tag">復旧</span>の作業</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">監視</span>と<span class="keyword-tag">トラブルシューティング</span></span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="category-box">
+            <div class="category-title"><i class="fa-solid fa-shield-halved" style="margin-right: 5px;"></i>セキュリティコスト</div>
+            <ul class="keyword-list" style="margin-top: 10px;">
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">セキュリティ設定</span>と<span class="keyword-tag">強化</span>の作業</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">脆弱性管理</span>と<span class="keyword-tag">パッチ適用</span></span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">監査</span>と<span class="keyword-tag">コンプライアンス</span>対応</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">インシデント対応</span>の体制</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+            目に見えるコストだけでなく
+            <br>
+            人件費や管理コストも含めて
+            <br>
+            総合的に判断しよう！
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- セクション9: 実装手順 -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-list-check fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
+          <h2>実装手順</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="step-box">
+            <p><strong>1. マネージドサービスで置き換え可能なコンポーネントを評価</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>ワークロードを AWS に移行する場合、<span class="keyword-tag">リホスト</span>、<span class="keyword-tag">リファクタリング</span>、<span class="keyword-tag">リプラットフォーム</span>、<span class="keyword-tag">再構築</span>、<span class="keyword-tag">交換</span>が必要かを評価</li>
+              <li>移行の開始時に<span class="keyword-tag">追加投資</span>を行うことで、長期的には大幅な節約になる可能性</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>2. マネージドサービスの導入検討</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>独自のテクノロジーデプロイをインストールして管理する代わりに、<span class="keyword-tag">Amazon RDS</span>などのマネージドサービスを導入</li>
+              <li><span class="keyword-tag">Lambda</span>や<span class="keyword-tag">DynamoDB</span>などのサーバーレスオプションの検討</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>3. AWS Artifact の活用</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li><span class="keyword-tag">AWS Artifact</span>の責任ガイダンスを参考にして、ワークロードに対して導入すべき<span class="keyword-tag">セキュリティ統制</span>を決定</li>
+              <li><span class="keyword-tag">監査アーティファクト</span>をセキュリティ統制の証拠として監査人や規制当局に提出</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>4. インベントリの管理と最新情報の入手</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>使用中のリソースの<span class="keyword-tag">インベントリ</span>を保管</li>
+              <li>新しい<span class="keyword-tag">サービス</span>や<span class="keyword-tag">アプローチ</span>に関する最新情報を入手して、スコープを縮小する新たな機会を特定</li>
+              <li><span class="keyword-tag">AWS Health</span>のようなツールで更新を追跡し管理</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2">
+          <span class="handwritten">
+            <i class="fa-solid fa-check-double fa-lg" style="color: var(--ui-color-5);"></i>
+            ステップバイステップで
+            <br>
+            マネージドサービスに移行していこう！
+            <br>
+            長期的な視点が大切だよ
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション10: コンプライアンス考慮事項 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-file-contract fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
+          <h2>コンプライアンス考慮事項</h2>
+        </div>
+        
+        <div class="card-content">
+          <p>マネージドサービスを使用すると、コンプライアンス要件への対応も効率化できます。</p>
+          
+          <div class="category-box">
+            <div class="category-title"><i class="fa-solid fa-folder-open" style="margin-right: 5px;"></i>AWS Artifactの活用</div>
+            <ul class="keyword-list" style="margin-top: 10px;">
+              <li>
+                <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
+                <span><span class="keyword-tag">監査報告書</span>（SOC 1/2/3、PCI DSS、ISO 27001など）の入手</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                <span><span class="keyword-tag">責任ガイダンス</span>によるAWSと顧客の責任範囲の理解</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                <span>マネージドサービスによって実装される<span class="keyword-tag">AWSセキュリティ統制</span>の証拠として利用</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="category-box">
+            <div class="category-title"><i class="fa-solid fa-book" style="margin-right: 5px;"></i>AWS Customer Compliance Guides</div>
+            <ul class="keyword-list" style="margin-top: 10px;">
+              <li>
+                <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+                <span>各種コンプライアンスフレームワークに対応するための<span class="keyword-tag">ガイダンス</span></span>
+              </li>
+              <li>
+                <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+                <span>システムの特定のユースケースをサポートするために<span class="keyword-tag">導入すべき追加のセキュリティ統制</span>を決定</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="category-box">
+            <div class="category-title"><i class="fa-solid fa-people-group" style="margin-right: 5px;"></i>コンプライアンスチームとの協力</div>
+            <ul class="keyword-list" style="margin-top: 10px;">
+              <li>
+                <i class="fa-solid fa-comments" aria-hidden="true"></i>
+                <span>サービスの自社で運用管理する側面の<span class="keyword-tag">監査の容易さ</span>について議論</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check-to-slot" aria-hidden="true"></i>
+                <span>関連する AWS 監査報告書の<span class="keyword-tag">統制に関するステートメント</span>の受け入れを確認</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-file-circle-check fa-lg" style="color: var(--ui-color-2);"></i>
+            コンプライアンス対応も
+            <br>
+            マネージドサービスで
+            <br>
+            大幅に楽になるよ！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション11: マネージドサービスの更新管理 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-arrows-rotate fa-5x" style="color: var(--ui-color-1); animation: fa-spin 4s linear infinite;" aria-hidden="true"></i>
+          <h2>マネージドサービスの更新管理</h2>
+        </div>
+        
+        <div class="card-content">
+          <p>マネージドサービスを使用する場合でも、更新の管理と運用への影響理解は重要です。</p>
+          
+          <div class="category-box">
+            <div class="category-title"><i class="fa-solid fa-code-branch" style="margin-right: 5px;"></i>更新のタイプ</div>
+            <ul class="keyword-list" style="margin-top: 10px;">
+              <li>
+                <i class="fa-solid fa-database" aria-hidden="true"></i>
+                <span><span class="keyword-tag">Amazon RDS</span>で管理されるデータベースのバージョン更新</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-code" aria-hidden="true"></i>
+                <span><span class="keyword-tag">AWS Lambda</span>関数の<span class="keyword-tag">プログラミング言語ランタイム</span>の更新</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-shield-virus" aria-hidden="true"></i>
+                <span>各種マネージドサービスの<span class="keyword-tag">セキュリティパッチ</span></span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="category-box">
+            <div class="category-title"><i class="fa-solid fa-gears" style="margin-right: 5px;"></i>管理のベストプラクティス</div>
+            <ul class="keyword-list" style="margin-top: 10px;">
+              <li>
+                <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
+                <span>更新のタイミングを<span class="keyword-tag">設定・計画</span></span>
+              </li>
+              <li>
+                <i class="fa-solid fa-chart-simple" aria-hidden="true"></i>
+                <span>運用への<span class="keyword-tag">影響を理解</span>して対策を準備</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-stethoscope" aria-hidden="true"></i>
+                <span><span class="keyword-tag">AWS Health</span>などのツールで更新を追跡・管理</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-flask" aria-hidden="true"></i>
+                <span>更新前に<span class="keyword-tag">テスト環境</span>で検証</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2">
+          <span class="handwritten">
+            <i class="fa-solid fa-clock-rotate-left fa-lg" style="color: var(--ui-color-5);"></i>
+            マネージドサービスでも
+            <br>
+            更新のタイミングと影響は
+            <br>
+            把握しておくことが大切！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション12: まとめ -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-check-circle fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
+          <h2>まとめと効果</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-arrows-to-circle" aria-hidden="true"></i>
+              <span><span class="keyword-tag">スコープ縮小</span>: マネージドサービスで管理範囲を削減</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+              <span><span class="keyword-tag">責任移行</span>: 特定の統制の管理をAWSに委託</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-gauge-simple-high" aria-hidden="true"></i>
+              <span><span class="keyword-tag">効率化</span>: セキュリティメンテナンスタスクの負担軽減</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-coins" aria-hidden="true"></i>
+              <span><span class="keyword-tag">コスト削減</span>: セキュリティ管理タスクを含めたTCOの最適化</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-file-contract" aria-hidden="true"></i>
+              <span><span class="keyword-tag">コンプライアンス</span>: 要件への対応の効率化と簡素化</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-business-time" aria-hidden="true"></i>
+              <span><span class="keyword-tag">価値創出</span>: セキュリティから戦略的タスクへのリソースシフト</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-2);"></i>
+            マネージドサービスで
+            <br>
+            セキュリティの負担を軽減して
+            <br>
+            本業にフォーカスしよう！
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

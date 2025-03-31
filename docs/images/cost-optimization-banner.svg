@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400">
+  <!-- 背景 -->
+  <rect width="1000" height="400" fill="#232F3E" />
+  
+  <!-- 装飾的な要素 - 左側 -->
+  <rect x="0" y="0" width="20" height="400" fill="#FF9900" />
+  
+  <!-- 中央のグラフィック要素 -->
+  <g transform="translate(500, 200)">
+    <!-- コストの円形 -->
+    <circle cx="0" cy="0" r="90" fill="#FF9900" opacity="0.2" />
+    <circle cx="0" cy="0" r="80" fill="#232F3E" stroke="#FF9900" stroke-width="3" />
+    
+    <!-- コイン/通貨記号 -->
+    <g transform="translate(-40, -20)">
+      <circle cx="0" cy="0" r="30" fill="#FFD700" />
+      <text x="0" y="10" font-family="Arial, sans-serif" font-size="40" font-weight="bold" fill="#232F3E" text-anchor="middle">$</text>
+    </g>
+    
+    <!-- 節約/コスト削減を表す下向き矢印 -->
+    <g transform="translate(40, -20)">
+      <circle cx="0" cy="0" r="30" fill="#4CAF50" />
+      <path d="M0,-15 L15,0 L5,0 L5,15 L-5,15 L-5,0 L-15,0 Z" fill="white" transform="rotate(180)" />
+    </g>
+    
+    <!-- コスト分析グラフ -->
+    <g transform="translate(0, 40)">
+      <rect x="-60" y="-10" width="20" height="50" fill="#1DA1F2" />
+      <rect x="-30" y="-20" width="20" height="60" fill="#1DA1F2" />
+      <rect x="0" y="-5" width="20" height="45" fill="#4CAF50" />
+      <rect x="30" y="-25" width="20" height="65" fill="#4CAF50" />
+      <path d="M-50,50 L-50,60 L50,60 L50,50" stroke="#FFFFFF" stroke-width="1" />
+      <line x1="-70" y1="40" x2="70" y2="40" stroke="#FFFFFF" stroke-width="1" stroke-dasharray="2,2" />
+    </g>
+  </g>
+  
+  <!-- タイトルテキスト -->
+  <text x="500" y="50" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="white" text-anchor="middle">AWS Well-Architected</text>
+  <text x="500" y="90" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#FF9900" text-anchor="middle">コスト最適化</text>
+  
+  <!-- 説明テキスト -->
+  <text x="500" y="320" font-family="Arial, sans-serif" font-size="18" fill="white" text-anchor="middle">最小コストで最大のビジネス価値を実現</text>
+  <text x="500" y="350" font-family="Arial, sans-serif" font-size="16" fill="#CCCCCC" text-anchor="middle">無駄の排除、需要と供給のバランス、コスト分析</text>
+  
+</svg>

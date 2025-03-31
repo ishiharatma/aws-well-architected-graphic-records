@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>標準的なセキュリティ統制のデプロイを自動化する</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    
+    :root {
+      --ui-color-1: #1B6C8C;
+      --ui-color-2: #BF8136;
+      --ui-color-3: #F2E8E4;
+      --ui-color-4: #260101;
+      --ui-color-5: #BF5656;
+    }
+    
+    body {
+      font-family: 'Zen Kurenaido', sans-serif;
+      background-color: #FFF8F5;
+      color: #333333;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 2000px;
+      margin: 0 auto;
+    }
+    
+    /* ヘッダースタイル */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+      padding: 20px;
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    
+    .title h1 {
+      font-size: 36px;
+      color: var(--ui-color-1);
+      margin: 15px 0;
+      line-height: 1.2;
+    }
+    
+    .date {
+      font-size: 14px;
+      color: #777777;
+    }
+    
+    /* セクションレイアウト */
+    .section-layout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+    
+    /* カードスタイル */
+    .section-card {
+      flex: 1;
+      min-width: 220px;
+      max-width: 450px;
+      background-color: white;
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInScale 0.5s ease-out;
+    }
+    
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    /* カード内アイコンコンテナ */
+    .mega-icon-container {
+      text-align: center;
+      margin: 15px 0;
+    }
+    
+    /* カードコンテンツ */
+    .card-content {
+      padding: 0 10px 15px;
+    }
+    
+    /* キーワードリスト */
+    .keyword-list {
+      margin: 15px 0;
+      padding: 0;
+      list-style-type: none;
+    }
+    
+    .keyword-list li {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .keyword-list li i {
+      margin-right: 8px;
+      color: var(--ui-color-2);
+      min-width: 16px;
+      margin-top: 4px;
+    }
+    
+    /* キーワードタグ */
+    .keyword-tag {
+      background-color: var(--ui-color-3);
+      color: var(--ui-color-4);
+      padding: 3px 8px;
+      border-radius: 5px;
+      margin-right: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    .risk-tag {
+      background-color: #FFAA33;
+      color: var(--ui-color-4);
+      padding: 3px 10px;
+      border-radius: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    /* 手書き風吹き出し */
+    .speech-bubble {
+      position: relative;
+      background: #fff;
+      border: 3px solid var(--ui-color-1);
+      border-radius: 20px;
+      padding: 10px 15px;
+      margin: 15px 5px;
+      font-family: 'Yomogi', cursive;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+      transform: rotate(-1deg);
+    }
+    
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -13px;
+      left: 20px;
+      border-width: 12px 8px 0;
+      border-style: solid;
+      border-color: var(--ui-color-1) transparent;
+      display: block;
+      width: 0;
+    }
+    
+    /* 吹き出しバリエーション */
+    .speech-bubble.right::after {
+      left: auto;
+      right: 20px;
+      transform: rotate(15deg);
+    }
+    
+    .speech-bubble.top::after {
+      bottom: auto;
+      top: -13px;
+      border-width: 0 8px 12px;
+      transform: rotate(-5deg);
+    }
+    
+    .speech-bubble.variant-1 {
+      background: #FFF9E3;
+      border-color: var(--ui-color-2);
+      transform: rotate(1deg);
+    }
+    
+    .speech-bubble.variant-1::after {
+      border-color: var(--ui-color-2) transparent;
+    }
+    
+    .speech-bubble.variant-2 {
+      background: #FFE9E9;
+      border-color: var(--ui-color-5);
+      transform: rotate(-2deg);
+    }
+    
+    .speech-bubble.variant-2::after {
+      border-color: var(--ui-color-5) transparent;
+    }
+    
+    /* 手書き文字 */
+    .handwritten {
+      font-family: 'Yomogi', cursive;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #333;
+    }
+    
+    /* コードプレビュー */
+    pre {
+      background: #f5f5f5;
+      padding: 8px;
+      border-radius: 5px;
+      font-size: 12px;
+      margin-top: 10px;
+      overflow-x: auto;
+    }
+    
+    /* 実装ステップボックス */
+    .step-box {
+      border-left: 4px solid var(--ui-color-1);
+      padding-left: 12px;
+      margin: 10px 0;
+    }
+    
+    /* 比較表 */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    
+    .comparison-table th,
+    .comparison-table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .comparison-table th {
+      background-color: var(--ui-color-3);
+      font-weight: bold;
+    }
+    
+    .comparison-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    
+    /* デプロイモデル図 */
+    .deployment-model {
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+    
+    .deployment-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+      color: var(--ui-color-1);
+    }
+    
+    .deployment-image {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    
+    .aws-service-box {
+      background-color: #f0f9ff;
+      border: 1px solid #d0e3f2;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .aws-service-icon {
+      margin-right: 10px;
+      color: var(--ui-color-1);
+      font-size: 24px;
+    }
+    
+    .aws-service-content {
+      flex-grow: 1;
+    }
+    
+    .aws-service-name {
+      font-weight: bold;
+      color: var(--ui-color-1);
+      margin-bottom: 5px;
+    }
+    
+    /* レスポンシブ対応 */
+    @media (max-width: 1600px) {
+      .section-card {
+        min-width: 280px;
+      }
+    }
+    
+    @media (max-width: 1200px) {
+      .section-card {
+        min-width: 320px;
+      }
+    }
+    
+    @media (max-width: 900px) {
+      .section-card {
+        min-width: 380px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .section-layout {
+        flex-direction: column;
+      }
+      
+      .section-card {
+        width: 100%;
+        min-width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ヘッダー -->
+    <div class="header">
+      <div class="title">
+        <i class="fa-solid fa-gears fa-7x" style="color: var(--ui-color-1); animation: fa-spin 10s linear infinite;" aria-hidden="true"></i>
+        <h1>SEC01-BP06 標準的なセキュリティ統制のデプロイを自動化する</h1>
+      </div>
+      <div class="date">2025年3月29日</div>
+    </div>
+    
+    <!-- セクション1: 概要 -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-rocket fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
+          <h2>概要</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-code-branch" aria-hidden="true"></i>
+              <span>あらゆるAWS環境で<span class="keyword-tag">最新のDevOps</span>プラクティスを適用</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-file-code" aria-hidden="true"></i>
+              <span>標準的なセキュリティ統制と構成を<span class="keyword-tag">IaC</span>テンプレートに定義</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-code-commit" aria-hidden="true"></i>
+              <span><span class="keyword-tag">バージョン管理システム</span>で変更を取り込み</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-vial" aria-hidden="true"></i>
+              <span><span class="keyword-tag">CI/CDパイプライン</span>の一環として変更をテスト</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+              <span>AWS環境への変更の<span class="keyword-tag">デプロイを自動化</span></span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble">
+          <span class="handwritten">
+            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+            セキュリティも「コード」として
+            <br>
+            管理・テスト・デプロイすることで
+            <br>
+            効率的で一貫性のある運用ができるよ！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション2: 期待される成果 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-check-double fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
+          <h2>期待される成果</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-file-code" aria-hidden="true"></i>
+              <span><span class="keyword-tag">IaCテンプレート</span>で標準化されたセキュリティ統制が定義・管理される</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+              <span>変更を検出し、<span class="keyword-tag">テストとデプロイを自動化</span>するCI/CDパイプラインが整備される</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+              <span><span class="keyword-tag">ガードレール</span>が効き、設定ミスをデプロイ前に検出・警告</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-server" aria-hidden="true"></i>
+              <span>標準の統制が効いている環境に<span class="keyword-tag">ワークロードがデプロイ</span>される</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-users-gear" aria-hidden="true"></i>
+              <span>チームには<span class="keyword-tag">セルフサービスメカニズム</span>を通じてデプロイする権限が与えられる</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-database" aria-hidden="true"></i>
+              <span>統制の構成、スクリプト、関連データに対して、<span class="keyword-tag">安全なバックアップと復旧</span>の戦略が実施</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-1 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-hand-peace fa-lg" style="color: var(--ui-color-2);"></i>
+            ガードレールがあれば
+            <br>
+            「やらかし」を未然に防止！
+            <br>
+            チームも安心してセルフサービスできるね
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション3: アンチパターン -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 3s;" aria-hidden="true"></i>
+          <h2>一般的なアンチパターン</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>標準のセキュリティ統制に対する変更を<span class="keyword-tag">手作業</span>で行っている</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>中央のチームが定義した統制の実装は<span class="keyword-tag">個々のワークロードチームによる手作業</span>に頼っている</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>ワークロードレベルの統制をデプロイするのは<span class="keyword-tag">中央のセキュリティチーム</span>に一任されている</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>セキュリティ統制の自動化スクリプトの開発、テスト、デプロイを<span class="keyword-tag">同じ個人またはチーム</span>が担当でき、<span class="keyword-tag">職務分離</span>やチェックアンドバランスが適切に機能していない</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-2">
+          <span class="handwritten">
+            <i class="fa-solid fa-triangle-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+            手作業は人間ミスの温床！
+            <br>
+            「中央チームだけ」も「各チーム任せ」も
+            <br>
+            どっちもダメなんだよね
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション4: メリット -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-2); animation: fa-spin 6s linear infinite;" aria-hidden="true"></i>
+          <h2>このベストプラクティスを活用するメリット</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-timeline" aria-hidden="true"></i>
+              <span>バージョン管理システムで変化を<span class="keyword-tag">経時的に追跡</span>し、比較できる</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-gauge-high" aria-hidden="true"></i>
+              <span>変更のテストとデプロイを自動化することで<span class="keyword-tag">プロセスが標準化</span>され、<span class="keyword-tag">予測可能性</span>が高まる</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+              <span><span class="keyword-tag">デプロイの成功率</span>が上がる</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-user-clock" aria-hidden="true"></i>
+              <span><span class="keyword-tag">繰り返しの手作業</span>を省くことができる</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-shield-virus" aria-hidden="true"></i>
+              <span>承認済みのサービスと構成をワークロードチームがデプロイできるため<span class="keyword-tag">構成ミスや誤用のリスク</span>が軽減</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-code-merge" aria-hidden="true"></i>
+              <span>開発プロセスの<span class="keyword-tag">早い段階</span>で統制を組み込むことができる</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-thumbs-up fa-lg" style="color: var(--ui-color-2);"></i>
+            「左シフト」で開発初期から
+            <br>
+            セキュリティを組み込める！
+            <br>
+            後から直すより断然効率的
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- セクション5: リスクレベル -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: #FFAA33; animation: fa-beat-fade 2s infinite;" aria-hidden="true"></i>
+          <h2>リスクレベル</h2>
+        </div>
+        
+        <div class="card-content" style="text-align: center;">
+          <p style="font-size: 24px; margin: 20px 0;">
+            <span class="risk-tag">中</span>
+          </p>
+          <p>このベストプラクティスを活用しない場合のリスクレベル</p>
+        </div>
+        
+        <div class="speech-bubble right">
+          <span class="handwritten">
+            <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-2);"></i>
+            リスクは「中」レベルだけど
+            <br>
+            長期的に見ると大きな負担に
+            <br>
+            なっていくよ！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション6: IaCとDevOpsのメリット -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-puzzle-piece fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite linear;" aria-hidden="true"></i>
+          <h2>IaCとDevOpsのセキュリティへの応用</h2>
+        </div>
+        
+        <div class="card-content">
+          <table class="comparison-table">
+            <tr>
+              <th>従来の方法</th>
+              <th>IaC/DevOpsを活用した方法</th>
+            </tr>
+            <tr>
+              <td>手作業でのセキュリティ設定</td>
+              <td>コードとしてバージョン管理された設定</td>
+            </tr>
+            <tr>
+              <td>一貫性の欠如とヒューマンエラー</td>
+              <td>自動化による一貫性の確保</td>
+            </tr>
+            <tr>
+              <td>変更の記録が不十分</td>
+              <td>全ての変更が追跡可能</td>
+            </tr>
+            <tr>
+              <td>環境間の差異</td>
+              <td>全環境で同一の構成を保証</td>
+            </tr>
+            <tr>
+              <td>テスト不足</td>
+              <td>自動テストによる品質保証</td>
+            </tr>
+            <tr>
+              <td>セキュリティチームへの依存</td>
+              <td>セルフサービスの実現</td>
+            </tr>
+          </table>
+          
+          <div style="margin-top: 20px;">
+            <strong>主要なIaCツールとサービス:</strong>
+            <ul class="keyword-list" style="margin-top: 10px;">
+              <li>
+                <i class="fa-solid fa-cubes" aria-hidden="true"></i>
+                <span><span class="keyword-tag">AWS CloudFormation</span>: AWSリソースのプロビジョニング</span>
+              </li>
+              <li>
+                <i class="fa-brands fa-terraform" aria-hidden="true"></i>
+                <span><span class="keyword-tag">Terraform</span>: マルチクラウド対応のIaCツール</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                <span><span class="keyword-tag">AWS CloudFormation Guard</span>: テンプレートの検証</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-puzzle-piece fa-lg" style="color: var(--ui-color-2);"></i>
+            アプリケーションだけじゃなく
+            <br>
+            セキュリティもコードとして扱うことで
+            <br>
+            再現性と品質が飛躍的に向上！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション7: 自動化デプロイモデル -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-diagram-project fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
+          <h2>セキュリティ統制の自動化デプロイモデル</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="deployment-model">
+            <div class="deployment-title"><i class="fa-solid fa-code-branch" style="margin-right: 5px;"></i>CI/CDパイプラインモデル</div>
+            <div class="deployment-image">
+              <img src="/api/placeholder/400/150" alt="セキュリティCI/CDパイプライン" />
+            </div>
+            <ul class="keyword-list" style="margin-top: 10px;">
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">開発</span>: IaCテンプレートの作成・更新</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">コミット</span>: バージョン管理システムへの保存</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">テスト</span>: 自動検証・セキュリティチェック</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">承認</span>: 必要に応じた手動レビュー</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">デプロイ</span>: 自動適用とフィードバック</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="deployment-model">
+            <div class="deployment-title"><i class="fa-solid fa-store" style="margin-right: 5px;"></i>セルフサービスカタログモデル</div>
+            <div class="deployment-image">
+              <img src="/api/placeholder/400/150" alt="セルフサービスカタログモデル" />
+            </div>
+            <ul class="keyword-list" style="margin-top: 10px;">
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span>セキュリティチームが<span class="keyword-tag">標準テンプレート</span>を作成・管理</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span>テンプレートは<span class="keyword-tag">カタログ化</span>され、ワークロードチームが利用可能</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span>ワークロードチームは<span class="keyword-tag">製品として</span>カタログから選択</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span>選択されたテンプレートは<span class="keyword-tag">自動でデプロイ</span></span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="deployment-model">
+            <div class="deployment-title"><i class="fa-solid fa-robot" style="margin-right: 5px;"></i>コンプライアンス自動修復モデル</div>
+            <div class="deployment-image">
+              <img src="/api/placeholder/400/150" alt="コンプライアンス自動修復モデル" />
+            </div>
+            <ul class="keyword-list" style="margin-top: 10px;">
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">継続的なモニタリング</span>で統制の逸脱を検知</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span>検知時に<span class="keyword-tag">自動修復</span>アクションを実行</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span>修復はIaCテンプレートに<span class="keyword-tag">準拠</span>して実施</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span>修復の<span class="keyword-tag">ログと通知</span>を記録</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-5);"></i>
+            3つのモデルを組み合わせれば
+            <br>
+            「作成・提供・監視・修復」の
+            <br>
+            セキュリティライフサイクルが完成！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション8: 実装のガイダンス -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-compass fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
+          <h2>実装のガイダンス</h2>
+        </div>
+        
+        <div class="card-content">
+          <p>「<span class="keyword-tag">SEC01-BP01 アカウントを使用してワークロードを分ける</span>」に従うと、複数のAWSアカウントを管理することになります。一部のセキュリティ統制は標準化して組織全体に適用できます。</p>
+          
+          <div class="aws-service-box">
+            <div class="aws-service-icon">
+              <i class="fa-solid fa-cubes" aria-hidden="true"></i>
+            </div>
+            <div class="aws-service-content">
+              <div class="aws-service-name">AWS CloudFormation</div>
+              <p>AWSリソースのプロビジョニングを自動化し、インフラをコードとして管理。セキュリティ構成も含めてテンプレート化。</p>
+            </div>
+          </div>
+          
+          <div class="aws-service-box">
+            <div class="aws-service-icon">
+              <i class="fa-solid fa-code-merge" aria-hidden="true"></i>
+            </div>
+            <div class="aws-service-content">
+              <div class="aws-service-name">AWS CodePipeline</div>
+              <p>継続的インテグレーション・デリバリーサービス。セキュリティ統制の変更を自動的にテスト・デプロイ。</p>
+            </div>
+          </div>
+          
+          <div class="aws-service-box">
+            <div class="aws-service-icon">
+              <i class="fa-solid fa-vial" aria-hidden="true"></i>
+            </div>
+            <div class="aws-service-content">
+              <div class="aws-service-name">AWS CodeBuild</div>
+              <p>マネージドビルドサービス。セキュリティテンプレートの検証とテストを自動化。</p>
+            </div>
+          </div>
+          
+          <div class="aws-service-box">
+            <div class="aws-service-icon">
+              <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+            </div>
+            <div class="aws-service-content">
+              <div class="aws-service-name">AWS CodeDeploy</div>
+              <p>自動デプロイサービス。検証済みのセキュリティ統制を環境に適用。</p>
+            </div>
+          </div>
+          
+          <div class="aws-service-box">
+            <div class="aws-service-icon">
+              <i class="fa-solid fa-store" aria-hidden="true"></i>
+            </div>
+            <div class="aws-service-content">
+              <div class="aws-service-name">AWS Service Catalog</div>
+              <p>承認済みのITサービスカタログを作成・管理。セキュリティ統制がコンプライアンスに準拠したテンプレートをセルフサービスで提供。</p>
+            </div>
+          </div>
+          
+          <div class="aws-service-box">
+            <div class="aws-service-icon">
+              <i class="fa-solid fa-tower-observation" aria-hidden="true"></i>
+            </div>
+            <div class="aws-service-content">
+              <div class="aws-service-name">AWS Control Tower</div>
+              <p>複数アカウント環境のセットアップと管理。Account Factoryで標準化されたアカウントを提供。</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-wand-magic-sparkles fa-lg" style="color: var(--ui-color-2);"></i>
+            AWSのマネージドサービスを活用すれば
+            <br>
+            セキュリティ統制の自動化が
+            <br>
+            驚くほど簡単に実現できるよ！
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- セクション9: 実装手順 -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-list-check fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
+          <h2>実装手順</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="step-box">
+            <p><strong>1. テンプレートをバージョン管理システムに保存し、管理する方法を決定</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>適切な<span class="keyword-tag">バージョン管理システム</span>（GitHubなど）を選択</li>
+              <li><span class="keyword-tag">ブランチ戦略</span>とマージプロセスを定義</li>
+              <li>変更の<span class="keyword-tag">承認プロセス</span>を確立</li>
+              <li>テンプレート<span class="keyword-tag">リポジトリの構造</span>を設計</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>2. テンプレートをテストおよびデプロイするCI/CDパイプラインを作成</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li><span class="keyword-tag">AWS CodePipeline</span>など適切なツールを選択</li>
+              <li>テンプレートの<span class="keyword-tag">構文検証</span>を実装</li>
+              <li>セキュリティの<span class="keyword-tag">ポリシー準拠</span>チェックを追加</li>
+              <li>会社の<span class="keyword-tag">標準への準拠</span>を確認するテストを定義</li>
+              <li>テスト環境への<span class="keyword-tag">自動デプロイ</span>を設定</li>
+              <li>本番環境への<span class="keyword-tag">承認プロセス</span>を組み込む</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>3. 標準化されたテンプレートのカタログを作成</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li><span class="keyword-tag">AWS Service Catalog</span>を構成</li>
+              <li>必要な<span class="keyword-tag">製品ポートフォリオ</span>を作成</li>
+              <li>標準化された<span class="keyword-tag">セキュリティテンプレート</span>をカタログに追加</li>
+              <li>適切な<span class="keyword-tag">アクセス許可</span>を設定</li>
+              <li>テンプレートの<span class="keyword-tag">更新プロセス</span>を確立</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>4. 安全なバックアップと復旧の戦略を実装</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>テンプレートとスクリプトの<span class="keyword-tag">バックアップ方法</span>を確立</li>
+              <li>構成データの<span class="keyword-tag">暗号化</span>を確保</li>
+              <li>バックアップの<span class="keyword-tag">定期的なテスト</span>を実施</li>
+              <li><span class="keyword-tag">災害復旧</span>計画にセキュリティ統制の復元手順を含める</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-check-double fa-lg" style="color: var(--ui-color-5);"></i>
+            順序が大事！まずバージョン管理から
+            <br>
+            そしてCI/CD、カタログ作成と進めて
+            <br>
+            最後に災害対策も忘れずに
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション10: サポートサービス -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-cloud fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
+          <h2>サポートAWSサービスの活用</h2>
+        </div>
+        
+        <div class="card-content">
+          <div style="margin: 15px 0; padding: 15px; background-color: #f9f9f9; border-radius: 10px; border-left: 4px solid var(--ui-color-1);">
+            <div style="font-weight: bold; margin-bottom: 10px; color: var(--ui-color-1);">
+              <i class="fa-solid fa-shield-halved" style="margin-right: 5px;"></i>セキュリティ統制の自動化をサポートするサービス
+            </div>
+            <ul style="margin: 0; padding-left: 20px; list-style-type: disc;">
+              <li><span class="keyword-tag">AWS Config</span>: リソース構成の評価と修復</li>
+              <li><span class="keyword-tag">AWS Security Hub</span>: 統合セキュリティ・コンプライアンスチェック</li>
+              <li><span class="keyword-tag">Amazon EventBridge</span>: イベント駆動型の自動セキュリティ対応</li>
+              <li><span class="keyword-tag">AWS Lambda</span>: 自動修復機能の実装</li>
+              <li><span class="keyword-tag">AWS Systems Manager</span>: 自動化および構成管理</li>
+              <li><span class="keyword-tag">AWS Backup</span>: 統合バックアップサービス</li>
+            </ul>
+          </div>
+          
+          <div style="margin: 15px 0; padding: 15px; background-color: #fff9e6; border-radius: 10px; border-left: 4px solid var(--ui-color-2);">
+            <div style="font-weight: bold; margin-bottom: 10px; color: var(--ui-color-2);">
+              <i class="fa-solid fa-tools" style="margin-right: 5px;"></i>便利なサードパーティツール
+            </div>
+            <ul style="margin: 0; padding-left: 20px; list-style-type: disc;">
+              <li><span class="keyword-tag">cfn-lint</span>: CloudFormationテンプレートの検証</li>
+              <li><span class="keyword-tag">cfn-nag</span>: セキュリティ問題のスキャン</li>
+              <li><span class="keyword-tag">cdk-nag</span>: CDKコードのセキュリティ検証</li>
+              <li><span class="keyword-tag">Checkov</span>: IaCセキュリティスキャンツール</li>
+              <li><span class="keyword-tag">tfsec</span>: Terraformセキュリティスキャナー</li>
+            </ul>
+          </div>
+          
+          <div style="margin: 15px 0; padding: 15px; background-color: #edf7ed; border-radius: 10px; border-left: 4px solid #4CAF50;">
+            <div style="font-weight: bold; margin-bottom: 10px; color: #4CAF50;">
+              <i class="fa-solid fa-graduation-cap" style="margin-right: 5px;"></i>組織の成熟度向上のヒント
+            </div>
+            <ul style="margin: 0; padding-left: 20px; list-style-type: disc;">
+              <li><span class="keyword-tag">段階的アプローチ</span>: 基本から始めて徐々に複雑化</li>
+              <li><span class="keyword-tag">セキュリティチャンピオン</span>: 各チームに専任担当者を配置</li>
+              <li><span class="keyword-tag">フィードバックループ</span>: 継続的な改善プロセスを確立</li>
+              <li><span class="keyword-tag">知識共有</span>: ベストプラクティスのドキュメント化と共有</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-2);"></i>
+            サポートサービスを上手く組み合わせれば
+            <br>
+            セキュリティの自動化がどんどん進むよ！
+            <br>
+            サードパーティツールも積極活用しよう
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション11: まとめと効果 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-check-circle fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
+          <h2>まとめと効果</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-code" aria-hidden="true"></i>
+              <span><span class="keyword-tag">コード化</span>: セキュリティ統制をコードとして管理</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-robot" aria-hidden="true"></i>
+              <span><span class="keyword-tag">自動化</span>: 手作業を排除し効率と一貫性を向上</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>
+              <span><span class="keyword-tag">可視性</span>: 変更履歴と監査証跡の明確化</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-gauge-high" aria-hidden="true"></i>
+              <span><span class="keyword-tag">スピード</span>: セキュリティ統制の迅速な展開</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-scale-balanced" aria-hidden="true"></i>
+              <span><span class="keyword-tag">バランス</span>: セキュリティとビジネス速度の両立</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-users-gear" aria-hidden="true"></i>
+              <span><span class="keyword-tag">権限委譲</span>: チームの自律性とセルフサービス</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i>
+              <span><span class="keyword-tag">スケーラビリティ</span>: 組織の成長に合わせた拡張性</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-2">
+          <span class="handwritten">
+            <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+            セキュリティとDevOpsの融合で
+            <br>
+            「速く・安全に・継続的に」
+            <br>
+            クラウド環境を守っていこう！
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

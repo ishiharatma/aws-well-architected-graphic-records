@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400">
+  <!-- 背景 -->
+  <rect width="1000" height="400" fill="#232F3E" />
+  
+  <!-- 装飾的な要素 - 左側 -->
+  <rect x="0" y="0" width="20" height="400" fill="#FF9900" />
+  
+  <!-- 中央のグラフィック要素 -->
+  <g transform="translate(500, 200)">
+    <!-- 信頼性の輪 -->
+    <circle cx="0" cy="0" r="90" fill="#FF9900" opacity="0.2" />
+    <circle cx="0" cy="0" r="80" fill="#232F3E" stroke="#FF9900" stroke-width="3" stroke-dasharray="0" />
+    
+    <!-- 高可用性を示す複数のサーバーアイコン -->
+    <g transform="translate(-50, -10)">
+      <rect x="-25" y="-30" width="50" height="60" rx="5" fill="#232F3E" stroke="#FFFFFF" stroke-width="2" />
+      <line x1="-15" y1="-20" x2="15" y2="-20" stroke="#FFFFFF" stroke-width="2" />
+      <line x1="-15" y1="-10" x2="5" y2="-10" stroke="#FFFFFF" stroke-width="2" />
+      <line x1="-15" y1="0" x2="15" y2="0" stroke="#FFFFFF" stroke-width="2" />
+      <line x1="-15" y1="10" x2="5" y2="10" stroke="#FFFFFF" stroke-width="2" />
+    </g>
+    
+    <g transform="translate(50, -10)">
+      <rect x="-25" y="-30" width="50" height="60" rx="5" fill="#232F3E" stroke="#FFFFFF" stroke-width="2" />
+      <line x1="-15" y1="-20" x2="15" y2="-20" stroke="#FFFFFF" stroke-width="2" />
+      <line x1="-15" y1="-10" x2="5" y2="-10" stroke="#FFFFFF" stroke-width="2" />
+      <line x1="-15" y1="0" x2="15" y2="0" stroke="#FFFFFF" stroke-width="2" />
+      <line x1="-15" y1="10" x2="5" y2="10" stroke="#FFFFFF" stroke-width="2" />
+    </g>
+    
+    <!-- 接続線 -->
+    <path d="M-30,-10 C-20,-35 20,-35 30,-10" stroke="#1DA1F2" stroke-width="2" fill="none" />
+    <path d="M-30,-5 C-20,20 20,20 30,-5" stroke="#1DA1F2" stroke-width="2" fill="none" />
+    
+    <!-- アップタイムを示す上向き矢印 -->
+    <path d="M0,-80 L15,-65 L5,-65 L5,-40 L-5,-40 L-5,-65 L-15,-65 Z" fill="#4CAF50" />
+    
+    <!-- 障害復旧を示す要素 -->
+    <g transform="translate(0, 50)">
+      <path d="M-30,0 C-20,-10 -10,10 0,0 C10,-10 20,10 30,0" stroke="#FF9900" stroke-width="3" fill="none" />
+      <polygon points="30,0 20,-5 20,5" fill="#FF9900" />
+    </g>
+  </g>
+  
+  <!-- タイトルテキスト -->
+  <text x="500" y="50" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="white" text-anchor="middle">AWS Well-Architected</text>
+  <text x="500" y="90" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#FF9900" text-anchor="middle">信頼性</text>
+  
+  <!-- 説明テキスト -->
+  <text x="500" y="320" font-family="Arial, sans-serif" font-size="18" fill="white" text-anchor="middle">ビジネスニーズに応じた回復力と可用性の確保</text>
+  <text x="500" y="350" font-family="Arial, sans-serif" font-size="16" fill="#CCCCCC" text-anchor="middle">障害復旧、自動スケーリング、分散システム設計</text>
+  
+</svg>

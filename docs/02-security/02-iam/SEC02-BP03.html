@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEC02-BP03 シークレットを安全に保存して使用する</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    
+    :root {
+      --ui-color-1: #1B6C8C;
+      --ui-color-2: #BF8136;
+      --ui-color-3: #F2E8E4;
+      --ui-color-4: #260101;
+      --ui-color-5: #BF5656;
+    }
+    
+    body {
+      font-family: 'Zen Kurenaido', sans-serif;
+      background-color: #FFF8F5;
+      color: #333333;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 2000px;
+      margin: 0 auto;
+    }
+    
+    /* ヘッダースタイル */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+      padding: 20px;
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    
+    .title h1 {
+      font-size: 36px;
+      color: var(--ui-color-1);
+      margin: 15px 0;
+      line-height: 1.2;
+    }
+    
+    .date {
+      font-size: 14px;
+      color: #777777;
+    }
+    
+    /* セクションレイアウト */
+    .section-layout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+    
+    /* カードスタイル */
+    .section-card {
+      flex: 1;
+      min-width: 220px;
+      max-width: 450px;
+      background-color: white;
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInScale 0.5s ease-out;
+    }
+    
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    /* カード内アイコンコンテナ */
+    .mega-icon-container {
+      text-align: center;
+      margin: 15px 0;
+    }
+    
+    /* カードコンテンツ */
+    .card-content {
+      padding: 0 10px 15px;
+    }
+    
+    /* キーワードリスト */
+    .keyword-list {
+      margin: 15px 0;
+      padding: 0;
+      list-style-type: none;
+    }
+    
+    .keyword-list li {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .keyword-list li i {
+      margin-right: 8px;
+      color: var(--ui-color-2);
+      min-width: 16px;
+      margin-top: 4px;
+    }
+    
+    /* キーワードタグ */
+    .keyword-tag {
+      background-color: var(--ui-color-3);
+      color: var(--ui-color-4);
+      padding: 3px 8px;
+      border-radius: 5px;
+      margin-right: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    .risk-tag {
+      background-color: #FF5555;
+      color: white;
+      padding: 3px 10px;
+      border-radius: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    /* 手書き風吹き出し */
+    .speech-bubble {
+      position: relative;
+      background: #fff;
+      border: 3px solid var(--ui-color-1);
+      border-radius: 20px;
+      padding: 10px 15px;
+      margin: 15px 5px;
+      font-family: 'Yomogi', cursive;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+      transform: rotate(-1deg);
+    }
+    
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -13px;
+      left: 20px;
+      border-width: 12px 8px 0;
+      border-style: solid;
+      border-color: var(--ui-color-1) transparent;
+      display: block;
+      width: 0;
+    }
+    
+    /* 吹き出しバリエーション */
+    .speech-bubble.right::after {
+      left: auto;
+      right: 20px;
+      transform: rotate(15deg);
+    }
+    
+    .speech-bubble.top::after {
+      bottom: auto;
+      top: -13px;
+      border-width: 0 8px 12px;
+      transform: rotate(-5deg);
+    }
+    
+    .speech-bubble.variant-1 {
+      background: #FFF9E3;
+      border-color: var(--ui-color-2);
+      transform: rotate(1deg);
+    }
+    
+    .speech-bubble.variant-1::after {
+      border-color: var(--ui-color-2) transparent;
+    }
+    
+    .speech-bubble.variant-2 {
+      background: #FFE9E9;
+      border-color: var(--ui-color-5);
+      transform: rotate(-2deg);
+    }
+    
+    .speech-bubble.variant-2::after {
+      border-color: var(--ui-color-5) transparent;
+    }
+    
+    /* 手書き文字 */
+    .handwritten {
+      font-family: 'Yomogi', cursive;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #333;
+    }
+    
+    /* 比較表 */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    
+    .comparison-table th,
+    .comparison-table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .comparison-table th {
+      background-color: var(--ui-color-3);
+      font-weight: bold;
+    }
+    
+    .comparison-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    
+    /* カテゴリボックス */
+    .category-box {
+      margin: 15px 0;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      border-left: 4px solid var(--ui-color-1);
+    }
+    
+    .category-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: var(--ui-color-1);
+    }
+    
+    /* 戦略ボックス */
+    .strategy-box {
+      background-color: #f0f8ff;
+      border: 1px solid #d0e5ff;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 10px 0;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .strategy-icon {
+      margin-right: 10px;
+      color: var(--ui-color-1);
+      font-size: 24px;
+      min-width: 30px;
+      text-align: center;
+    }
+    
+    .strategy-content {
+      flex-grow: 1;
+    }
+    
+    .strategy-name {
+      font-weight: bold;
+      color: var(--ui-color-1);
+      margin-bottom: 5px;
+    }
+    
+    /* 実装ステップボックス */
+    .step-box {
+      border-left: 4px solid var(--ui-color-1);
+      padding-left: 12px;
+      margin: 10px 0;
+    }
+    
+    /* レスポンシブ対応 */
+    @media (max-width: 1600px) {
+      .section-card {
+        min-width: 280px;
+      }
+    }
+    
+    @media (max-width: 1200px) {
+      .section-card {
+        min-width: 320px;
+      }
+    }
+    
+    @media (max-width: 900px) {
+      .section-card {
+        min-width: 380px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .section-layout {
+        flex-direction: column;
+      }
+      
+      .section-card {
+        width: 100%;
+        min-width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ヘッダー -->
+    <div class="header">
+      <div class="title">
+        <i class="fa-solid fa-vault fa-7x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
+        <h1>SEC02-BP03 シークレットを安全に保存して使用する</h1>
+      </div>
+      <div class="date">2025年3月29日</div>
+    </div>
+    
+    <!-- セクション1: 概要 -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-key fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
+          <h2>概要</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-server" aria-hidden="true"></i>
+              <span>ワークロードには<span class="keyword-tag">データベース</span>、<span class="keyword-tag">リソース</span>、および<span class="keyword-tag">サードパーティーサービス</span>にアイデンティティを証明するための自動機能が必要</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-key" aria-hidden="true"></i>
+              <span><span class="keyword-tag">APIアクセスキー</span>、<span class="keyword-tag">パスワード</span>、および<span class="keyword-tag">OAuthトークン</span>などのシークレットアクセス認証情報を使用</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+              <span>これらの認証情報を<span class="keyword-tag">保存</span>、<span class="keyword-tag">管理</span>、<span class="keyword-tag">ローテーション</span>する専用のサービスを使用</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+              <span>認証情報が<span class="keyword-tag">侵害される可能性</span>を低減</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble">
+          <span class="handwritten">
+            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+            シークレットの管理、特に
+            <br>
+            ローテーションを自動化すれば
+            <br>
+            セキュリティが大幅に向上するよ！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション2: 期待される成果 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-check-double fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
+          <h2>期待される成果</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+              <span>ワークロードに必要な<span class="keyword-tag">シークレットを特定</span>する</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
+              <span><span class="keyword-tag">長期的認証情報</span>を<span class="keyword-tag">短期的認証情報</span>と置き換える（可能な場合）ことによりその数を減らす</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-vault" aria-hidden="true"></i>
+              <span><span class="keyword-tag">安全なストレージ</span>と、残りの長期的認証情報の<span class="keyword-tag">自動化されたローテーション</span>を確立する</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+              <span>ワークロードに存在するシークレットへの<span class="keyword-tag">アクセスを監査</span>する</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-code" aria-hidden="true"></i>
+              <span>開発プロセス中、<span class="keyword-tag">ソースコードに組み込まれたシークレット</span>がないことを継続的に監視する</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+              <span>認証情報が<span class="keyword-tag">誤って開示</span>される可能性を減らす</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-1 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-shield-halved fa-lg" style="color: var(--ui-color-2);"></i>
+            ハードコードされた
+            <br>
+            シークレットをなくして
+            <br>
+            安全に管理しよう！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション3: アンチパターン -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 3s;" aria-hidden="true"></i>
+          <h2>一般的なアンチパターン</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>認証情報を<span class="keyword-tag">ローテーションしない</span></span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span><span class="keyword-tag">ソースコード</span>または<span class="keyword-tag">設定ファイル</span>に長期的認証情報を保管する</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>認証情報を<span class="keyword-tag">暗号化せずに保管</span>する</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>モバイルアプリ内に<span class="keyword-tag">IAMアクセスキー</span>を埋め込む</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-2">
+          <span class="handwritten">
+            <i class="fa-solid fa-triangle-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+            コードにシークレットを
+            <br>
+            直接書き込むのは絶対NG！
+            <br>
+            漏洩リスクが非常に高いよ
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション4: リスクレベル -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: #FF5555; animation: fa-beat-fade 2s infinite;" aria-hidden="true"></i>
+          <h2>リスクレベル</h2>
+        </div>
+        
+        <div class="card-content" style="text-align: center;">
+          <p style="font-size: 24px; margin: 20px 0;">
+            <span class="risk-tag">高</span>
+          </p>
+          <p>このベストプラクティスを活用しない場合のリスクレベル</p>
+        </div>
+        
+        <div class="speech-bubble right">
+          <span class="handwritten">
+            <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-2);"></i>
+            リスクレベルは「高」！
+            <br>
+            シークレット漏洩は
+            <br>
+            深刻なセキュリティ事故につながるよ
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- セクション5: このベストプラクティスを活用するメリット -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-2); animation: fa-spin 6s linear infinite;" aria-hidden="true"></i>
+          <h2>このベストプラクティスを活用するメリット</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-lock" aria-hidden="true"></i>
+              <span>シークレットが、<span class="keyword-tag">保管時</span>と<span class="keyword-tag">転送時</span>に暗号化される</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-door-closed" aria-hidden="true"></i>
+              <span>認証情報へのアクセスが、<span class="keyword-tag">API</span>（認証情報の自動販売機として捉える）経由でゲート化される</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+              <span>認証情報へのアクセス（<span class="keyword-tag">読み出し</span>と<span class="keyword-tag">書き込み</span>）が監査およびログ記録される</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+              <span><span class="keyword-tag">懸念事項の分離</span>：認証情報のローテーションは、アーキテクチャの他の部分から分離できる別のコンポーネントによって実行</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-atom" aria-hidden="true"></i>
+              <span>シークレットは、ソフトウェアコンポーネントに対して<span class="keyword-tag">オンデマンド</span>で配布され、<span class="keyword-tag">中央ロケーション</span>でローテーションが発生</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+              <span>認証情報へのアクセスは、<span class="keyword-tag">非常にきめ細やか</span>に制御できる</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-thumbs-up fa-lg" style="color: var(--ui-color-2);"></i>
+            集中管理と分散利用の
+            <br>
+            ベストバランスで
+            <br>
+            安全性と利便性を両立！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション6: シークレット管理アプローチ -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-lightbulb fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
+          <h2>シークレット管理アプローチ</h2>
+        </div>
+        
+        <div class="card-content">
+          <p>シークレット管理に対する最善のアプローチは、<span class="keyword-tag">削除</span>、<span class="keyword-tag">置換</span>、<span class="keyword-tag">ローテーション</span>のガイダンスに従うことです。</p>
+          
+          <div class="category-box">
+            <div class="category-title"><i class="fa-solid fa-trash" style="margin-right: 5px;"></i>削除</div>
+            <ul class="keyword-list" style="margin-top: 10px;">
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>最も安全な認証情報は、<span class="keyword-tag">保管、管理、処理が不要</span>なもの</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>ワークロードの機能にとって<span class="keyword-tag">不要となった</span>認証情報を安全に削除</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="category-box">
+            <div class="category-title"><i class="fa-solid fa-exchange-alt" style="margin-right: 5px;"></i>置換</div>
+            <ul class="keyword-list" style="margin-top: 10px;">
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">長期的認証情報</span>を<span class="keyword-tag">一時的または短期的</span>な認証情報と置換</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>例：AWS シークレットアクセスキーをハードコーディングする代わりに、<span class="keyword-tag">IAM ロール</span>を使って長期的認証情報を一時的認証情報と置換</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="category-box">
+            <div class="category-title"><i class="fa-solid fa-arrows-rotate" style="margin-right: 5px;"></i>ローテーション</div>
+            <ul class="keyword-list" style="margin-top: 10px;">
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>削除も置換もできない<span class="keyword-tag">存続期間の長いシークレット</span>は、<span class="keyword-tag">AWS Secrets Manager</span>などのサービスに保管</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>一元的に保管、管理したり、<span class="keyword-tag">定期的にローテーション</span>したりすることが可能</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-arrows-rotate fa-lg" style="color: var(--ui-color-5);"></i>
+            まずは不要なものを削除！
+            <br>
+            次に長期認証情報を短期に置換
+            <br>
+            最後に残ったものをローテーション
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション7: 認証情報のタイプと対応戦略 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-table-cells fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite linear;" aria-hidden="true"></i>
+          <h2>認証情報のタイプと対応戦略</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="strategy-box">
+            <div class="strategy-icon">
+              <i class="fa-solid fa-id-badge" aria-hidden="true"></i>
+            </div>
+            <div class="strategy-content">
+              <div class="strategy-name">IAM アクセスキー</div>
+              <p><span class="keyword-tag">置き換え</span>: 代わりに、コンピューティングインスタンスに割り当てられた<span class="keyword-tag">IAMロール</span>を使用。AWS外のリソースには<span class="keyword-tag">IAM Roles Anywhere</span>を検討。モバイルアプリには<span class="keyword-tag">Amazon Cognito</span>を使用。</p>
+            </div>
+          </div>
+          
+          <div class="strategy-box">
+            <div class="strategy-icon">
+              <i class="fa-solid fa-terminal" aria-hidden="true"></i>
+            </div>
+            <div class="strategy-content">
+              <div class="strategy-name">SSH キー</div>
+              <p><span class="keyword-tag">置き換え</span>: <span class="keyword-tag">AWS Systems Manager</span>または<span class="keyword-tag">EC2 Instance Connect</span>を使用して、IAMロールを使ってEC2インスタンスへのプログラムおよび人間によるアクセスを提供。</p>
+            </div>
+          </div>
+          
+          <div class="strategy-box">
+            <div class="strategy-icon">
+              <i class="fa-solid fa-database" aria-hidden="true"></i>
+            </div>
+            <div class="strategy-content">
+              <div class="strategy-name">データベース認証情報</div>
+              <p><span class="keyword-tag">ローテーション</span>: 認証情報を<span class="keyword-tag">AWS Secrets Manager</span>に保存し、可能であれば自動ローテーションを確立。</p>
+            </div>
+          </div>
+          
+          <div class="strategy-box">
+            <div class="strategy-icon">
+              <i class="fa-solid fa-database" aria-hidden="true"></i>
+            </div>
+            <div class="strategy-content">
+              <div class="strategy-name">RDS/Aurora認証情報</div>
+              <p><span class="keyword-tag">置き換え</span>: <span class="keyword-tag">Secrets Manager</span>とAmazon RDS/Auroraの統合を使用。一部のRDSデータベースタイプでは、パスワードの代わりに<span class="keyword-tag">IAMデータベース認証</span>を使用可能。</p>
+            </div>
+          </div>
+          
+          <div class="strategy-box">
+            <div class="strategy-icon">
+              <i class="fa-brands fa-openid" aria-hidden="true"></i>
+            </div>
+            <div class="strategy-content">
+              <div class="strategy-name">OAuthトークン</div>
+              <p><span class="keyword-tag">ローテーション</span>: トークンを<span class="keyword-tag">AWS Secrets Manager</span>に保存し、<span class="keyword-tag">自動ローテーション</span>を設定。</p>
+            </div>
+          </div>
+          
+          <div class="strategy-box">
+            <div class="strategy-icon">
+              <i class="fa-solid fa-key" aria-hidden="true"></i>
+            </div>
+            <div class="strategy-content">
+              <div class="strategy-name">APIトークンとキー</div>
+              <p><span class="keyword-tag">ローテーション</span>: <span class="keyword-tag">AWS Secrets Manager</span>に保存し、可能であれば自動ローテーションを確立。</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+            それぞれの認証情報タイプに
+            <br>
+            最適な戦略を採用することで
+            <br>
+            セキュリティが大幅に向上するよ！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション8: AWS Secrets Manager -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-vault fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
+          <h2>AWS Secrets Manager</h2>
+        </div>
+        
+        <div class="card-content">
+          <p>AWS Secrets Managerは、認証情報の安全な管理、API トークン、パスワード、およびその他の認証情報の保管、使用、ローテーション専用のサービスです。</p>
+          
+          <div class="category-box">
+            <div class="category-title"><i class="fa-solid fa-shield-halved" style="margin-right: 5px;"></i>主要な機能</div>
+            <ul class="keyword-list" style="margin-top: 10px;">
+              <li>
+                <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                <span><span class="keyword-tag">保管時の暗号化</span>: シークレットがAWS KMSを使用して保管時に暗号化</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                <span><span class="keyword-tag">転送中の暗号化</span>: TLS 1.2以上を使用した安全な通信</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                <span><span class="keyword-tag">包括的な監査</span>: AWS CloudTrailによるすべてのアクセスの詳細なログ記録</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                <span><span class="keyword-tag">きめ細かなアクセスコントロール</span>: IAMポリシーによる詳細なアクセス制御</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
+                <span><span class="keyword-tag">拡張可能な認証情報ローテーション</span>: Lambda関数を使用した自動ローテーション</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="category-box">
+            <div class="category-title"><i class="fa-solid fa-memory" style="margin-right: 5px;"></i>クライアント側のキャッシュ</div>
+            <ul class="keyword-list" style="margin-top: 10px;">
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>Secrets Managerの<span class="keyword-tag">クライアント側のキャッシュコンポーネント</span>を使用して、将来使用するためにキャッシュ可能</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>キャッシュされたシークレットの取得は<span class="keyword-tag">高速</span>で<span class="keyword-tag">コスト削減</span>効果がある</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>一部の言語では、<span class="keyword-tag">インメモリ暗号化</span>の実装が必要な場合もある</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-key fa-lg" style="color: var(--ui-color-5);"></i>
+            Secrets Managerで
+            <br>
+            シークレットの管理と
+            <br>
+            ローテーションを自動化しよう！
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- セクション9: 実装手順 -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-list-check fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
+          <h2>実装手順</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="step-box">
+            <p><strong>1. ハードコードされた認証情報の特定</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li><span class="keyword-tag">Amazon CodeGuru</span>などの自動ツールを使用してハードコードされた認証情報を含むコードパスを特定</li>
+              <li>レビュー後、CodeGuruで <span class="keyword-tag">Type=Secrets</span> をフィルタリングして問題のあるコード行を特定</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>2. 削除または置換可能な認証情報の特定</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>既に<span class="keyword-tag">不要な認証情報</span>を特定して削除</li>
+              <li>ソースコードに埋め込まれたAWSシークレットキーを<span class="keyword-tag">IAMロール</span>で置換</li>
+              <li>その他のサードパーティーの長期的シークレットには<span class="keyword-tag">Secrets Manager</span>をコードに統合</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>3. Secrets Managerとの統合</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>CodeGuruコンソールで検出された認証情報を使って<span class="keyword-tag">Secrets Manager</span>にシークレットを作成</li>
+              <li>サーバーレスLambda関数では<span class="keyword-tag">言語に依存しない拡張機能</span>を使用</li>
+              <li>EC2やコンテナでは<span class="keyword-tag">クライアント側のコード例</span>を活用</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>4. 継続的なコードレビューと監視</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>定期的にコードベースをレビューして再スキャンして<span class="keyword-tag">新たなシークレット</span>がないことを確認</li>
+              <li><span class="keyword-tag">git-secrets</span>などのツールでソースコードリポジトリに新しいシークレットがコミットされるのを防止</li>
+              <li>Secrets Managerアクティビティをモニタリングして<span class="keyword-tag">予想外の使用</span>や<span class="keyword-tag">不適切なアクセス</span>を検出</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>5. アクセス制限</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>認証情報に対する<span class="keyword-tag">人的曝露を減少</span></li>
+              <li>特化したIAMロールに対する認証情報を読み出し、書き込み、変更するためのアクセスを制限</li>
+              <li>一部の運用ユーザーにのみ、その役割を担うためのアクセスを提供</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-check-double fa-lg" style="color: var(--ui-color-2);"></i>
+            まずは現状を把握して
+            <br>
+            シークレットの見直しから始めよう！
+            <br>
+            継続的なケアも大切だよ
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション10: 実装例 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-code fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
+          <h2>実装例</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="category-box">
+            <div class="category-title"><i class="fa-solid fa-ban" style="margin-right: 5px;"></i>アンチパターン例（避けるべき）</div>
+            <pre>
+// データベース接続情報をハードコード
+const dbConfig = {
+  host: 'db.example.com',
+  username: 'admin',
+  password: 'SuperSecret123!',
+  database: 'production'
+};
+
+// APIキーをソースコードに直接記述
+const apiKey = 'ak_live_12345abcdefghijklmnopqrstuvwxyz';
+            </pre>
+          </div>
+          
+          <div class="category-box">
+            <div class="category-title"><i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i>Secrets Managerを使用した良い例</div>
+            <pre>
+const AWS = require('aws-sdk');
+const secretsManager = new AWS.SecretsManager();
+
+async function getDbConfig() {
+  const data = await secretsManager.getSecretValue({
+    SecretId: 'prod/db/credentials'
+  }).promise();
+  
+  return JSON.parse(data.SecretString);
+}
+
+async function connectToDb() {
+  const dbConfig = await getDbConfig();
+  // dbConfigオブジェクトを使用してデータベースに接続
+}
+            </pre>
+          </div>
+          
+          <div class="category-box">
+            <div class="category-title"><i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i>IAMロールを使用した良い例</div>
+            <pre>
+// EC2インスタンスにIAMロールを割り当て、
+// コードにはアクセスキーを含めない
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3(); // IAMロールから自動的に認証情報を取得
+
+async function getObject() {
+  const data = await s3.getObject({
+    Bucket: 'my-bucket',
+    Key: 'my-object'
+  }).promise();
+  
+  return data;
+}
+            </pre>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-code fa-lg" style="color: var(--ui-color-5);"></i>
+            コードに直接書かずに
+            <br>
+            Secrets Managerや
+            <br>
+            IAMロールを活用しよう！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション11: まとめ -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-check-circle fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
+          <h2>まとめと効果</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+              <span><span class="keyword-tag">特定</span>: ワークロード内のすべてのシークレットを把握</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-trash" aria-hidden="true"></i>
+              <span><span class="keyword-tag">削除</span>: 不要な認証情報を安全に除去</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-exchange-alt" aria-hidden="true"></i>
+              <span><span class="keyword-tag">置換</span>: 長期的認証情報を短期的または一時的な認証情報に置き換え</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-vault" aria-hidden="true"></i>
+              <span><span class="keyword-tag">保管</span>: 必要な長期的シークレットを安全に保管</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
+              <span><span class="keyword-tag">ローテーション</span>: 認証情報を定期的に自動更新</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+              <span><span class="keyword-tag">監査</span>: すべてのアクセスを記録して不正使用を検出</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+              <span><span class="keyword-tag">保護</span>: シークレットへのアクセスを安全に制御</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-2);"></i>
+            シークレットをちゃんと管理して
+            <br>
+            セキュリティレベルを
+            <br>
+            大きく向上させよう！
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

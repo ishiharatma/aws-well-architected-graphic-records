@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400">
+  <!-- 背景 -->
+  <rect width="1000" height="400" fill="#232F3E" />
+  
+  <!-- 装飾的な要素 - 左側 -->
+  <rect x="0" y="0" width="20" height="400" fill="#FF9900" />
+  
+  <!-- 中央のグラフィック要素 -->
+  <g transform="translate(500, 200)">
+    <!-- パフォーマンスの円形 -->
+    <circle cx="0" cy="0" r="90" fill="#FF9900" opacity="0.2" />
+    <circle cx="0" cy="0" r="80" fill="#232F3E" stroke="#FF9900" stroke-width="3" />
+    
+    <!-- スピードメーター -->
+    <path d="M-70,-40 A80,80 0 0,1 70,-40" fill="none" stroke="#FFFFFF" stroke-width="3" />
+    <path d="M-60,-35 A70,70 0 0,1 60,-35" fill="none" stroke="#4CAF50" stroke-width="5" />
+    
+    <!-- メーターの針 -->
+    <line x1="0" y1="0" x2="30" y2="-60" stroke="#FF9900" stroke-width="3" />
+    <circle cx="0" cy="0" r="10" fill="#FF9900" />
+    
+    <!-- パフォーマンスグラフ -->
+    <g transform="translate(0, 20)">
+      <polyline points="-60,40 -40,20 -20,30 0,10 20,15 40,0 60,5" fill="none" stroke="#1DA1F2" stroke-width="3" />
+      <circle cx="-60" cy="40" r="3" fill="#1DA1F2" />
+      <circle cx="-40" cy="20" r="3" fill="#1DA1F2" />
+      <circle cx="-20" cy="30" r="3" fill="#1DA1F2" />
+      <circle cx="0" cy="10" r="3" fill="#1DA1F2" />
+      <circle cx="20" cy="15" r="3" fill="#1DA1F2" />
+      <circle cx="40" cy="0" r="3" fill="#1DA1F2" />
+      <circle cx="60" cy="5" r="3" fill="#1DA1F2" />
+    </g>
+    
+    <!-- 最適化シンボル -->
+    <g transform="translate(0, -70)">
+      <path d="M-30,10 L30,10 L0,-20 Z" fill="#4CAF50" />
+      <text x="0" y="5" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">↑</text>
+    </g>
+  </g>
+  
+  <!-- タイトルテキスト -->
+  <text x="500" y="50" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="white" text-anchor="middle">AWS Well-Architected</text>
+  <text x="500" y="90" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#FF9900" text-anchor="middle">パフォーマンス効率</text>
+  
+  <!-- 説明テキスト -->
+  <text x="500" y="320" font-family="Arial, sans-serif" font-size="18" fill="white" text-anchor="middle">コンピューティングリソースの効率的な活用</text>
+  <text x="500" y="350" font-family="Arial, sans-serif" font-size="16" fill="#CCCCCC" text-anchor="middle">適切なサービス選択、リソース最適化、効率的なデータ処理</text>
+  
+</svg>

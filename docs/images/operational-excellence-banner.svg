@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400">
+  <!-- 背景 -->
+  <rect width="1000" height="400" fill="#232F3E" />
+  
+  <!-- 装飾的な要素 - 左側 -->
+  <rect x="0" y="0" width="20" height="400" fill="#FF9900" />
+  
+  <!-- 中央のグラフィック要素 -->
+  <g transform="translate(500, 200)">
+    <!-- 歯車の図形 -->
+    <circle cx="0" cy="0" r="90" fill="#FF9900" opacity="0.2" />
+    <circle cx="0" cy="0" r="80" fill="#232F3E" stroke="#FF9900" stroke-width="2" />
+    
+    <!-- 歯車の歯 -->
+    <g>
+      <path d="M0,-80 L10,-65 L-10,-65 Z" fill="#FF9900" />
+      <path d="M28,-75 L38,-60 L18,-60 Z" fill="#FF9900" transform="rotate(30)" />
+      <path d="M28,-75 L38,-60 L18,-60 Z" fill="#FF9900" transform="rotate(60)" />
+      <path d="M28,-75 L38,-60 L18,-60 Z" fill="#FF9900" transform="rotate(90)" />
+      <path d="M28,-75 L38,-60 L18,-60 Z" fill="#FF9900" transform="rotate(120)" />
+      <path d="M28,-75 L38,-60 L18,-60 Z" fill="#FF9900" transform="rotate(150)" />
+      <path d="M28,-75 L38,-60 L18,-60 Z" fill="#FF9900" transform="rotate(180)" />
+      <path d="M28,-75 L38,-60 L18,-60 Z" fill="#FF9900" transform="rotate(210)" />
+      <path d="M28,-75 L38,-60 L18,-60 Z" fill="#FF9900" transform="rotate(240)" />
+      <path d="M28,-75 L38,-60 L18,-60 Z" fill="#FF9900" transform="rotate(270)" />
+      <path d="M28,-75 L38,-60 L18,-60 Z" fill="#FF9900" transform="rotate(300)" />
+      <path d="M28,-75 L38,-60 L18,-60 Z" fill="#FF9900" transform="rotate(330)" />
+    </g>
+    
+    <!-- 中央のチェックマーク -->
+    <path d="M-20,0 L-5,15 L20,-10" fill="none" stroke="#FF9900" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+    
+    <!-- プロセスの流れを表す矢印 -->
+    <path d="M-150,0 C-120,-40 -80,-40 -50,0 C-20,40 20,40 50,0 C80,-40 120,-40 150,0" fill="none" stroke="#1DA1F2" stroke-width="3" stroke-dasharray="5,5" />
+    <polygon points="150,0 140,-10 140,10" fill="#1DA1F2" />
+  </g>
+  
+  <!-- タイトルテキスト -->
+  <text x="500" y="50" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="white" text-anchor="middle">AWS Well-Architected</text>
+  <text x="500" y="90" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#FF9900" text-anchor="middle">優れた運用効率</text>
+  
+  <!-- 説明テキスト -->
+  <text x="500" y="320" font-family="Arial, sans-serif" font-size="18" fill="white" text-anchor="middle">システムの運用と監視を自動化し、継続的な改善を推進</text>
+  <text x="500" y="350" font-family="Arial, sans-serif" font-size="16" fill="#CCCCCC" text-anchor="middle">継続的な改善、自動化、効率的なプロセス管理</text>
+  
+</svg>

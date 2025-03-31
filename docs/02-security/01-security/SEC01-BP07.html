@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>脅威モデルを使用して脅威を特定し、緩和策の優先順位を付ける</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    
+    :root {
+      --ui-color-1: #1B6C8C;
+      --ui-color-2: #BF8136;
+      --ui-color-3: #F2E8E4;
+      --ui-color-4: #260101;
+      --ui-color-5: #BF5656;
+    }
+    
+    body {
+      font-family: 'Zen Kurenaido', sans-serif;
+      background-color: #FFF8F5;
+      color: #333333;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 2000px;
+      margin: 0 auto;
+    }
+    
+    /* ヘッダースタイル */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+      padding: 20px;
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    
+    .title h1 {
+      font-size: 36px;
+      color: var(--ui-color-1);
+      margin: 15px 0;
+      line-height: 1.2;
+    }
+    
+    .date {
+      font-size: 14px;
+      color: #777777;
+    }
+    
+    /* セクションレイアウト */
+    .section-layout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+    
+    /* カードスタイル */
+    .section-card {
+      flex: 1;
+      min-width: 220px;
+      max-width: 450px;
+      background-color: white;
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInScale 0.5s ease-out;
+    }
+    
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    /* カード内アイコンコンテナ */
+    .mega-icon-container {
+      text-align: center;
+      margin: 15px 0;
+    }
+    
+    /* カードコンテンツ */
+    .card-content {
+      padding: 0 10px 15px;
+    }
+    
+    /* キーワードリスト */
+    .keyword-list {
+      margin: 15px 0;
+      padding: 0;
+      list-style-type: none;
+    }
+    
+    .keyword-list li {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .keyword-list li i {
+      margin-right: 8px;
+      color: var(--ui-color-2);
+      min-width: 16px;
+      margin-top: 4px;
+    }
+    
+    /* キーワードタグ */
+    .keyword-tag {
+      background-color: var(--ui-color-3);
+      color: var(--ui-color-4);
+      padding: 3px 8px;
+      border-radius: 5px;
+      margin-right: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    .risk-tag {
+      background-color: #FF5252;
+      color: white;
+      padding: 3px 10px;
+      border-radius: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    /* 手書き風吹き出し */
+    .speech-bubble {
+      position: relative;
+      background: #fff;
+      border: 3px solid var(--ui-color-1);
+      border-radius: 20px;
+      padding: 10px 15px;
+      margin: 15px 5px;
+      font-family: 'Yomogi', cursive;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+      transform: rotate(-1deg);
+    }
+    
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -13px;
+      left: 20px;
+      border-width: 12px 8px 0;
+      border-style: solid;
+      border-color: var(--ui-color-1) transparent;
+      display: block;
+      width: 0;
+    }
+    
+    /* 吹き出しバリエーション */
+    .speech-bubble.right::after {
+      left: auto;
+      right: 20px;
+      transform: rotate(15deg);
+    }
+    
+    .speech-bubble.top::after {
+      bottom: auto;
+      top: -13px;
+      border-width: 0 8px 12px;
+      transform: rotate(-5deg);
+    }
+    
+    .speech-bubble.variant-1 {
+      background: #FFF9E3;
+      border-color: var(--ui-color-2);
+      transform: rotate(1deg);
+    }
+    
+    .speech-bubble.variant-1::after {
+      border-color: var(--ui-color-2) transparent;
+    }
+    
+    .speech-bubble.variant-2 {
+      background: #FFE9E9;
+      border-color: var(--ui-color-5);
+      transform: rotate(-2deg);
+    }
+    
+    .speech-bubble.variant-2::after {
+      border-color: var(--ui-color-5) transparent;
+    }
+    
+    /* 手書き文字 */
+    .handwritten {
+      font-family: 'Yomogi', cursive;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #333;
+    }
+    
+    /* コードプレビュー */
+    pre {
+      background: #f5f5f5;
+      padding: 8px;
+      border-radius: 5px;
+      font-size: 12px;
+      margin-top: 10px;
+      overflow-x: auto;
+    }
+    
+    /* 実装ステップボックス */
+    .step-box {
+      border-left: 4px solid var(--ui-color-1);
+      padding-left: 12px;
+      margin: 10px 0;
+    }
+    
+    /* フロー図スタイル */
+    .flow-diagram {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 20px 0;
+    }
+    
+    .flow-step {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      background-color: #f5f5f5;
+      text-align: center;
+      position: relative;
+    }
+    
+    .flow-step::after {
+      content: "↓";
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      color: var(--ui-color-1);
+    }
+    
+    .flow-step:last-child::after {
+      content: none;
+    }
+    
+    /* 質問フレームボックス */
+    .question-box {
+      background-color: #f0f9ff;
+      border-left: 4px solid var(--ui-color-1);
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 0 5px 5px 0;
+    }
+    
+    .question-box h3 {
+      margin-top: 0;
+      color: var(--ui-color-1);
+      font-size: 18px;
+    }
+    
+    .question-box p {
+      margin-bottom: 5px;
+    }
+    
+    /* STRIDE表 */
+    .stride-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    
+    .stride-table th,
+    .stride-table td {
+      padding: 8px;
+      border: 1px solid #ddd;
+    }
+    
+    .stride-table th {
+      background-color: var(--ui-color-3);
+    }
+    
+    .stride-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    
+    /* デプロイモデル図 */
+    .deployment-model {
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+    
+    .deployment-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+      color: var(--ui-color-1);
+    }
+    
+    .deployment-image {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    
+    /* 共有責任モデル図 */
+    .shared-responsibility {
+      display: flex;
+      flex-direction: column;
+      margin: 15px 0;
+    }
+    
+    .resp-section {
+      padding: 10px;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      text-align: center;
+    }
+    
+    .customer-resp {
+      background-color: #e3f2fd;
+      border: 1px solid #90caf9;
+    }
+    
+    .aws-resp {
+      background-color: #fff3e0;
+      border: 1px solid #ffe0b2;
+    }
+    
+    /* ツールボックス */
+    .tool-box {
+      background-color: #f0f9ff;
+      border: 1px solid #d0e3f2;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+    
+    .tool-title {
+      font-weight: bold;
+      color: var(--ui-color-1);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .tool-title i {
+      margin-right: 10px;
+      font-size: 24px;
+    }
+    
+    /* レスポンシブ対応 */
+    @media (max-width: 1600px) {
+      .section-card {
+        min-width: 280px;
+      }
+    }
+    
+    @media (max-width: 1200px) {
+      .section-card {
+        min-width: 320px;
+      }
+    }
+    
+    @media (max-width: 900px) {
+      .section-card {
+        min-width: 380px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .section-layout {
+        flex-direction: column;
+      }
+      
+      .section-card {
+        width: 100%;
+        min-width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ヘッダー -->
+    <div class="header">
+      <div class="title">
+        <i class="fa-solid fa-shield-virus fa-7x" style="color: var(--ui-color-1); animation: fa-spin 8s linear infinite;" aria-hidden="true"></i>
+        <h1>SEC01-BP07 脅威モデルを使用して脅威を特定し、緩和策の優先順位を付ける</h1>
+      </div>
+      <div class="date">2025年3月29日</div>
+    </div>
+    
+    <!-- セクション1: 概要 -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-magnifying-glass-chart fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
+          <h2>脅威モデリングとは</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-quote-left" aria-hidden="true"></i>
+              <span>「脅威モデリングとは、<span class="keyword-tag">価値あるものを保護する状況</span>において、<span class="keyword-tag">脅威</span>とその<span class="keyword-tag">緩和策</span>を特定し、伝達して理解する取り組みをいう」</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+              <span>– The Open Web Application Security Project (OWASP) Application Threat Modeling</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+              <span>ワークロードの<span class="keyword-tag">潜在的脅威</span>と関連付けられた<span class="keyword-tag">緩和策</span>を特定し、最新の状態を維持</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-sort-amount-down" aria-hidden="true"></i>
+              <span>脅威に<span class="keyword-tag">優先順位</span>を付け、セキュリティコントロール緩和策を調整</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-sync" aria-hidden="true"></i>
+              <span>ワークロードの内容および進化する<span class="keyword-tag">セキュリティ環境</span>の状況に応じて保持・維持</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble">
+          <span class="handwritten">
+            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+            脅威モデリングは「敵を知る」ための
+            <br>
+            体系的なアプローチなんだ！
+            <br>
+            何が起きるかを予測して対応策を用意する
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション2: なぜ脅威モデリングが必要なのか -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-question-circle fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
+          <h2>なぜ脅威モデリングが必要なのか</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-code-branch" aria-hidden="true"></i>
+              <span>システムは<span class="keyword-tag">複雑</span>であり、時代とともに次第に複雑かつ高性能に進化</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-arrows-to-dot" aria-hidden="true"></i>
+              <span>増え続ける<span class="keyword-tag">ユースケース</span>の組み合わせは、非構造化アプローチでは脅威の検出と緩和に効果がない</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-sitemap" aria-hidden="true"></i>
+              <span>必要なのは<span class="keyword-tag">体系的アプローチ</span>：
+                <ul style="margin-top: 5px; padding-left: 25px; list-style-type: disc;">
+                  <li>潜在的な脅威を列挙</li>
+                  <li>緩和策を考案</li>
+                  <li>緩和策に優先順位</li>
+                </ul>
+              </span>
+            </li>
+            <li>
+              <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+              <span><span class="keyword-tag">シフトレフト</span>：設計プロセスの早い段階で問題を発見し対処</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-gauge-high" aria-hidden="true"></i>
+              <span>ライフサイクルの後半と比較すると相対的に<span class="keyword-tag">コストと労力が低減</span></span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-1 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-coins fa-lg" style="color: var(--ui-color-2);"></i>
+            後から対応するより先に対策！
+            <br>
+            設計段階で見つければ
+            <br>
+            コスト10分の1と言われているよ
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション3: リスクレベル -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: #FF5252; animation: fa-beat-fade 2s infinite;" aria-hidden="true"></i>
+          <h2>リスクレベル</h2>
+        </div>
+        
+        <div class="card-content" style="text-align: center;">
+          <p style="font-size: 24px; margin: 20px 0;">
+            <span class="risk-tag">高</span>
+          </p>
+          <p>このベストプラクティスを活用しない場合のリスクレベル</p>
+          
+          <div style="margin-top: 25px; padding: 10px 15px; background-color: #FFF4F4; border-radius: 10px; text-align: left;">
+            <p><strong>リスクが「高」である理由：</strong></p>
+            <ul style="padding-left: 25px;">
+              <li>未発見の脅威が重大なセキュリティ侵害につながる可能性</li>
+              <li>脅威への対応が後手に回ると対応コストが大幅に増加</li>
+              <li>組織的なアプローチなしでは脅威の全体像を把握できない</li>
+              <li>優先順位がないと最も重要な対策から実施できない</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2">
+          <span class="handwritten">
+            <i class="fa-solid fa-exclamation-circle fa-lg" style="color: var(--ui-color-5);"></i>
+            リスクレベルが「高」なのは
+            <br>
+            脅威モデリングをしないと
+            <br>
+            「何が危険か」すら把握できないから！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション4: 脅威モデリングを実行するタイミング -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-clock fa-5x" style="color: var(--ui-color-1); animation: fa-spin 6s linear infinite;" aria-hidden="true"></i>
+          <h2>脅威モデリングを実行するタイミング</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="flow-diagram">
+            <div class="flow-step" style="background-color: #e3f2fd;">
+              <strong>ライフサイクルの早期段階</strong>
+              <p>設計フェーズで開始するのが理想的</p>
+            </div>
+            <div class="flow-step" style="background-color: #e8f5e9;">
+              <strong>大きな変更時</strong>
+              <p>アーキテクチャや機能の大幅な変更</p>
+            </div>
+            <div class="flow-step" style="background-color: #fff3e0;">
+              <strong>新機能・サービス採用時</strong>
+              <p>新たなコンポーネント導入時</p>
+            </div>
+            <div class="flow-step" style="background-color: #f3e5f5;">
+              <strong>脅威状況の変化時</strong>
+              <p>新たな攻撃手法やセキュリティ脆弱性の発見</p>
+            </div>
+            <div class="flow-step" style="background-color: #ffebee;">
+              <strong>定期的な見直し</strong>
+              <p>3〜6ヶ月ごとの見直しが推奨</p>
+            </div>
+          </div>
+          
+          <div style="margin-top: 15px; padding: 10px; background-color: #f5f5f5; border-radius: 10px;">
+            <p style="margin: 0;"><strong>ポイント：</strong> 脅威モデルは<span class="keyword-tag">ライブドキュメント</span>であり、ワークロードの変化に応じて進化し続ける必要があります。</p>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-arrow-left fa-lg" style="color: var(--ui-color-2);"></i>
+            早ければ早いほど柔軟に対応できる！
+            <br>
+            でも一度で終わりじゃなく
+            <br>
+            常に更新し続けることが大切だよ
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- セクション5: Shostack's 4 Question Frame -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-clipboard-question fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite;" aria-hidden="true"></i>
+          <h2>Shostack's 4 Question Frame</h2>
+        </div>
+        
+        <div class="card-content">
+          <p>脅威モデリングをシンプルに始めるための4つの質問フレームワーク：</p>
+          
+          <div class="question-box">
+            <h3><i class="fa-solid fa-1" style="margin-right: 5px;"></i>現在取り組んでいることは何か</h3>
+            <p>構築しているシステムとセキュリティ関連の詳細を理解するための質問</p>
+            <ul style="margin-top: 5px; padding-left: 25px;">
+              <li><span class="keyword-tag">データフロー図</span>などを作成してシステムを視覚化</li>
+              <li>システムに関する<span class="keyword-tag">推測と重要な詳細</span>を書き留める</li>
+              <li><span class="keyword-tag">対象範囲</span>を明確に定義する</li>
+            </ul>
+          </div>
+          
+          <div class="question-box">
+            <h3><i class="fa-solid fa-2" style="margin-right: 5px;"></i>問題化する可能性があるものは何か</h3>
+            <p>システムに対する脅威を特定するための質問</p>
+            <ul style="margin-top: 5px; padding-left: 25px;">
+              <li><span class="keyword-tag">ブレインストーミング</span>とコラボレーションが重要</li>
+              <li><span class="keyword-tag">STRIDE</span>などのモデルを活用</li>
+              <li><span class="keyword-tag">既存のリスト</span>(OWASP Top 10など)を参考にする</li>
+            </ul>
+          </div>
+          
+          <div class="question-box">
+            <h3><i class="fa-solid fa-3" style="margin-right: 5px;"></i>どのように対処すべきか</h3>
+            <p>特定された脅威への緩和策を考える質問</p>
+            <ul style="margin-top: 5px; padding-left: 25px;">
+              <li>AWS責任共有モデルを理解することが重要</li>
+              <li>セキュリティコントロールの<span class="keyword-tag">実装ドメイン</span>を検討</li>
+              <li>カスタムコードの脆弱性に特に注意</li>
+            </ul>
+          </div>
+          
+          <div class="question-box">
+            <h3><i class="fa-solid fa-4" style="margin-right: 5px;"></i>十分に優れた仕事をしたか</h3>
+            <p>脅威モデルの質を評価する質問</p>
+            <ul style="margin-top: 5px; padding-left: 25px;">
+              <li><span class="keyword-tag">練習、学習、指導、レビュー</span>の組み合わせで改善</li>
+              <li>トレーニングコースやワークショップの受講</li>
+              <li>組織の開発ライフサイクルへの<span class="keyword-tag">脅威モデリングの組み込み</span></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-5);"></i>
+            4つの質問に答えるだけで
+            <br>
+            脅威モデリングの基本的な流れが
+            <br>
+            身につくよ！シンプルだけど強力
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション6: STRIDEモデル -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-sitemap fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
+          <h2>STRIDEモデル</h2>
+        </div>
+        
+        <div class="card-content">
+          <p>脅威を特定するための効果的なモデルの一つ：</p>
+          
+          <table class="stride-table">
+            <tr>
+              <th>カテゴリ</th>
+              <th>英語</th>
+              <th>説明</th>
+            </tr>
+            <tr>
+              <td><i class="fa-solid fa-user-secret" style="color: var(--ui-color-2);"></i> <span class="keyword-tag">なりすまし</span></td>
+              <td>Spoofing</td>
+              <td>不正なアクセスや正規ユーザーへのなりすまし</td>
+            </tr>
+            <tr>
+              <td><i class="fa-solid fa-edit" style="color: var(--ui-color-2);"></i> <span class="keyword-tag">改ざん</span></td>
+              <td>Tampering</td>
+              <td>データの不正な変更や破壊</td>
+            </tr>
+            <tr>
+              <td><i class="fa-solid fa-ban" style="color: var(--ui-color-2);"></i> <span class="keyword-tag">否認</span></td>
+              <td>Repudiation</td>
+              <td>アクションの実行者が否定できる状態</td>
+            </tr>
+            <tr>
+              <td><i class="fa-solid fa-unlock" style="color: var(--ui-color-2);"></i> <span class="keyword-tag">情報漏洩</span></td>
+              <td>Information Disclosure</td>
+              <td>機密情報の不正な開示</td>
+            </tr>
+            <tr>
+              <td><i class="fa-solid fa-skull-crossbones" style="color: var(--ui-color-2);"></i> <span class="keyword-tag">サービス妨害</span></td>
+              <td>Denial of Service</td>
+              <td>サービスやリソースの可用性の阻害</td>
+            </tr>
+            <tr>
+              <td><i class="fa-solid fa-level-up-alt" style="color: var(--ui-color-2);"></i> <span class="keyword-tag">権限昇格</span></td>
+              <td>Elevation of Privilege</td>
+              <td>不正に高いレベルの権限を取得</td>
+            </tr>
+          </table>
+          
+          <div style="margin-top: 20px; padding: 10px; background-color: #f5f5f5; border-radius: 10px;">
+            <p style="margin: 0;"><strong>その他の参考資料：</strong></p>
+            <ul style="margin-top: 5px; padding-left: 25px;">
+              <li><span class="keyword-tag">OWASP Top 10</span> - ウェブアプリケーションの主要な脆弱性リスト</li>
+              <li><span class="keyword-tag">HiTrust Threat Catalog</span> - 包括的な脅威カタログ</li>
+              <li><span class="keyword-tag">AWS Well-Architected</span> - セキュリティの柱</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble">
+          <span class="handwritten">
+            <i class="fa-solid fa-crosshairs fa-lg" style="color: var(--ui-color-2);"></i>
+            STRIDEを使えば脅威を
+            <br>
+            漏れなく洗い出せるよ！
+            <br>
+            まさに「脅威の見取り図」だね
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション7: AWS責任共有モデル -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-handshake fa-5x" style="color: var(--ui-color-1); animation: fa-shake 3s infinite;" aria-hidden="true"></i>
+          <h2>AWS責任共有モデル</h2>
+        </div>
+        
+        <div class="card-content">
+          <p>脅威モデリングにおいて、AWS責任共有モデルを理解することが重要です：</p>
+          
+          <div class="shared-responsibility">
+            <div class="resp-section customer-resp">
+              <h3><i class="fa-solid fa-user" style="margin-right: 5px;"></i>お客様の責任（クラウド内のセキュリティ）</h3>
+              <ul style="text-align: left; padding-left: 25px;">
+                <li>お客様のデータ</li>
+                <li>プラットフォーム、アプリケーション、ID、アクセス管理</li>
+                <li>オペレーティングシステム、ネットワーク、ファイアウォールの設定</li>
+                <li>クライアントサイドのデータ暗号化と整合性認証</li>
+                <li>サーバーサイドの暗号化（ファイルシステム、データ）</li>
+                <li>ネットワークトラフィックの保護（暗号化、整合性、ID）</li>
+              </ul>
+            </div>
+            
+            <div class="resp-section aws-resp">
+              <h3><i class="fa-brands fa-aws" style="margin-right: 5px;"></i>AWSの責任（クラウドのセキュリティ）</h3>
+              <ul style="text-align: left; padding-left: 25px;">
+                <li>ファシリティ</li>
+                <li>物理的なセキュリティ</li>
+                <li>ネットワークインフラストラクチャ</li>
+                <li>仮想化インフラストラクチャ</li>
+                <li>ホストOS</li>
+                <li>サービス運用</li>
+                <li>コンプライアンスプログラム</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div style="margin-top: 15px; padding: 10px; background-color: #f5f5f5; border-radius: 10px;">
+            <p style="margin: 0;"><strong>重要ポイント：</strong></p>
+            <ul style="margin-top: 5px; padding-left: 25px;">
+              <li>使用するAWSサービスに関わらず、<span class="keyword-tag">お客様の責任</span>となる要素が存在</li>
+              <li>これらの責任に合わせた<span class="keyword-tag">緩和策</span>を脅威モデルに組み込む必要がある</li>
+              <li>AWSの責任範囲については<span class="keyword-tag">AWS Artifact</span>から監査レポートを参照可能</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-balance-scale fa-lg" style="color: var(--ui-color-2);"></i>
+            自分の守るべき範囲を
+            <br>
+            明確に理解することが
+            <br>
+            効果的な対策の第一歩！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション8: Threat Composer -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-toolbox fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
+          <h2>Threat Composerツール</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="tool-box">
+            <div class="tool-title">
+              <i class="fa-solid fa-wrench" aria-hidden="true"></i>
+              <span>Threat Composer</span>
+            </div>
+            <p>脅威モデリングをサポートし、実行を導くオープンソースツール</p>
+            <p>脅威モデリングの価値を実感できるまでの時間を短縮</p>
+            
+            <p style="margin-top: 15px;"><strong>主な機能：</strong></p>
+            <ul style="padding-left: 25px;">
+              <li><span class="keyword-tag">Threat grammar</span>に沿った有益な脅威のステートメントを記述</li>
+              <li>自然な非線形のワークフローをサポート</li>
+              <li><span class="keyword-tag">人間が読める脅威モデル</span>を生成</li>
+              <li><span class="keyword-tag">機械可読な脅威モデル</span>を生成（脅威モデルをコードとして扱う）</li>
+              <li><span class="keyword-tag">Insights Dashboard</span>で品質や対象範囲の改善点を特定</li>
+            </ul>
+            
+            <div style="margin-top: 15px; text-align: center;">
+              <img src="/api/placeholder/400/200" alt="Threat Composerツールのスクリーンショット" />
+            </div>
+            
+            <p style="margin-top: 15px;"><strong>始め方：</strong></p>
+            <ol style="padding-left: 25px;">
+              <li>Threat Composerにアクセス</li>
+              <li>システムで定義された<span class="keyword-tag">Example Workspace</span>を参照</li>
+              <li>自分のプロジェクト用のワークスペースを作成</li>
+              <li>脅威ステートメントの記述を開始</li>
+            </ol>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2">
+          <span class="handwritten">
+            <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-5);"></i>
+            専用ツールを使えば
+            <br>
+            脅威モデリングが格段に楽になる！
+            <br>
+            チームで共有もしやすいよ
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- セクション9: 実装手順 -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-list-check fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
+          <h2>実装手順</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="step-box">
+            <p><strong>1. チームを編成する</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>アプリケーション開発者、アーキテクト、セキュリティ専門家などを含める</li>
+              <li>様々な視点を持ったメンバーを集める</li>
+              <li>明確な<span class="keyword-tag">ロールと責任</span>を定義</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>2. システムの理解と視覚化</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li><span class="keyword-tag">データフロー図</span>を作成</li>
+              <li>信頼境界を特定</li>
+              <li>入出力ポイントをマッピング</li>
+              <li>対象範囲を明確に定義</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>3. 脅威の特定</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li><span class="keyword-tag">STRIDEモデル</span>を利用して脅威を洗い出し</li>
+              <li>脅威のブレインストーミングセッションを実施</li>
+              <li>既存の<span class="keyword-tag">脅威カタログ</span>を参照</li>
+              <li>各脅威に対して明確な<span class="keyword-tag">脅威ステートメント</span>を作成</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>4. 影響度と可能性の評価</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>各脅威の<span class="keyword-tag">影響度</span>を評価（低・中・高）</li>
+              <li>発生<span class="keyword-tag">可能性</span>を評価（低・中・高）</li>
+              <li>影響度と可能性に基づいて<span class="keyword-tag">リスクスコア</span>を計算</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>5. 緩和策の特定と優先順位付け</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>各脅威に対する<span class="keyword-tag">緩和策</span>を特定</li>
+              <li>AWSサービスの<span class="keyword-tag">セキュリティ機能</span>を活用</li>
+              <li>リスクスコアに基づいて<span class="keyword-tag">優先順位</span>を設定</li>
+              <li>実装の<span class="keyword-tag">コストと効果</span>のバランスを評価</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>6. 脅威モデルの文書化と共有</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>脅威モデルを<span class="keyword-tag">文書化</span></li>
+              <li>関係者と<span class="keyword-tag">共有</span>し、フィードバックを収集</li>
+              <li>実装計画を作成</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>7. 緩和策の実装</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>優先順位に基づいて緩和策を<span class="keyword-tag">実装</span></li>
+              <li>実装の<span class="keyword-tag">有効性</span>を検証</li>
+              <li>必要に応じて<span class="keyword-tag">追加対策</span>を実施</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>8. 定期的な見直しと更新</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>脅威モデルを<span class="keyword-tag">定期的に見直し</span></li>
+              <li>新しい脅威や変更点を反映</li>
+              <li>緩和策の<span class="keyword-tag">有効性</span>を継続的に評価</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-check-double fa-lg" style="color: var(--ui-color-2);"></i>
+            一度きりではなく
+            <br>
+            継続的なプロセスとして
+            <br>
+            脅威モデリングを取り入れよう！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション10: 主要なセキュリティドメイン -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-layer-group fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite linear;" aria-hidden="true"></i>
+          <h2>主要なセキュリティドメイン</h2>
+        </div>
+        
+        <div class="card-content">
+          <p>緩和策を検討する際に考慮すべき主要なセキュリティドメイン：</p>
+          
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+            <div style="flex: 1; min-width: 180px; background-color: #e3f2fd; padding: 10px; border-radius: 8px;">
+              <p style="margin: 0; font-weight: bold;"><i class="fa-solid fa-user-lock" style="margin-right: 5px; color: var(--ui-color-1);"></i>ID管理とアクセス制御</p>
+              <ul style="margin-top: 5px; padding-left: 20px;">
+                <li>最小権限の原則</li>
+                <li>多要素認証</li>
+                <li>IAMポリシー</li>
+                <li>一時的な認証情報</li>
+              </ul>
+            </div>
+            
+            <div style="flex: 1; min-width: 180px; background-color: #e8f5e9; padding: 10px; border-radius: 8px;">
+              <p style="margin: 0; font-weight: bold;"><i class="fa-solid fa-lock" style="margin-right: 5px; color: var(--ui-color-1);"></i>データ保護</p>
+              <ul style="margin-top: 5px; padding-left: 20px;">
+                <li>静止時の暗号化</li>
+                <li>転送時の暗号化</li>
+                <li>キー管理</li>
+                <li>データの分類</li>
+              </ul>
+            </div>
+            
+            <div style="flex: 1; min-width: 180px; background-color: #fff3e0; padding: 10px; border-radius: 8px;">
+              <p style="margin: 0; font-weight: bold;"><i class="fa-solid fa-network-wired" style="margin-right: 5px; color: var(--ui-color-1);"></i>インフラストラクチャセキュリティ</p>
+              <ul style="margin-top: 5px; padding-left: 20px;">
+                <li>ネットワークセグメンテーション</li>
+                <li>ファイアウォールルール</li>
+                <li>セキュリティグループ</li>
+                <li>VPCエンドポイント</li>
+              </ul>
+            </div>
+            
+            <div style="flex: 1; min-width: 180px; background-color: #f3e5f5; padding: 10px; border-radius: 8px;">
+              <p style="margin: 0; font-weight: bold;"><i class="fa-solid fa-file-signature" style="margin-right: 5px; color: var(--ui-color-1);"></i>ログとモニタリング</p>
+              <ul style="margin-top: 5px; padding-left: 20px;">
+                <li>CloudTrail</li>
+                <li>CloudWatch</li>
+                <li>Config</li>
+                <li>Security Hub</li>
+              </ul>
+            </div>
+            
+            <div style="flex: 1; min-width: 180px; background-color: #ffebee; padding: 10px; border-radius: 8px;">
+              <p style="margin: 0; font-weight: bold;"><i class="fa-solid fa-code" style="margin-right: 5px; color: var(--ui-color-1);"></i>アプリケーションセキュリティ</p>
+              <ul style="margin-top: 5px; padding-left: 20px;">
+                <li>入力の検証</li>
+                <li>セッションの処理</li>
+                <li>境界の処理</li>
+                <li>脆弱性スキャン</li>
+              </ul>
+            </div>
+            
+            <div style="flex: 1; min-width: 180px; background-color: #e0f7fa; padding: 10px; border-radius: 8px;">
+              <p style="margin: 0; font-weight: bold;"><i class="fa-solid fa-shield-halved" style="margin-right: 5px; color: var(--ui-color-1);"></i>インシデント対応</p>
+              <ul style="margin-top: 5px; padding-left: 20px;">
+                <li>対応計画</li>
+                <li>自動化された修復</li>
+                <li>フォレンジック</li>
+                <li>復旧プロセス</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div style="margin-top: 20px; padding: 10px; background-color: #f5f5f5; border-radius: 10px;">
+            <p style="margin: 0;"><strong>ポイント：</strong> 各AWSサービスのドキュメントには<span class="keyword-tag">セキュリティに関する項目</span>があり、緩和策として利用できるセキュリティコントロールについてのガイダンスが記されています。</p>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2">
+          <span class="handwritten">
+            <i class="fa-solid fa-shield-halved fa-lg" style="color: var(--ui-color-5);"></i>
+            複数のドメインを組み合わせた
+            <br>
+            多層防御が効果的！
+            <br>
+            どれか一つに頼らないことが大切
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション11: まとめ -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-check-circle fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
+          <h2>まとめ</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-chess" aria-hidden="true"></i>
+              <span><span class="keyword-tag">戦略的アプローチ</span>: 脅威モデリングは体系的なセキュリティ対策の基盤</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+              <span><span class="keyword-tag">シフトレフト</span>: 設計段階から脅威を考慮することでコストと労力を削減</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-sort-amount-down" aria-hidden="true"></i>
+              <span><span class="keyword-tag">優先順位付け</span>: 限られたリソースを最も重要な対策に集中投下</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-sync" aria-hidden="true"></i>
+              <span><span class="keyword-tag">継続的なプロセス</span>: 一度きりではなく、継続的に見直しと更新が必要</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+              <span><span class="keyword-tag">共同作業</span>: 様々な視点を持つチームメンバーの協力が重要</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+              <span><span class="keyword-tag">責任共有</span>: AWS環境では責任共有モデルの理解が不可欠</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-toolbox" aria-hidden="true"></i>
+              <span><span class="keyword-tag">ツール活用</span>: Threat Composerなどのツールで効率化</span>
+            </li>
+          </ul>
+          
+          <div style="margin-top: 20px; padding: 15px; background-color: #e8f5e9; border-radius: 10px; border-left: 4px solid #4CAF50;">
+            <p style="margin: 0; font-weight: bold; color: #4CAF50;"><i class="fa-solid fa-lightbulb" style="margin-right: 5px;"></i>最終メッセージ</p>
+            <p style="margin-top: 10px;">脅威モデリングは単なるセキュリティ対策ではなく、プロジェクトの<span class="keyword-tag">成功を左右する重要な活動</span>です。早期に開始し、継続的に更新することで、効果的かつ効率的にセキュリティリスクを管理しましょう。</p>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-2);"></i>
+            「敵を知り、己を知れば百戦危うからず」
+            <br>
+            脅威モデリングで敵（脅威）を知り
+            <br>
+            堅牢なシステムを構築しよう！
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

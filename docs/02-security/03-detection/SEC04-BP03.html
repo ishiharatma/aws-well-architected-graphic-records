@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEC04-BP03 セキュリティアラートを相関付けて充実させる</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    
+    :root {
+      --ui-color-1: #1B6C8C;
+      --ui-color-2: #BF8136;
+      --ui-color-3: #F2E8E4;
+      --ui-color-4: #260101;
+      --ui-color-5: #BF5656;
+    }
+    
+    body {
+      font-family: 'Zen Kurenaido', sans-serif;
+      background-color: #FFF8F5;
+      color: #333333;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 2000px;
+      margin: 0 auto;
+    }
+    
+    /* ヘッダースタイル */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+      padding: 20px;
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    
+    .title h1 {
+      font-size: 36px;
+      color: var(--ui-color-1);
+      margin: 15px 0;
+      line-height: 1.2;
+    }
+    
+    .date {
+      font-size: 14px;
+      color: #777777;
+    }
+    
+    /* セクションレイアウト */
+    .section-layout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+    
+    /* カードスタイル */
+    .section-card {
+      flex: 1;
+      min-width: 220px;
+      max-width: 450px;
+      background-color: white;
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInScale 0.5s ease-out;
+    }
+    
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    /* カード内アイコンコンテナ */
+    .mega-icon-container {
+      text-align: center;
+      margin: 15px 0;
+    }
+    
+    /* カードコンテンツ */
+    .card-content {
+      padding: 0 10px 15px;
+    }
+    
+    /* キーワードリスト */
+    .keyword-list {
+      margin: 15px 0;
+      padding: 0;
+      list-style-type: none;
+    }
+    
+    .keyword-list li {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .keyword-list li i {
+      margin-right: 8px;
+      color: var(--ui-color-2);
+      min-width: 16px;
+      margin-top: 4px;
+    }
+    
+    /* キーワードタグ */
+    .keyword-tag {
+      background-color: var(--ui-color-3);
+      color: var(--ui-color-4);
+      padding: 3px 8px;
+      border-radius: 5px;
+      margin-right: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    .risk-tag {
+      background-color: #90CAF9;
+      color: #01579B;
+      padding: 3px 10px;
+      border-radius: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    /* 手書き風吹き出し */
+    .speech-bubble {
+      position: relative;
+      background: #fff;
+      border: 3px solid var(--ui-color-1);
+      border-radius: 20px;
+      padding: 10px 15px;
+      margin: 15px 5px;
+      font-family: 'Yomogi', cursive;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+      transform: rotate(-1deg);
+    }
+    
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -13px;
+      left: 20px;
+      border-width: 12px 8px 0;
+      border-style: solid;
+      border-color: var(--ui-color-1) transparent;
+      display: block;
+      width: 0;
+    }
+    
+    /* 吹き出しバリエーション */
+    .speech-bubble.right::after {
+      left: auto;
+      right: 20px;
+      transform: rotate(15deg);
+    }
+    
+    .speech-bubble.top::after {
+      bottom: auto;
+      top: -13px;
+      border-width: 0 8px 12px;
+      transform: rotate(-5deg);
+    }
+    
+    .speech-bubble.variant-1 {
+      background: #FFF9E3;
+      border-color: var(--ui-color-2);
+      transform: rotate(1deg);
+    }
+    
+    .speech-bubble.variant-1::after {
+      border-color: var(--ui-color-2) transparent;
+    }
+    
+    .speech-bubble.variant-2 {
+      background: #FFE9E9;
+      border-color: var(--ui-color-5);
+      transform: rotate(-2deg);
+    }
+    
+    .speech-bubble.variant-2::after {
+      border-color: var(--ui-color-5) transparent;
+    }
+    
+    /* 手書き文字 */
+    .handwritten {
+      font-family: 'Yomogi', cursive;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #333;
+    }
+    
+    /* コードプレビュー */
+    pre {
+      background: #f5f5f5;
+      padding: 8px;
+      border-radius: 5px;
+      font-size: 12px;
+      margin-top: 10px;
+      overflow-x: auto;
+    }
+    
+    /* 実装ステップボックス */
+    .step-box {
+      border-left: 4px solid var(--ui-color-1);
+      padding-left: 12px;
+      margin: 15px 0;
+    }
+    
+    .step-box h3 {
+      margin-top: 0;
+      color: var(--ui-color-1);
+    }
+    
+    /* 比較表 */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    
+    .comparison-table th,
+    .comparison-table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .comparison-table th {
+      background-color: var(--ui-color-3);
+      font-weight: bold;
+    }
+    
+    .comparison-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    
+    /* ボックススタイル */
+    .info-box {
+      background-color: #f0f9ff;
+      border-left: 4px solid var(--ui-color-1);
+      padding: 12px;
+      margin: 15px 0;
+      border-radius: 0 5px 5px 0;
+    }
+    
+    .warning-box {
+      background-color: #fff3e0;
+      border-left: 4px solid var(--ui-color-2);
+      padding: 12px;
+      margin: 15px 0;
+      border-radius: 0 5px 5px 0;
+    }
+    
+    .danger-box {
+      background-color: #ffebee;
+      border-left: 4px solid var(--ui-color-5);
+      padding: 12px;
+      margin: 15px 0;
+      border-radius: 0 5px 5px 0;
+    }
+    
+    /* サービスカード */
+    .service-card {
+      background-color: #f0f9ff;
+      border: 1px solid #d0e3f2;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 10px 0;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .service-icon {
+      margin-right: 10px;
+      color: var(--ui-color-1);
+      font-size: 24px;
+      min-width: 30px;
+      text-align: center;
+    }
+    
+    .service-content {
+      flex-grow: 1;
+    }
+    
+    .service-title {
+      font-weight: bold;
+      color: var(--ui-color-1);
+      margin-bottom: 5px;
+    }
+    
+    /* 比較カード */
+    .compare-container {
+      display: flex;
+      gap: 15px;
+      margin: 15px 0;
+    }
+    
+    .compare-card {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+    }
+    
+    .compare-card h3 {
+      margin-top: 0;
+      text-align: center;
+    }
+    
+    .compare-card.good {
+      background-color: #e8f5e9;
+      border: 1px solid #a5d6a7;
+    }
+    
+    .compare-card.bad {
+      background-color: #ffebee;
+      border: 1px solid #ef9a9a;
+    }
+    
+    /* フロー図 */
+    .flow-diagram {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin: 15px 0;
+    }
+    
+    .flow-step {
+      background-color: #f0f9ff;
+      border: 1px solid #d0e3f2;
+      border-radius: 8px;
+      padding: 12px;
+      position: relative;
+    }
+    
+    .flow-step::after {
+      content: "\f063"; /* Font Awesome down arrow */
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 18px;
+      color: var(--ui-color-1);
+    }
+    
+    .flow-step:last-child::after {
+      content: none;
+    }
+    
+    .flow-title {
+      font-weight: bold;
+      color: var(--ui-color-1);
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .flow-title i {
+      margin-right: 8px;
+    }
+    
+    /* 相関図 */
+    .correlation-diagram {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px 0;
+      flex-direction: column;
+    }
+    
+    .correlation-center {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background-color: var(--ui-color-1);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-weight: bold;
+      padding: 10px;
+      position: relative;
+      font-size: 16px;
+      z-index: 2;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .correlation-nodes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      max-width: 400px;
+      margin-top: 15px;
+    }
+    
+    .correlation-node {
+      padding: 8px 12px;
+      background-color: white;
+      border: 2px solid var(--ui-color-2);
+      border-radius: 5px;
+      font-size: 14px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    /* レスポンシブ対応 */
+    @media (max-width: 1600px) {
+      .section-card {
+        min-width: 280px;
+      }
+    }
+    
+    @media (max-width: 1200px) {
+      .section-card {
+        min-width: 320px;
+      }
+    }
+    
+    @media (max-width: 900px) {
+      .section-card {
+        min-width: 380px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .section-layout {
+        flex-direction: column;
+      }
+      
+      .section-card {
+        width: 100%;
+        min-width: auto;
+      }
+      
+      .compare-container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ヘッダー -->
+    <div class="header">
+      <div class="title">
+        <i class="fa-solid fa-link-slash fa-7x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
+        <h1>SEC04-BP03 セキュリティアラートを相関付けて充実させる</h1>
+      </div>
+      <div class="date">2025年3月29日</div>
+    </div>
+    
+    <!-- セクション1: 概要 -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-sitemap fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
+          <h2>概要</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-bell" aria-hidden="true"></i>
+              <span>予期しないアクティビティが検知されると、さまざまなソースがそれぞれの<span class="keyword-tag">セキュリティアラート</span>を発します</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-link" aria-hidden="true"></i>
+              <span>状況を完全に理解するには、アラートを<span class="keyword-tag">関連付け</span>て情報を<span class="keyword-tag">強化 (エンリッチメント)</span>する必要があります</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-robot" aria-hidden="true"></i>
+              <span>セキュリティアラートの<span class="keyword-tag">関連付けとエンリッチメントを自動化</span>すると、インシデントの特定と対応をより正確に行えるようになります</span>
+            </li>
+          </ul>
+          
+          <div class="correlation-diagram">
+            <div class="correlation-center">アラートの<br>相関付けと<br>エンリッチメント</div>
+            <div class="correlation-nodes">
+              <div class="correlation-node"><i class="fa-solid fa-network-wired" style="color: var(--ui-color-2); margin-right: 5px;"></i>ネットワーク</div>
+              <div class="correlation-node"><i class="fa-solid fa-user-shield" style="color: var(--ui-color-2); margin-right: 5px;"></i>IDとアクセス</div>
+              <div class="correlation-node"><i class="fa-solid fa-server" style="color: var(--ui-color-2); margin-right: 5px;"></i>インフラ</div>
+              <div class="correlation-node"><i class="fa-solid fa-code" style="color: var(--ui-color-2); margin-right: 5px;"></i>アプリケーション</div>
+              <div class="correlation-node"><i class="fa-solid fa-credit-card" style="color: var(--ui-color-2); margin-right: 5px;"></i>請求</div>
+              <div class="correlation-node"><i class="fa-solid fa-globe" style="color: var(--ui-color-2); margin-right: 5px;"></i>外部情報</div>
+            </div>
+          </div>
+          
+          <div style="text-align: center; margin-top: 20px;">
+            <span class="risk-tag" style="font-size: 18px;">リスクレベル: 低</span>
+          </div>
+        </div>
+        
+        <div class="speech-bubble">
+          <span class="handwritten">
+            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+            バラバラのアラートは1つの事象の
+            <br>
+            断片的な情報かもしれないよ！
+            <br>
+            点と点をつなげば、全体像が見えてくる
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション2: 期待される成果 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-check-double fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
+          <h2>期待される成果</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-robot" aria-hidden="true"></i>
+              <span>アクティビティによって環境内でさまざまなアラートが生成されると、<span class="keyword-tag">自動メカニズム</span>がデータを関連付け、補足情報によって強化</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>
+              <span>この前処理のおかげで、<span class="keyword-tag">イベントについて詳しく把握</span>できるようになる</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-ranking-star" aria-hidden="true"></i>
+              <span>調査員はイベントの<span class="keyword-tag">重要度</span>や、正式な対応を必要とする<span class="keyword-tag">インシデント</span>であるかどうかを判断可能</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-people-group" aria-hidden="true"></i>
+              <span><span class="keyword-tag">監視チームと調査チームの負担</span>が軽減</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-stopwatch" aria-hidden="true"></i>
+              <span>イベントがインシデントを示唆しているかどうかを判断し、<span class="keyword-tag">正式な対応に着手するまでの時間を短縮</span></span>
+            </li>
+            <li>
+              <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+              <span>文脈が補足されることで、イベントの<span class="keyword-tag">実際の重大度を正確に評価</span>できる</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-1 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-clock fa-lg" style="color: var(--ui-color-2);"></i>
+            セキュリティチームの時間を節約！
+            <br>
+            関連性のない情報が整理されて
+            <br>
+            本当に重要な問題に集中できるよ
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション3: 一般的なアンチパターン -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 3s;" aria-hidden="true"></i>
+          <h2>一般的なアンチパターン</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>職務分掌の要件で別途義務付けられているわけでもないのに、<span class="keyword-tag">さまざまなグループの人員が</span>さまざまなシステムによって生成された検出結果やアラートを調査している</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>組織はセキュリティ検出結果と警告データをすべて標準の保存先に集めているが、<span class="keyword-tag">相関付けやエンリッチメントは調査員が手作業</span>で行う必要がある</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>検出結果の報告と重要度の決定は、<span class="keyword-tag">脅威検出システムのインテリジェンスのみ</span>に頼っている</span>
+            </li>
+          </ul>
+          
+          <div class="compare-container">
+            <div class="compare-card good">
+              <h3><i class="fa-solid fa-thumbs-up" style="color: #4CAF50;"></i> ベストプラクティス</h3>
+              <ul>
+                <li>アラートの自動相関付け</li>
+                <li>一元化された分析</li>
+                <li>コンテキストに基づいた重要度評価</li>
+                <li>追加情報による強化</li>
+                <li>適切なチームへの迅速な通知</li>
+              </ul>
+            </div>
+            
+            <div class="compare-card bad">
+              <h3><i class="fa-solid fa-thumbs-down" style="color: #F44336;"></i> アンチパターン</h3>
+              <ul>
+                <li>サイロ化された監視と対応</li>
+                <li>手動での相関分析</li>
+                <li>単一ソースからの重要度評価</li>
+                <li>コンテキスト情報の欠如</li>
+                <li>誤検知への過剰な対応</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2">
+          <span class="handwritten">
+            <i class="fa-solid fa-exclamation-circle fa-lg" style="color: var(--ui-color-5);"></i>
+            人手による分析だけじゃ間に合わない！
+            <br>
+            大量のアラートに埋もれて
+            <br>
+            本当に重要な脅威を見逃す危険があるよ
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション4: このベストプラクティスを活用するメリット -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-1); animation: fa-spin 6s linear infinite;" aria-hidden="true"></i>
+          <h2>このベストプラクティスを活用するメリット</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-brain" aria-hidden="true"></i>
+              <span>調査担当者に求められる<span class="keyword-tag">認知的な負担</span>や<span class="keyword-tag">手作業</span>によるデータ準備を全体的に減らす</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-stopwatch" aria-hidden="true"></i>
+              <span>イベントがインシデントを示唆しているかどうかを判断し、正式な対応に着手するまでに<span class="keyword-tag">かかる時間を短縮</span></span>
+            </li>
+            <li>
+              <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+              <span>文脈が補足されることで、イベントの<span class="keyword-tag">実際の重大度を正確に評価</span>できる</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-bell-slash" aria-hidden="true"></i>
+              <span><span class="keyword-tag">誤検知</span>による<span class="keyword-tag">アラート疲れ</span>を軽減</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-binoculars" aria-hidden="true"></i>
+              <span>関連するイベントを結びつけることで<span class="keyword-tag">攻撃の全体像</span>を把握しやすくなる</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+              <span>セキュリティ対応の<span class="keyword-tag">一貫性と質</span>が向上</span>
+            </li>
+          </ul>
+          
+          <div class="warning-box">
+            <h3 style="margin-top: 0; color: var(--ui-color-2);"><i class="fa-solid fa-lightbulb" style="margin-right: 5px;"></i>重要度の再評価</h3>
+            <p style="margin-bottom: 0;">実際の重大度は、1つのアラートが示す重大度よりも高い場合や低い場合が考えられます。例えば、単独では「低」とされるアラートでも、他のアクティビティと組み合わせると「高」重大度のインシデントの一部である可能性があります。逆に、誤検知であることが確認できれば、対応の優先度を下げることができます。</p>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-arrow-trend-up fa-lg" style="color: var(--ui-color-2);"></i>
+            一人のセキュリティアナリストが
+            <br>
+            より多くのアラートを効率的に処理できるよ！
+            <br>
+            人材不足の現代では特に重要なポイント
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- セクション5: セキュリティアラートのソース -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-tower-broadcast fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
+          <h2>セキュリティアラートのソース</h2>
+        </div>
+        
+        <div class="card-content">
+          <p>AWSではさまざまなソースからセキュリティアラートが生成されます。これらのソースからのアラートは、関連付けの対象となります。</p>
+          
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+            </div>
+            <div class="service-content">
+              <div class="service-title">AWSセキュリティサービス</div>
+              <ul style="padding-left: 20px; margin-bottom: 0;">
+                <li><span class="keyword-tag">Amazon GuardDuty</span>: 脅威検知サービス</li>
+                <li><span class="keyword-tag">AWS Security Hub</span>: セキュリティアラートの集約サービス</li>
+                <li><span class="keyword-tag">Amazon Macie</span>: 機密データの検出と保護</li>
+                <li><span class="keyword-tag">Amazon Inspector</span>: 脆弱性管理</li>
+                <li><span class="keyword-tag">AWS Config</span>: リソース設定のモニタリング</li>
+                <li><span class="keyword-tag">IAM Access Analyzer</span>: アクセス権の分析</li>
+                <li><span class="keyword-tag">Network Access Analyzer</span>: ネットワークアクセスの分析</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+            </div>
+            <div class="service-content">
+              <div class="service-title">ログと自動分析</div>
+              <ul style="padding-left: 20px; margin-bottom: 0;">
+                <li><span class="keyword-tag">Amazon OpenSearch Service</span>のセキュリティ分析</li>
+                <li>AWSサービス、インフラストラクチャ、アプリケーションログの自動分析から発せられたアラート</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="fa-solid fa-credit-card" aria-hidden="true"></i>
+            </div>
+            <div class="service-content">
+              <div class="service-title">請求関連</div>
+              <ul style="padding-left: 20px; margin-bottom: 0;">
+                <li><span class="keyword-tag">Amazon CloudWatch</span></li>
+                <li><span class="keyword-tag">Amazon EventBridge</span></li>
+                <li><span class="keyword-tag">AWS Budgets</span></li>
+                <li>請求アクティビティの変化に反応したアラート</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="fa-solid fa-globe" aria-hidden="true"></i>
+            </div>
+            <div class="service-content">
+              <div class="service-title">サードパーティと外部ソース</div>
+              <ul style="padding-left: 20px; margin-bottom: 0;">
+                <li><span class="keyword-tag">脅威インテリジェンス</span>のフィード</li>
+                <li><span class="keyword-tag">AWS Partner Network</span>のセキュリティパートナーソリューション</li>
+                <li><span class="keyword-tag">AWS Trust & Safety</span>、顧客や従業員からの連絡</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="info-box">
+            <h3 style="margin-top: 0;"><i class="fa-solid fa-info-circle" style="margin-right: 5px;"></i>アラートの基本構成要素</h3>
+            <p style="margin-bottom: 0;">アラートには、最も基本的な形式で、以下の情報が含まれます：</p>
+            <ul style="margin-top: 5px; margin-bottom: 0;">
+              <li><span class="keyword-tag">誰が</span> (プリンシパルまたはアイデンティティ)</li>
+              <li><span class="keyword-tag">何を</span> (実行されたアクション)</li>
+              <li><span class="keyword-tag">何に対して</span> (影響を受けるリソース)</li>
+            </ul>
+            <p style="margin-top: 5px; margin-bottom: 0;">これらの要素が相関付けの土台となります。</p>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-satellite-dish fa-lg" style="color: var(--ui-color-5);"></i>
+            アラートはいろんな場所から来るよ！
+            <br>
+            セキュリティサービスだけじゃなく
+            <br>
+            請求情報も大事な手がかりになるんだ
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション6: アラートの相関付けとエンリッチメント -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite;" aria-hidden="true"></i>
+          <h2>アラートの相関付けとエンリッチメント</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="flow-diagram">
+            <div class="flow-step">
+              <div class="flow-title"><i class="fa-solid fa-1" aria-hidden="true"></i>アラートの収集</div>
+              <p>さまざまなソースからのアラートを一元的に収集します。これには、AWSセキュリティサービス、ログ分析、請求アラート、サードパーティのソースが含まれます。</p>
+            </div>
+            <div class="flow-step">
+              <div class="flow-title"><i class="fa-solid fa-2" aria-hidden="true"></i>識別子のマッピング</div>
+              <p>各ソースのアイデンティティ、アクション、リソースの識別子間のマッピングを作成します。これが相関付けの土台となります。</p>
+            </div>
+            <div class="flow-step">
+              <div class="flow-title"><i class="fa-solid fa-3" aria-hidden="true"></i>コンテキスト情報の追加</div>
+              <p>CloudTrail、VPCフローログ、Route 53 Resolverログなどの追加データソースから情報を取得し、アラートを強化します。</p>
+            </div>
+            <div class="flow-step">
+              <div class="flow-title"><i class="fa-solid fa-4" aria-hidden="true"></i>パターン検出と関連付け</div>
+              <p>時間、関係者、行動パターンなどに基づいて関連するアラートをグループ化し、より大きなセキュリティイベントを特定します。</p>
+            </div>
+            <div class="flow-step">
+              <div class="flow-title"><i class="fa-solid fa-5" aria-hidden="true"></i>重要度の再評価</div>
+              <p>関連付けられた情報に基づいて、イベントの実際の重要度を評価し、対応の優先順位を決定します。</p>
+            </div>
+          </div>
+          
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>
+            </div>
+            <div class="service-content">
+              <div class="service-title">Amazon Detective</div>
+              <p>AWSやサードパーティーのさまざまなソースからのアラートを継続的に取り込み、さまざまな形式のインテリジェンスを使用してそれらの関係を視覚的にグラフ化して調査に役立てます。</p>
+              <p style="margin-bottom: 0;">Detectiveは、関連付けの代表的なサービスであり、アラートの相互関係を自動的に特定し、視覚化します。</p>
+            </div>
+          </div>
+          
+          <div class="info-box">
+            <h3 style="margin-top: 0;"><i class="fa-solid fa-lightbulb" style="margin-right: 5px;"></i>具体例: 重要度の再評価</h3>
+            <p>例えば、Amazon GuardDutyが、ワークロード内のEC2インスタンスが想定されていないドメイン名をクエリしたとしてアラートを発したとします。GuardDutyは、このアラートに「低」と重要度を判定しています。</p>
+            <p>しかし、アラートの発生前後の他のアクティビティと自動で相関付けた結果、次のことが判明しました：</p>
+            <ul>
+              <li>数百のEC2インスタンスが同じアイデンティティによってデプロイされている</li>
+              <li>全体的な運用コストが増加している</li>
+            </ul>
+            <p style="margin-bottom: 0;">この場合、これらの関連付けられたイベントのコンテキストを新しいセキュリティアラートとして公開し、重要度を「高」に調整する可能性があります。これにより、対応が迅速化します。</p>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-puzzle-piece fa-lg" style="color: var(--ui-color-2);"></i>
+            パズルのピースをつなげるように
+            <br>
+            バラバラの情報を関連付けると
+            <br>
+            攻撃の全体像が見えてくるんだ！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション7: 実装手順 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-list-check fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
+          <h2>実装手順</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="step-box">
+            <h3>Step 1: セキュリティアラート情報のソースを特定する</h3>
+            <ul class="keyword-list" style="margin-left: 10px;">
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span>組織で使用している<span class="keyword-tag">セキュリティアラートのソース</span>をすべて洗い出す</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span>各システムからのアラートが<span class="keyword-tag">アイデンティティ、アクション、リソース</span>をどのように表すかを理解</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span>どの要素で相関付けができるかを判断</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <h3>Step 2: アラートを取りまとめるメカニズムを確立する</h3>
+            <ul class="keyword-list" style="margin-left: 10px;">
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span>さまざまなソースからのアラートを<span class="keyword-tag">一元的に収集</span>する仕組みを構築</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">AWS Security Hub</span>: セキュリティアラートの集約サービス</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">Amazon EventBridge</span>: イベント駆動型アーキテクチャの構築</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">Amazon CloudWatch</span>: ログとメトリクスのモニタリング</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <h3>Step 3: データの相関付けとエンリッチメントのためのソースを特定する</h3>
+            <ul class="keyword-list" style="margin-left: 10px;">
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">AWS CloudTrail</span>: APIアクティビティのログ</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">VPC フローログ</span>: ネットワークトラフィックの情報</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">Route 53 Resolver ログ</span>: DNSクエリの記録</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">インフラストラクチャ</span>および<span class="keyword-tag">アプリケーションログ</span></span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">Amazon Security Lake</span>との統合も検討</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <h3>Step 4: アラートの相関付けとエンリッチメントを実装する</h3>
+            <ul class="keyword-list" style="margin-left: 10px;">
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span>アラートをデータの相関付けやエンリッチメントのソースと統合</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span>セキュリティイベントのより詳細な文脈を作成し、重要度を設定</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <span>以下のいずれかのアプローチを選択：</span>
+              </li>
+            </ul>
+            
+            <div style="display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 180px; background-color: #f0f9ff; padding: 10px; border-radius: 8px;">
+                <p style="margin: 0; font-weight: bold;"><i class="fa-solid fa-puzzle-piece" style="margin-right: 5px; color: var(--ui-color-1);"></i>既製ソリューション</p>
+                <ul style="margin-top: 5px; margin-bottom: 0; padding-left: 20px;">
+                  <li><span class="keyword-tag">Amazon Detective</span></li>
+                  <li><span class="keyword-tag">SIEMツール</span></li>
+                  <li>その他のサードパーティソリューション</li>
+                </ul>
+              </div>
+              
+              <div style="flex: 1; min-width: 180px; background-color: #f0f9ff; padding: 10px; border-radius: 8px;">
+                <p style="margin: 0; font-weight: bold;"><i class="fa-solid fa-code" style="margin-right: 5px; color: var(--ui-color-1);"></i>カスタム構築</p>
+                <ul style="margin-top: 5px; margin-bottom: 0; padding-left: 20px;">
+                  <li><span class="keyword-tag">AWS Lambda</span>関数</li>
+                  <li><span class="keyword-tag">Amazon Athena</span>クエリ</li>
+                  <li><span class="keyword-tag">EventBridge</span>へのパブリッシュ</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div class="warning-box" style="margin-top: 15px;">
+            <h3 style="margin-top: 0; color: var(--ui-color-2);"><i class="fa-solid fa-lightbulb" style="margin-right: 5px;"></i>重要なポイント</h3>
+            <p style="margin-bottom: 0;">アラートの相関付けとエンリッチメントは一度構築して終わりではなく、継続的な改善が必要です。新しい脅威パターンや組織の変化に合わせて、相関ルールやエンリッチメントソースを定期的に見直し、更新することが重要です。また、誤検知率とセキュリティイベントの検出率のバランスを取りながら、システムを調整していきましょう。</p>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-wrench fa-lg" style="color: var(--ui-color-5);"></i>
+            既製品を使うか自作するか、
+            <br>
+            それとも組み合わせるか…
+            <br>
+            環境に合った方法を選ぼう！
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- セクション8: まとめ -->
+    <div class="section-layout">
+      <div class="section-card" style="max-width: 920px;">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-check-circle fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
+          <h2>まとめ</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-link" aria-hidden="true"></i>
+              <span><span class="keyword-tag">アラートの相関付け</span>: バラバラのアラートを関連付けて包括的な視点を得る</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-plus-circle" aria-hidden="true"></i>
+              <span><span class="keyword-tag">情報のエンリッチメント</span>: 追加コンテキストで意思決定の質を向上</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-robot" aria-hidden="true"></i>
+              <span><span class="keyword-tag">自動化</span>: 手作業を減らし、対応時間を短縮</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+              <span><span class="keyword-tag">重要度の適正評価</span>: 状況に応じた適切な重要度の設定</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-users" aria-hidden="true"></i>
+              <span><span class="keyword-tag">チームの負担軽減</span>: セキュリティチームがより重要なタスクに集中可能</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+              <span><span class="keyword-tag">セキュリティ対応の向上</span>: 全体像を把握した上での的確な対応</span>
+            </li>
+          </ul>
+          
+          <div class="info-box">
+            <h3 style="margin-top: 0;"><i class="fa-solid fa-key" style="margin-right: 5px;"></i>ポイント</h3>
+            <p>セキュリティアラートの相関付けとエンリッチメントは、単なる技術的な改善ではなく、セキュリティオペレーションの<span class="keyword-tag">効率性</span>と<span class="keyword-tag">有効性</span>を大幅に向上させる戦略的なアプローチです。</p>
+            <p style="margin-bottom: 0;">このベストプラクティスを実装することで、セキュリティチームはより少ないリソースでより多くの脅威に対処できるようになり、組織全体のセキュリティ態勢が強化されます。</p>
+          </div>
+          
+          <div style="margin-top: 20px; padding: 15px; background-color: #e8f5e9; border-radius: 10px; border-left: 4px solid #4CAF50;">
+            <p style="margin: 0; font-weight: bold; color: #4CAF50;"><i class="fa-solid fa-lightbulb" style="margin-right: 5px;"></i>次のステップ</p>
+            <p style="margin-top: 10px; margin-bottom: 0;">既存のセキュリティアラートソースを洗い出し、それらを一元的に収集する仕組みを検討しましょう。Amazon Detectiveなどの既存サービスの活用から始め、組織のニーズに合わせて徐々に拡張していくアプローチがおすすめです。相関付けとエンリッチメントの自動化により、セキュリティチームの負担を軽減しながら、セキュリティ対応の質を向上させることができます。</p>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-shield-halved fa-lg" style="color: var(--ui-color-2);"></i>
+            点と点をつなぐことで
+            <br>
+            セキュリティの全体像が見えてくる！
+            <br>
+            これがセキュリティの「賢さ」を高める鍵だよ
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

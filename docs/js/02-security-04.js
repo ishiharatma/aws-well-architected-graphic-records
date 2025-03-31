@@ -77,6 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // 必要に応じて他のファイルを追加
     ];
 
-    const basePath = './04-performance-efficiency';
+    const basePath = './04-infrastructure-protection';
     initializeCardRendering('card-container', 'language-toggle', files, basePath);
 });

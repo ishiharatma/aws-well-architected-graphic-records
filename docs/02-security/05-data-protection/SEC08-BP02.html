@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEC08-BP02 保管中に暗号化を適用する</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    
+    :root {
+      --ui-color-1: #1B6C8C;
+      --ui-color-2: #BF8136;
+      --ui-color-3: #F2E8E4;
+      --ui-color-4: #260101;
+      --ui-color-5: #BF5656;
+    }
+    
+    body {
+      font-family: 'Zen Kurenaido', sans-serif;
+      background-color: #FFF8F5;
+      color: #333333;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 2000px;
+      margin: 0 auto;
+    }
+    
+    /* ヘッダースタイル */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+      padding: 20px;
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    
+    .title h1 {
+      font-size: 36px;
+      color: var(--ui-color-1);
+      margin: 15px 0;
+      line-height: 1.2;
+    }
+    
+    .date {
+      font-size: 14px;
+      color: #777777;
+    }
+    
+    /* セクションレイアウト */
+    .section-layout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+    
+    /* カードスタイル */
+    .section-card {
+      flex: 1;
+      min-width: 220px;
+      max-width: 450px;
+      background-color: white;
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInScale 0.5s ease-out;
+    }
+    
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    /* カード内アイコンコンテナ */
+    .mega-icon-container {
+      text-align: center;
+      margin: 15px 0;
+    }
+    
+    /* カードコンテンツ */
+    .card-content {
+      padding: 0 10px 15px;
+    }
+    
+    /* キーワードリスト */
+    .keyword-list {
+      margin: 15px 0;
+      padding: 0;
+      list-style-type: none;
+    }
+    
+    .keyword-list li {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .keyword-list li i {
+      margin-right: 8px;
+      color: var(--ui-color-2);
+      min-width: 16px;
+      margin-top: 4px;
+    }
+    
+    /* キーワードタグ */
+    .keyword-tag {
+      background-color: var(--ui-color-3);
+      color: var(--ui-color-4);
+      padding: 3px 8px;
+      border-radius: 5px;
+      margin-right: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    .risk-tag {
+      background-color: #FFAA33;
+      color: var(--ui-color-4);
+      padding: 3px 10px;
+      border-radius: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    .high-risk-tag {
+      background-color: #FF5555;
+      color: white;
+      padding: 3px 10px;
+      border-radius: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    /* 手書き風吹き出し */
+    .speech-bubble {
+      position: relative;
+      background: #fff;
+      border: 3px solid var(--ui-color-1);
+      border-radius: 20px;
+      padding: 10px 15px;
+      margin: 15px 5px;
+      font-family: 'Yomogi', cursive;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+      transform: rotate(-1deg);
+    }
+    
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -13px;
+      left: 20px;
+      border-width: 12px 8px 0;
+      border-style: solid;
+      border-color: var(--ui-color-1) transparent;
+      display: block;
+      width: 0;
+    }
+    
+    /* 吹き出しバリエーション */
+    .speech-bubble.right::after {
+      left: auto;
+      right: 20px;
+      transform: rotate(15deg);
+    }
+    
+    .speech-bubble.top::after {
+      bottom: auto;
+      top: -13px;
+      border-width: 0 8px 12px;
+      transform: rotate(-5deg);
+    }
+    
+    .speech-bubble.variant-1 {
+      background: #FFF9E3;
+      border-color: var(--ui-color-2);
+      transform: rotate(1deg);
+    }
+    
+    .speech-bubble.variant-1::after {
+      border-color: var(--ui-color-2) transparent;
+    }
+    
+    .speech-bubble.variant-2 {
+      background: #FFE9E9;
+      border-color: var(--ui-color-5);
+      transform: rotate(-2deg);
+    }
+    
+    .speech-bubble.variant-2::after {
+      border-color: var(--ui-color-5) transparent;
+    }
+    
+    /* 手書き文字 */
+    .handwritten {
+      font-family: 'Yomogi', cursive;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #333;
+    }
+    
+    /* コードプレビュー */
+    pre {
+      background: #f5f5f5;
+      padding: 8px;
+      border-radius: 5px;
+      font-size: 12px;
+      margin-top: 10px;
+      overflow-x: auto;
+    }
+    
+    /* 実装ステップボックス */
+    .step-box {
+      border-left: 4px solid var(--ui-color-1);
+      padding-left: 12px;
+      margin: 10px 0;
+    }
+    
+    /* 比較表 */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    
+    .comparison-table th,
+    .comparison-table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .comparison-table th {
+      background-color: var(--ui-color-3);
+      font-weight: bold;
+    }
+    
+    .comparison-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    
+    /* AWSサービスボックス */
+    .aws-service-box {
+      background-color: #f0f9ff;
+      border: 1px solid #d0e3f2;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .aws-service-icon {
+      margin-right: 10px;
+      color: var(--ui-color-1);
+      font-size: 24px;
+    }
+    
+    .aws-service-content {
+      flex-grow: 1;
+    }
+    
+    .aws-service-name {
+      font-weight: bold;
+      color: var(--ui-color-1);
+      margin-bottom: 5px;
+    }
+    
+    /* レスポンシブ対応 */
+    @media (max-width: 1600px) {
+      .section-card {
+        min-width: 280px;
+      }
+    }
+    
+    @media (max-width: 1200px) {
+      .section-card {
+        min-width: 320px;
+      }
+    }
+    
+    @media (max-width: 900px) {
+      .section-card {
+        min-width: 380px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .section-layout {
+        flex-direction: column;
+      }
+      
+      .section-card {
+        width: 100%;
+        min-width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ヘッダー -->
+    <div class="header">
+      <div class="title">
+        <i class="fa-solid fa-lock fa-7x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
+        <h1>SEC08-BP02 保管中に暗号化を適用する</h1>
+      </div>
+      <div class="date">2025年4月10日</div>
+    </div>
+    
+    <!-- セクション1: 概要 -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-shield-halved fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
+          <h2>概要</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-database" aria-hidden="true"></i>
+              <span><span class="keyword-tag">保管中のプライベートデータ</span>を暗号化して機密性を維持</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-unlock-keyhole" aria-hidden="true"></i>
+              <span>意図しない<span class="keyword-tag">データの開示や流出</span>に対する保護を強化</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-key" aria-hidden="true"></i>
+              <span>暗号化は最初に<span class="keyword-tag">復号化</span>されない限り、データにアクセスできないよう保護</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+              <span>暗号化されていないデータを<span class="keyword-tag">インベントリ</span>して制御</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble">
+          <span class="handwritten">
+            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+            データが盗まれても
+            <br>
+            暗号化されていれば読めない！
+            <br>
+            最後の砦として重要なんだ
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション2: 期待される成果 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-check-double fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
+          <h2>期待される成果</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+              <span>保管中にデフォルトで<span class="keyword-tag">プライベートデータを暗号化</span>するメカニズム</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-user-secret" aria-hidden="true"></i>
+              <span>データの<span class="keyword-tag">機密性を維持</span>し、意図的または不注意による開示から保護</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+              <span>データ保護に<span class="keyword-tag">追加の保護層</span>を提供</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
+              <span><span class="keyword-tag">暗号化されていないデータのインベントリ</span>を維持し、保護対策を理解</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-1 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-check-circle fa-lg" style="color: var(--ui-color-2);"></i>
+            デフォルトで暗号化！
+            <br>
+            これが理想的な状態だよ
+            <br>
+            何も考えなくても安全になる
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション3: アンチパターン -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 3s;" aria-hidden="true"></i>
+          <h2>一般的なアンチパターン</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span><span class="keyword-tag">デフォルトで暗号化する設定</span>を使用しない</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>複合キーに<span class="keyword-tag">過度に寛容なアクセス</span>を提供する</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>暗号化および復号化キーの使用を<span class="keyword-tag">モニタリングしない</span></span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>データを<span class="keyword-tag">暗号化せずに保管</span>する</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>データの使用、タイプ、分類に関係なく、<span class="keyword-tag">すべてのデータに同じ暗号化キー</span>を使う</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-2">
+          <span class="handwritten">
+            <i class="fa-solid fa-triangle-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+            同じキーをすべてに使うのは危険！
+            <br>
+            一つ漏れると全部漏れる...
+            <br>
+            データに合わせたキー管理が大事
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション4: リスクレベル -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: #FF5555; animation: fa-beat-fade 2s infinite;" aria-hidden="true"></i>
+          <h2>リスクレベル</h2>
+        </div>
+        
+        <div class="card-content" style="text-align: center;">
+          <p style="font-size: 24px; margin: 20px 0;">
+            <span class="high-risk-tag">高</span>
+          </p>
+          <p>このベストプラクティスを活用しない場合のリスクレベル</p>
+          
+          <ul class="keyword-list" style="text-align: left; margin-top: 20px;">
+            <li>
+              <i class="fa-solid fa-user-secret" aria-hidden="true"></i>
+              <span>データ漏洩時に<span class="keyword-tag">機密情報が保護されない</span></span>
+            </li>
+            <li>
+              <i class="fa-solid fa-gavel" aria-hidden="true"></i>
+              <span><span class="keyword-tag">コンプライアンス違反</span>のリスク</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-coins" aria-hidden="true"></i>
+              <span>漏洩による<span class="keyword-tag">金銭的損失</span>と信頼損失</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-2 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-exclamation-circle fa-lg" style="color: var(--ui-color-5);"></i>
+            リスクは「高」！
+            <br>
+            暗号化しないと大変なことに
+            <br>
+            なりかねないよ...
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- セクション5: AWS KMSと暗号化キー管理 -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-key fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite;" aria-hidden="true"></i>
+          <h2>AWS KMSと暗号化キー管理</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-sitemap" aria-hidden="true"></i>
+              <span><span class="keyword-tag">暗号化キー</span>とワークロード内の<span class="keyword-tag">データ分類</span>をマッピング</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-key" aria-hidden="true"></i>
+              <span>AWSサービス制御型キー: AWS が<span class="keyword-tag">ユーザーに変わって管理・使用</span></span>
+            </li>
+            <li>
+              <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+              <span>カスタマーマネージドキー (CMK): <span class="keyword-tag">細かいアクセス管理</span>が必要な場合に最適</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-file-contract" aria-hidden="true"></i>
+              <span>キーポリシーで<span class="keyword-tag">ローテーション</span>や<span class="keyword-tag">アクセス管理</span>など完全制御</span>
+            </li>
+          </ul>
+          
+          <div class="aws-service-box">
+            <div class="aws-service-icon">
+              <i class="fa-solid fa-key" aria-hidden="true"></i>
+            </div>
+            <div class="aws-service-content">
+              <div class="aws-service-name">AWS Key Management Service (KMS)</div>
+              <p>多くのAWSサービスと統合し、保管中のデータを暗号化しやすくします。キーの作成・管理・使用を完全に制御できます。</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+            データの重要度に合わせて
+            <br>
+            キーの管理レベルを選ぼう！
+            <br>
+            <span class="keyword-tag">CMK</span>は最高レベルの保護だよ
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション6: AWSサービスの暗号化機能 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-cloud-lock fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
+          <h2>AWSサービスの暗号化機能</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-bucket" aria-hidden="true"></i>
+              <span><span class="keyword-tag">Amazon S3</span>: デフォルトですべての新規オブジェクトを暗号化</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-hard-drive" aria-hidden="true"></i>
+              <span><span class="keyword-tag">Amazon EBS</span>: アカウントレベルでデフォルト暗号化を設定可能</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-database" aria-hidden="true"></i>
+              <span><span class="keyword-tag">Amazon RDS</span>: 暗号化オプションでデータベースとスナップショットを保護</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-folder-tree" aria-hidden="true"></i>
+              <span><span class="keyword-tag">Amazon EFS</span>: デフォルトの暗号化設定をサポート</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-server" aria-hidden="true"></i>
+              <span><span class="keyword-tag">Amazon EC2</span>: 暗号化されたAMIの作成とコピーが可能</span>
+            </li>
+          </ul>
+          
+          <div style="background-color: #f5f5f5; padding: 10px; border-radius: 5px; margin-top: 10px;">
+            <p style="margin: 0; font-weight: bold; color: var(--ui-color-1);"><i class="fa-solid fa-clipboard-check" style="margin-right: 5px;"></i>暗号化状況の自動確認</p>
+            <p style="margin: 5px 0 0 0;">AWS Configルールを使用してEBSボリューム、RDSインスタンス、S3バケットなどの暗号化使用状況を自動的に確認できます。</p>
+          </div>
+        </div>
+        
+        <div class="speech-bubble right">
+          <span class="handwritten">
+            <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-1);"></i>
+            最近のAWSサービスは
+            <br>
+            デフォルトで暗号化してくれる！
+            <br>
+            パフォーマンスにも影響なし
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション7: クライアント側暗号化 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-laptop-code fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
+          <h2>クライアント側暗号化</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-upload" aria-hidden="true"></i>
+              <span>クラウドに<span class="keyword-tag">アップロードする前</span>にデータを暗号化</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+              <span><span class="keyword-tag">AWS Encryption SDK</span>: エンベロープ暗号化を使用してデータを保護</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+              <span><span class="keyword-tag">AWS CloudHSM</span>: FIPS 140-2 レベル3検証済みHSMで暗号化キーを管理</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-table" aria-hidden="true"></i>
+              <span><span class="keyword-tag">DynamoDB Encryption Client</span>: アップロード前のアイテムを暗号化・署名</span>
+            </li>
+          </ul>
+          
+          <div style="background-color: #f9f9e0; padding: 10px; border-radius: 5px; margin-top: 15px; border-left: 4px solid var(--ui-color-2);">
+            <p style="margin: 0; font-weight: bold;"><i class="fa-solid fa-lightbulb" style="color: var(--ui-color-2); margin-right: 5px;"></i>CloudHSM の主なユースケース</p>
+            <ul style="margin: 5px 0 0 0; padding-left: 20px;">
+              <li>認証局 (CA) 発行用プライベートキーの保護</li>
+              <li>Oracle データベースに対するTransparent Database Encryption (TDE)</li>
+              <li>最高レベルのセキュリティが求められる金融データの保護</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2">
+          <span class="handwritten">
+            <i class="fa-solid fa-user-lock fa-lg" style="color: var(--ui-color-5);"></i>
+            最大限の保護が必要なら
+            <br>
+            クライアント側で暗号化！
+            <br>
+            クラウドに送る前に安全にするんだ
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション8: データ分類と暗号化戦略 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-layer-group fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite;" aria-hidden="true"></i>
+          <h2>データ分類と暗号化戦略</h2>
+        </div>
+        
+        <div class="card-content">
+          <table class="comparison-table">
+            <tr>
+              <th>データ分類</th>
+              <th>推奨暗号化アプローチ</th>
+              <th>キー管理</th>
+            </tr>
+            <tr>
+              <td><span class="keyword-tag">公開</span></td>
+              <td>基本的な暗号化</td>
+              <td>AWS マネージドキー</td>
+            </tr>
+            <tr>
+              <td><span class="keyword-tag">内部</span></td>
+              <td>標準暗号化</td>
+              <td>AWS マネージドキー</td>
+            </tr>
+            <tr>
+              <td><span class="keyword-tag">機密</span></td>
+              <td>高度な暗号化</td>
+              <td>カスタマーマネージドキー (CMK)</td>
+            </tr>
+            <tr>
+              <td><span class="keyword-tag">極秘</span></td>
+              <td>最高レベルの暗号化+クライアント側暗号化</td>
+              <td>CloudHSM内のCMK</td>
+            </tr>
+          </table>
+          
+          <div style="margin-top: 15px; padding: 10px; background-color: #e6f7ff; border-radius: 5px; border-left: 4px solid var(--ui-color-1);">
+            <p style="margin: 0; font-weight: bold;"><i class="fa-solid fa-sitemap" style="color: var(--ui-color-1); margin-right: 5px;"></i>データ分類に基づくキー戦略</p>
+            <p style="margin: 5px 0 0 0;">
+              少数のデータ暗号化キーを使用する場合、データ分類に応じたキーの分離が重要です。開発・テスト・本番環境ごとに異なるキーを使用しましょう。
+            </p>
+          </div>

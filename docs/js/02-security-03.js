@@ -33,8 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ja: "非準拠リソースの修復を開始する",
                 en: "Initiate remediation of non-compliant resources"
             }
-        },
-        // 必要に応じて他のファイルを追加
+        }
     ];
 
     const basePath = './03-detection';

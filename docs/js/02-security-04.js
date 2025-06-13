@@ -73,8 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ja: "コンピューティング保護を自動化する",
                 en: "Automate computing protection"
             }
-        },
-        // 必要に応じて他のファイルを追加
+        }
     ];
 
     const basePath = './04-infrastructure-protection';

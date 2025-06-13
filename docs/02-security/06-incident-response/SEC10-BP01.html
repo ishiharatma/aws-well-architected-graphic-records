@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEC10-BP01 重要な人員と外部リソースを特定する</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    
+    :root {
+      --ui-color-1: #1B6C8C;
+      --ui-color-2: #BF8136;
+      --ui-color-3: #F2E8E4;
+      --ui-color-4: #260101;
+      --ui-color-5: #BF5656;
+    }
+    
+    body {
+      font-family: 'Zen Kurenaido', sans-serif;
+      background-color: #FFF8F5;
+      color: #333333;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 2000px;
+      margin: 0 auto;
+    }
+    
+    /* ヘッダースタイル */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+      padding: 20px;
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    
+    .title h1 {
+      font-size: 36px;
+      color: var(--ui-color-1);
+      margin: 15px 0;
+      line-height: 1.2;
+    }
+    
+    .date {
+      font-size: 14px;
+      color: #777777;
+    }
+    
+    /* セクションレイアウト */
+    .section-layout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+    
+    /* カードスタイル */
+    .section-card {
+      flex: 1;
+      min-width: 220px;
+      max-width: 450px;
+      background-color: white;
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInScale 0.5s ease-out;
+    }
+    
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    /* カード内アイコンコンテナ */
+    .mega-icon-container {
+      text-align: center;
+      margin: 15px 0;
+    }
+    
+    /* カードコンテンツ */
+    .card-content {
+      padding: 0 10px 15px;
+    }
+    
+    /* キーワードリスト */
+    .keyword-list {
+      margin: 15px 0;
+      padding: 0;
+      list-style-type: none;
+    }
+    
+    .keyword-list li {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .keyword-list li i {
+      margin-right: 8px;
+      color: var(--ui-color-2);
+      min-width: 16px;
+      margin-top: 4px;
+    }
+    
+    /* キーワードタグ */
+    .keyword-tag {
+      background-color: var(--ui-color-3);
+      color: var(--ui-color-4);
+      padding: 3px 8px;
+      border-radius: 5px;
+      margin-right: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    .risk-tag {
+      background-color: #FF6B6B;
+      color: white;
+      padding: 3px 10px;
+      border-radius: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    /* 手書き風吹き出し */
+    .speech-bubble {
+      position: relative;
+      background: #fff;
+      border: 3px solid var(--ui-color-1);
+      border-radius: 20px;
+      padding: 10px 15px;
+      margin: 15px 5px;
+      font-family: 'Yomogi', cursive;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+      transform: rotate(-1deg);
+    }
+    
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -13px;
+      left: 20px;
+      border-width: 12px 8px 0;
+      border-style: solid;
+      border-color: var(--ui-color-1) transparent;
+      display: block;
+      width: 0;
+    }
+    
+    /* 吹き出しバリエーション */
+    .speech-bubble.right::after {
+      left: auto;
+      right: 20px;
+      transform: rotate(15deg);
+    }
+    
+    .speech-bubble.top::after {
+      bottom: auto;
+      top: -13px;
+      border-width: 0 8px 12px;
+      transform: rotate(-5deg);
+    }
+    
+    .speech-bubble.variant-1 {
+      background: #FFF9E3;
+      border-color: var(--ui-color-2);
+      transform: rotate(1deg);
+    }
+    
+    .speech-bubble.variant-1::after {
+      border-color: var(--ui-color-2) transparent;
+    }
+    
+    .speech-bubble.variant-2 {
+      background: #FFE9E9;
+      border-color: var(--ui-color-5);
+      transform: rotate(-2deg);
+    }
+    
+    .speech-bubble.variant-2::after {
+      border-color: var(--ui-color-5) transparent;
+    }
+    
+    /* 手書き文字 */
+    .handwritten {
+      font-family: 'Yomogi', cursive;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #333;
+    }
+    
+    /* 実装ステップボックス */
+    .step-box {
+      border-left: 4px solid var(--ui-color-1);
+      padding-left: 12px;
+      margin: 10px 0;
+    }
+    
+    /* 人員表 */
+    .personnel-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .personnel-table th,
+    .personnel-table td {
+      padding: 12px 8px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .personnel-table th {
+      background-color: var(--ui-color-3);
+      font-weight: bold;
+      color: var(--ui-color-4);
+    }
+    
+    .personnel-table tr:nth-child(even) {
+      background-color: #ffffff;
+    }
+    
+    .personnel-table tr:hover {
+      background-color: #f0f9ff;
+    }
+    
+    /* 組織図 */
+    .org-chart {
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 15px 0;
+      text-align: center;
+    }
+    
+    .org-level {
+      margin: 10px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .org-role {
+      background-color: white;
+      border: 2px solid var(--ui-color-1);
+      border-radius: 15px;
+      padding: 10px 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      min-width: 120px;
+      text-align: center;
+    }
+    
+    .org-role-title {
+      font-weight: bold;
+      color: var(--ui-color-1);
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    
+    .org-role-desc {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .org-arrow {
+      color: var(--ui-color-2);
+      font-size: 24px;
+      margin: 0 10px;
+    }
+    
+    /* レスポンシブ対応 */
+    @media (max-width: 1600px) {
+      .section-card {
+        min-width: 280px;
+      }
+    }
+    
+    @media (max-width: 1200px) {
+      .section-card {
+        min-width: 320px;
+      }
+    }
+    
+    @media (max-width: 900px) {
+      .section-card {
+        min-width: 380px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .section-layout {
+        flex-direction: column;
+      }
+      
+      .section-card {
+        width: 100%;
+        min-width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ヘッダー -->
+    <div class="header">
+      <div class="title">
+        <i class="fa-solid fa-users fa-7x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
+        <h1>SEC10-BP01 重要な人員と外部リソースを特定する</h1>
+      </div>
+      <div class="date">AWS Well-Architected セキュリティの柱 - 準備</div>
+    </div>
+    
+    <!-- セクション1: 概要 -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-address-book fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
+          <h2>概要</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-people-group" aria-hidden="true"></i>
+              <span>組織の<span class="keyword-tag">インシデント対応体制</span>を整備</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-id-card" aria-hidden="true"></i>
+              <span>組織内外の<span class="keyword-tag">担当者</span>、<span class="keyword-tag">リソース</span>、<span class="keyword-tag">法的義務</span>を特定</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-phone" aria-hidden="true"></i>
+              <span>主要な担当者の<span class="keyword-tag">連絡先情報</span>と<span class="keyword-tag">役割</span>を明確化</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+              <span>定期的な<span class="keyword-tag">見直し</span>と<span class="keyword-tag">更新</span>を実施</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble">
+          <span class="handwritten">
+            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+            インシデント発生時に「誰に連絡すれば良いか」
+            <br>
+            迷わないように事前準備が大切！
+            <br>
+            <span class="keyword-tag">緊急時の連絡網</span>を整備しよう
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション2: 期待される成果 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-clipboard-check fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
+          <h2>期待される成果</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+              <span>主要な担当者の<span class="keyword-tag">最新リスト</span>を作成・維持</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-user-tag" aria-hidden="true"></i>
+              <span>セキュリティイベント対応時の<span class="keyword-tag">役割</span>と<span class="keyword-tag">責任</span>を明確化</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+              <span><span class="keyword-tag">サードパーティ</span>のサービスプロバイダーやベンダーも含める</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+              <span>適切な<span class="keyword-tag">責任</span>と<span class="keyword-tag">アクセス権</span>を持つ担当者による迅速な対応</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-1 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-check-double fa-lg" style="color: var(--ui-color-2);"></i>
+            「この人がいない！」という状況を
+            <br>
+            避けるために複数の連絡方法と
+            <br>
+            バックアップ体制を準備しよう
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション3: 主要な組織内担当者 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-sitemap fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite;" aria-hidden="true"></i>
+          <h2>主要な組織内担当者</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="org-chart">
+            <div class="org-level">
+              <div class="org-role">
+                <div class="org-role-title">
+                  <i class="fa-solid fa-crown" style="color: var(--ui-color-2);"></i>
+                  インシデント管理者
+                </div>
+                <div class="org-role-desc">イベント対応時の全権限を有する</div>
+              </div>
+            </div>
+            
+            <div class="org-level">
+              <i class="fa-solid fa-arrow-down org-arrow"></i>
+            </div>
+            
+            <div class="org-level">
+              <div class="org-role">
+                <div class="org-role-title">
+                  <i class="fa-solid fa-magnifying-glass" style="color: var(--ui-color-2);"></i>
+                  インシデント対応者
+                </div>
+                <div class="org-role-desc">調査・修正を担当</div>
+              </div>
+              
+              <div class="org-role">
+                <div class="org-role-title">
+                  <i class="fa-solid fa-bullhorn" style="color: var(--ui-color-2);"></i>
+                  コミュニケーションリーダー
+                </div>
+                <div class="org-role-desc">内外コミュニケーション担当</div>
+              </div>
+            </div>
+            
+            <div class="org-level">
+              <i class="fa-solid fa-arrow-down org-arrow"></i>
+            </div>
+            
+            <div class="org-level">
+              <div class="org-role">
+                <div class="org-role-title">
+                  <i class="fa-solid fa-user-graduate" style="color: var(--ui-color-2);"></i>
+                  対象分野エキスパート(SME)
+                </div>
+                <div class="org-role-desc">重要ワークロードの深い知識を提供</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2">
+          <span class="handwritten">
+            <i class="fa-solid fa-users fa-lg" style="color: var(--ui-color-5);"></i>
+            役割分担を明確にして
+            <br>
+            混乱を避けよう！
+            <br>
+            <span class="keyword-tag">指揮系統</span>も重要だよ
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション4: 人員リスト例 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-table fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
+          <h2>人員リスト例</h2>
+        </div>
+        
+        <div class="card-content">
+          <table class="personnel-table">
+            <thead>
+              <tr>
+                <th><i class="fa-solid fa-user-tag"></i> 役割</th>
+                <th><i class="fa-solid fa-user"></i> 氏名</th>
+                <th><i class="fa-solid fa-phone"></i> 連絡先</th>
+                <th><i class="fa-solid fa-tasks"></i> 責任</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="keyword-tag">管理者</span></td>
+                <td>田中 太郎</td>
+                <td>tanaka@example.com<br>080-1234-5678</td>
+                <td>対応時の全権限</td>
+              </tr>
+              <tr>
+                <td><span class="keyword-tag">対応者</span></td>
+                <td>佐藤 花子</td>
+                <td>sato@example.com<br>090-9876-5432</td>
+                <td>調査と修正</td>
+              </tr>
+              <tr>
+                <td><span class="keyword-tag">コミュニケーション</span></td>
+                <td>鈴木 次郎</td>
+                <td>suzuki@example.com<br>070-1111-2222</td>
+                <td>内外コミュニケーション</td>
+              </tr>
+              <tr>
+                <td><span class="keyword-tag">SME</span></td>
+                <td>山田 三郎</td>
+                <td>yamada@example.com<br>080-3333-4444</td>
+                <td>ワークロード専門知識</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-2);"></i>
+            最低でも2つの連絡方法を用意！
+            <br>
+            メール、電話、SMS、チャットなど
+            <br>
+            確実に連絡が取れる体制を
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- セクション5: 外部パートナー -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-handshake fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
+          <h2>外部パートナーの特定</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-building" aria-hidden="true"></i>
+              <span><span class="keyword-tag">ISV</span>・<span class="keyword-tag">パートナー</span>・<span class="keyword-tag">下請け業者</span>の担当者</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+              <span>適切なレベルの<span class="keyword-tag">AWS Support</span>にサインアップ</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+              <span><span class="keyword-tag">公的機関</span>や<span class="keyword-tag">規制当局</span>への通知義務</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-file-contract" aria-hidden="true"></i>
+              <span>すべての重要な<span class="keyword-tag">ソリューションプロバイダー</span>との取り決め</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-2 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-globe fa-lg" style="color: var(--ui-color-5);"></i>
+            内部だけでなく外部の
+            <br>
+            サポート体制も重要！
+            <br>
+            法的な報告義務も忘れずに
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション6: アンチパターン -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 3s;" aria-hidden="true"></i>
+          <h2>一般的なアンチパターン</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>主要担当者の<span class="keyword-tag">最新情報</span>をまとめたリストがない</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>担当者や依存関係について<span class="keyword-tag">全員が知っている</span>と想定</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>インフラやアプリケーション設計の<span class="keyword-tag">ドキュメント</span>がない</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>新しい人員への適切な<span class="keyword-tag">オンボーディングプロセス</span>がない</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>主要担当者が不在の場合の<span class="keyword-tag">エスカレーションパス</span>がない</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-2);"></i>
+            「みんな知ってるはず」は危険！
+            <br>
+            明文化とプロセス整備で
+            <br>
+            確実な対応体制を構築しよう
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション7: リスクレベルとメリット -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-chart-line fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s infinite;" aria-hidden="true"></i>
+          <h2>リスクレベルとメリット</h2>
+        </div>
+        
+        <div class="card-content">
+          <div style="text-align: center; margin: 20px 0;">
+            <p style="font-size: 18px; margin: 10px 0;">
+              <strong>リスクレベル：</strong>
+              <span class="risk-tag">高</span>
+            </p>
+          </div>
+          
+          <div style="margin: 20px 0;">
+            <h4 style="color: var(--ui-color-1); margin-bottom: 10px;">
+              <i class="fa-solid fa-star" style="margin-right: 5px;"></i>
+              メリット
+            </h4>
+            <ul class="keyword-list">
+              <li>
+                <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                <span><span class="keyword-tag">トリアージ</span>と<span class="keyword-tag">対応時間</span>の短縮</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+                <span>適切な担当者を迅速に<span class="keyword-tag">投入</span>可能</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-hourglass-half" aria-hidden="true"></i>
+                <span>イベント発生時の<span class="keyword-tag">時間の無駄</span>を削減</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2">
+          <span class="handwritten">
+            <i class="fa-solid fa-fire fa-lg" style="color: var(--ui-color-5);"></i>
+            準備不足のリスクは高い！
+            <br>
+            でも事前準備でメリットも大きい
+            <br>
+            投資対効果は抜群だよ
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション8: 実装のガイダンス -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-spin 6s linear infinite;" aria-hidden="true"></i>
+          <h2>実装のガイダンス</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="step-box">
+            <p><strong>1. インシデント管理ソリューションの設定</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>セキュリティツール用アカウントに<span class="keyword-tag">Incident Manager</span>をデプロイ</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>2. 連絡先の定義</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>連絡先ごとに最低<span class="keyword-tag">2種類の連絡チャネル</span>（SMS、電話、メールなど）</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>3. 対応計画の定義</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>インシデント発生時の<span class="keyword-tag">対応要員</span>を特定</li>
+              <li>個人ではなく<span class="keyword-tag">役割</span>に合わせたエスカレーション計画を定義</li>
+              <li>外部機関への情報提供担当者も含める</li>
+            </ul>
+          </div>
+          
+          <div style="margin: 15px 0; padding: 15px; background-color: #e8f4fd; border-radius: 10px; border-left: 4px solid var(--ui-color-1);">
+            <div style="font-weight: bold; margin-bottom: 10px; color: var(--ui-color-1);">
+              <i class="fa-solid fa-aws" style="margin-right: 5px;"></i>推奨AWSサービス
+            </div>
+            <ul style="margin: 0; padding-left: 20px; list-style-type: disc;">
+              <li><span class="keyword-tag">AWS Systems Manager Incident Manager</span></li>
+              <li>主要連絡先の取得、対応プラン策定</li>
+              <li>オンコールスケジュールの自動化</li>
+              <li>エスカレーションプランの作成</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-wrench fa-lg" style="color: var(--ui-color-2);"></i>
+            AWSのIncident Managerを使えば
+            <br>
+            人員管理が自動化できる！
+            <br>
+            ローテーションも楽々だよ
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- セクション9: オンボーディングプロセス -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-graduation-cap fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
+          <h2>オンボーディングプロセス</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-book-open" aria-hidden="true"></i>
+              <span>インシデント対応に必要な<span class="keyword-tag">スキル</span>と<span class="keyword-tag">知識</span>の習得</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+              <span>定期的な<span class="keyword-tag">トレーニング</span>と<span class="keyword-tag">オンボーディング</span>を実施</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
+              <span><span class="keyword-tag">シミュレーション</span>と<span class="keyword-tag">実践演習</span>を組み込み</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
+              <span>新入社員の効果的な<span class="keyword-tag">インシデント対応貢献</span>を支援</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-2 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-user-graduate fa-lg" style="color: var(--ui-color-5);"></i>
+            座学だけじゃダメ！
+            <br>
+            実際の演習で身につけることが
+            <br>
+            緊急時の対応力向上につながる
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション10: 継続的な改善 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-arrows-rotate fa-5x" style="color: var(--ui-color-1); animation: fa-spin 4s linear infinite;" aria-hidden="true"></i>
+          <h2>継続的な改善</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-calendar-alt" aria-hidden="true"></i>
+              <span>情報の<span class="keyword-tag">定期的な見直し</span>を実施</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-user-edit" aria-hidden="true"></i>
+              <span>組織編成の変更、昇進、チーム変更に対応した<span class="keyword-tag">適宜更新</span></span>
+            </li>
+            <li>
+              <i class="fa-solid fa-sync" aria-hidden="true"></i>
+              <span>人員配置の変更を<span class="keyword-tag">組織内外のツール</span>に反映</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+              <span>インシデント対応の<span class="keyword-tag">効果測定</span>と<span class="keyword-tag">改善点</span>の特定</span>
+            </li>
+          </ul>
+          
+          <div style="margin: 15px 0; padding: 15px; background-color: #fff3cd; border-radius: 10px; border-left: 4px solid var(--ui-color-2);">
+            <div style="font-weight: bold; margin-bottom: 10px; color: var(--ui-color-2);">
+              <i class="fa-solid fa-clock" style="margin-right: 5px;"></i>更新スケジュール例
+            </div>
+            <ul style="margin: 0; padding-left: 20px; list-style-type: disc;">
+              <li><span class="keyword-tag">四半期ごと</span>: 連絡先情報の確認・更新</li>
+              <li><span class="keyword-tag">半年ごと</span>: 役割と責任の見直し</li>
+              <li><span class="keyword-tag">年次</span>: 全体的なプロセスの評価・改善</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-refresh fa-lg" style="color: var(--ui-color-2);"></i>
+            一度作って終わりじゃダメ！
+            <br>
+            定期的なメンテナンスで
+            <br>
+            常に最新状態を保とう
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション11: まとめ -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-heart fa-5x" style="color: var(--ui-color-5); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
+          <h2>まとめ</h2>
+        </div>
+        
+        <div class="card-content">
+          <div style="text-align: center; margin: 20px 0; padding: 20px; background-color: #f0f9ff; border-radius: 15px;">
+            <h3 style="color: var(--ui-color-1); margin-bottom: 15px;">
+              <i class="fa-solid fa-key" style="margin-right: 8px;"></i>
+              成功の鍵
+            </h3>
+            <ul class="keyword-list">
+              <li>
+                <i class="fa-solid fa-users-gear" aria-hidden="true"></i>
+                <span><span class="keyword-tag">人・プロセス・技術</span>の3要素を緊密に連携</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                <span>迅速で効果的な<span class="keyword-tag">インシデント対応</span>を実現</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                <span><span class="keyword-tag">ビジネス中断</span>を最小限に抑制</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+                <span>組織の<span class="keyword-tag">セキュリティ成熟度</span>向上</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2">
+          <span class="handwritten">
+            <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-5);"></i>
+            人員の特定は準備の第一歩！
+            <br>
+            しっかりとした体制作りで
+            <br>
+            安心・安全なクラウド環境を実現しよう
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

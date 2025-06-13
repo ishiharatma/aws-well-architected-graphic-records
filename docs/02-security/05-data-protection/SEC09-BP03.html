@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEC09-BP03 ネットワーク通信を認証する</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    
+    :root {
+      --ui-color-1: #1B6C8C;
+      --ui-color-2: #BF8136;
+      --ui-color-3: #F2E8E4;
+      --ui-color-4: #260101;
+      --ui-color-5: #BF5656;
+    }
+    
+    body {
+      font-family: 'Zen Kurenaido', sans-serif;
+      background-color: #FFF8F5;
+      color: #333333;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 2000px;
+      margin: 0 auto;
+    }
+    
+    /* ヘッダースタイル */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+      padding: 20px;
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    
+    .title h1 {
+      font-size: 36px;
+      color: var(--ui-color-1);
+      margin: 15px 0;
+      line-height: 1.2;
+    }
+    
+    .date {
+      font-size: 14px;
+      color: #777777;
+    }
+    
+    /* セクションレイアウト */
+    .section-layout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+    
+    /* カードスタイル */
+    .section-card {
+      flex: 1;
+      min-width: 220px;
+      max-width: 450px;
+      background-color: white;
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInScale 0.5s ease-out;
+    }
+    
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    /* カード内アイコンコンテナ */
+    .mega-icon-container {
+      text-align: center;
+      margin: 15px 0;
+    }
+    
+    /* カードコンテンツ */
+    .card-content {
+      padding: 0 10px 15px;
+    }
+    
+    /* キーワードリスト */
+    .keyword-list {
+      margin: 15px 0;
+      padding: 0;
+      list-style-type: none;
+    }
+    
+    .keyword-list li {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .keyword-list li i {
+      margin-right: 8px;
+      color: var(--ui-color-2);
+      min-width: 16px;
+      margin-top: 4px;
+    }
+    
+    /* キーワードタグ */
+    .keyword-tag {
+      background-color: var(--ui-color-3);
+      color: var(--ui-color-4);
+      padding: 3px 8px;
+      border-radius: 5px;
+      margin-right: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    .risk-tag {
+      background-color: #FFAA33;
+      color: var(--ui-color-4);
+      padding: 3px 10px;
+      border-radius: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    /* 手書き風吹き出し */
+    .speech-bubble {
+      position: relative;
+      background: #fff;
+      border: 3px solid var(--ui-color-1);
+      border-radius: 20px;
+      padding: 10px 15px;
+      margin: 15px 5px;
+      font-family: 'Yomogi', cursive;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+      transform: rotate(-1deg);
+    }
+    
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -13px;
+      left: 20px;
+      border-width: 12px 8px 0;
+      border-style: solid;
+      border-color: var(--ui-color-1) transparent;
+      display: block;
+      width: 0;
+    }
+    
+    /* 吹き出しバリエーション */
+    .speech-bubble.right::after {
+      left: auto;
+      right: 20px;
+      transform: rotate(15deg);
+    }
+    
+    .speech-bubble.top::after {
+      bottom: auto;
+      top: -13px;
+      border-width: 0 8px 12px;
+      transform: rotate(-5deg);
+    }
+    
+    .speech-bubble.variant-1 {
+      background: #FFF9E3;
+      border-color: var(--ui-color-2);
+      transform: rotate(1deg);
+    }
+    
+    .speech-bubble.variant-1::after {
+      border-color: var(--ui-color-2) transparent;
+    }
+    
+    .speech-bubble.variant-2 {
+      background: #FFE9E9;
+      border-color: var(--ui-color-5);
+      transform: rotate(-2deg);
+    }
+    
+    .speech-bubble.variant-2::after {
+      border-color: var(--ui-color-5) transparent;
+    }
+    
+    /* 手書き文字 */
+    .handwritten {
+      font-family: 'Yomogi', cursive;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #333;
+    }
+    
+    /* コードプレビュー */
+    pre {
+      background: #f5f5f5;
+      padding: 8px;
+      border-radius: 5px;
+      font-size: 12px;
+      margin-top: 10px;
+      overflow-x: auto;
+    }
+    
+    /* 実装ステップボックス */
+    .step-box {
+      border-left: 4px solid var(--ui-color-1);
+      padding-left: 12px;
+      margin: 10px 0;
+    }
+    
+    /* 比較表 */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    
+    .comparison-table th,
+    .comparison-table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .comparison-table th {
+      background-color: var(--ui-color-3);
+      font-weight: bold;
+    }
+    
+    .comparison-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    
+    /* サービスボックス */
+    .aws-service-box {
+      background-color: #f0f9ff;
+      border: 1px solid #d0e3f2;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .aws-service-icon {
+      margin-right: 10px;
+      color: var(--ui-color-1);
+      font-size: 24px;
+    }
+    
+    .aws-service-content {
+      flex-grow: 1;
+    }
+    
+    .aws-service-name {
+      font-weight: bold;
+      color: var(--ui-color-1);
+      margin-bottom: 5px;
+    }
+    
+    /* トラフィックフロー図 */
+    .traffic-flow {
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 15px 0;
+      text-align: center;
+    }
+    
+    .traffic-flow h3 {
+      margin-top: 0;
+      color: var(--ui-color-1);
+    }
+    
+    .flow-diagram {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 15px 0;
+    }
+    
+    .flow-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin: 10px 0;
+    }
+    
+    .flow-item {
+      background-color: white;
+      border: 2px solid var(--ui-color-1);
+      border-radius: 8px;
+      padding: 10px;
+      margin: 0 10px;
+      min-width: 120px;
+      text-align: center;
+    }
+    
+    .flow-arrow {
+      color: var(--ui-color-1);
+      font-size: 24px;
+      margin: 0 5px;
+    }
+    
+    /* プロトコル比較ボックス */
+    .protocol-box {
+      background-color: #f5f5f5;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 10px 0;
+      border-left: 4px solid var(--ui-color-2);
+    }
+    
+    .protocol-title {
+      font-weight: bold;
+      color: var(--ui-color-1);
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .protocol-title i {
+      margin-right: 5px;
+      color: var(--ui-color-2);
+    }
+    
+    /* 認証フロー図 */
+    .auth-flow {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 15px 0;
+    }
+    
+    .auth-step {
+      background-color: white;
+      border: 2px solid var(--ui-color-1);
+      border-radius: 8px;
+      padding: 8px;
+      margin: 5px;
+      width: 110px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .auth-arrow {
+      color: var(--ui-color-1);
+      font-size: 20px;
+      margin: 0 5px;
+      display: flex;
+      align-items: center;
+      align-self: center;
+    }
+    
+    /* レスポンシブ対応 */
+    @media (max-width: 1600px) {
+      .section-card {
+        min-width: 280px;
+      }
+    }
+    
+    @media (max-width: 1200px) {
+      .section-card {
+        min-width: 320px;
+      }
+    }
+    
+    @media (max-width: 900px) {
+      .section-card {
+        min-width: 380px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .section-layout {
+        flex-direction: column;
+      }
+      
+      .section-card {
+        width: 100%;
+        min-width: auto;
+      }
+    }
+    
+    /* ラベル */
+    .label {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    
+    .label-east-west {
+      background-color: #e0f7fa;
+      color: #006064;
+      border: 1px solid #00acc1;
+    }
+    
+    .label-north-south {
+      background-color: #e8f5e9;
+      color: #1b5e20;
+      border: 1px solid #43a047;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ヘッダー -->
+    <div class="header">
+      <div class="title">
+        <i class="fa-solid fa-shield-halved fa-7x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
+        <h1>SEC09-BP03 ネットワーク通信を認証する</h1>
+      </div>
+      <div class="date">2025年4月10日</div>
+    </div>
+    
+    <!-- セクション1: 概要 -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-key fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
+          <h2>概要</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+              <span><span class="keyword-tag">TLS</span>や<span class="keyword-tag">IPsec</span>など認証をサポートするプロトコルで通信IDを検証</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-exchange" aria-hidden="true"></i>
+              <span>サービス間、アプリケーション間、ユーザーへの通信に<span class="keyword-tag">安全で認証済みのプロトコル</span>を使用</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+              <span>認証と認可をサポートするプロトコルで<span class="keyword-tag">不正アクセスの影響を軽減</span></span>
+            </li>
+            <li>
+              <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+              <span>ネットワークフローをより<span class="keyword-tag">強力に制御</span>できる</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble">
+          <span class="handwritten">
+            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+            通信相手が「本当に正しい相手か」を
+            <br>
+            確認することが大切なんだよ！
+            <br>
+            「なりすまし」を防ぐためにね
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション2: 期待される成果 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-check-double fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
+          <h2>期待される成果</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-sitemap" aria-hidden="true"></i>
+              <span>データプレーンとコントロールプレーンの<span class="keyword-tag">トラフィックフローが明確</span>に定義される</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+              <span>技術上可能な場合は必ず<span class="keyword-tag">認証および暗号化</span>されたプロトコルを使用</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-user-check" aria-hidden="true"></i>
+              <span>通信の<span class="keyword-tag">両端の身元</span>が確実に検証される</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-lock" aria-hidden="true"></i>
+              <span>不正なアクセスが<span class="keyword-tag">効果的に阻止</span>される</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-1 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-shield-halved fa-lg" style="color: var(--ui-color-2);"></i>
+            トラフィックフローを明確にして
+            <br>
+            認証と暗号化を組み合わせると
+            <br>
+            防御力がぐっと高まるよ！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション3: アンチパターン -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 3s;" aria-hidden="true"></i>
+          <h2>一般的なアンチパターン</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>ワークロード内のトラフィックが<span class="keyword-tag">暗号化されていない</span>、または<span class="keyword-tag">認証されていない</span></span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>複数のユーザーやエンティティで<span class="keyword-tag">認証情報を再利用</span>している</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>アクセス制御のメカニズムとして<span class="keyword-tag">ネットワーク統制にばかり依存</span>している</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>業界標準の認証メカニズムに頼る代わりに<span class="keyword-tag">カスタムの認証メカニズム</span>を作成する</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <span>VPC内のサービスコンポーネントや他のリソース間のトラフィックフローが<span class="keyword-tag">必要以上に許可</span>されている</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-2">
+          <span class="handwritten">
+            <i class="fa-solid fa-triangle-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+            「内部ネットワークだから安全」は
+            <br>
+            危険な思い込み！
+            <br>
+            内部通信も認証しないとダメだよ
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション4: メリット -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-2); animation: fa-spin 6s linear infinite;" aria-hidden="true"></i>
+          <h2>このベストプラクティスを活用するメリット</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-shield-virus" aria-hidden="true"></i>
+              <span>不正アクセスの影響範囲を<span class="keyword-tag">ワークロードの一部に制限</span></span>
+            </li>
+            <li>
+              <i class="fa-solid fa-user-check" aria-hidden="true"></i>
+              <span><span class="keyword-tag">アシュアランスレベル</span>を上げ、認証済みエンティティだけがアクションを実行</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+              <span>明確に定義されたインターフェイスで<span class="keyword-tag">サービスの分離</span>を強化</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+              <span>リクエストのアトリビューションにより<span class="keyword-tag">モニタリング</span>と<span class="keyword-tag">インシデント対応</span>を強化</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+              <span>ネットワーク統制と認証・認可の組み合わせで<span class="keyword-tag">多層防御</span>を実現</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-thumbs-up fa-lg" style="color: var(--ui-color-2);"></i>
+            「誰がアクセスしたか」が
+            <br>
+            明確になるから、問題発生時も
+            <br>
+            追跡しやすくなるのが大きいね！
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- セクション5: リスクレベル -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: #FFAA33; animation: fa-beat-fade 2s infinite;" aria-hidden="true"></i>
+          <h2>リスクレベル</h2>
+        </div>
+        
+        <div class="card-content" style="text-align: center;">
+          <p style="font-size: 24px; margin: 20px 0;">
+            <span class="risk-tag">低</span>
+          </p>
+          <p>このベストプラクティスを活用しない場合のリスクレベル</p>
+        </div>
+        
+        <div class="speech-bubble right">
+          <span class="handwritten">
+            <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-2);"></i>
+            リスクは低めだけど
+            <br>
+            認証をしっかりすれば
+            <br>
+            セキュリティが大幅に向上するよ！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション6: トラフィックパターン -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-arrows-up-down-left-right fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite linear;" aria-hidden="true"></i>
+          <h2>ネットワークトラフィックパターン</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="traffic-flow">
+            <h3>トラフィックの種類</h3>
+            
+            <div class="flow-diagram">
+              <div class="flow-row">
+                <div class="flow-item" style="border-color: #00acc1; background-color: #e0f7fa;">
+                  <span class="label label-east-west">East-West</span>
+                  <p><i class="fa-solid fa-arrows-left-right" style="color: #00acc1;"></i></p>
+                  <p>ワークロード内のサービス間通信</p>
+                </div>
+                
+                <div class="flow-item" style="border-color: #43a047; background-color: #e8f5e9;">
+                  <span class="label label-north-south">North-South</span>
+                  <p><i class="fa-solid fa-arrows-up-down" style="color: #43a047;"></i></p>
+                  <p>ワークロードとコンシューマー間通信</p>
+                </div>
+              </div>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 10px; background-color: #fff; border-radius: 8px; border: 1px dashed var(--ui-color-1);">
+              <p><i class="fa-solid fa-info-circle" style="color: var(--ui-color-1);"></i> <strong>重要ポイント</strong>: 最近のセキュリティ対策では、<span class="keyword-tag">ネットワークの設計だけで信頼関係を想定しない</span>のが通例です。同じネットワーク境界内のサービス間通信でも<span class="keyword-tag">暗号化・認証・認可</span>を行うことがベストプラクティスです。</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-puzzle-piece fa-lg" style="color: var(--ui-color-2);"></i>
+            内部通信（East-West）も
+            <br>
+            外部通信（North-South）も
+            <br>
+            両方とも認証が必要なんだよ！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション7: 認証プロトコル -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-lock fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
+          <h2>認証プロトコルの種類</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="protocol-box">
+            <div class="protocol-title">
+              <i class="fa-solid fa-id-card"></i> OAuth 2.0 / OIDC
+            </div>
+            <ul class="keyword-list" style="margin-top: 8px;">
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>ユーザーがサービスへのアクセスを制御する<span class="keyword-tag">標準プロトコル</span></span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>最近は<span class="keyword-tag">サービス間通信</span>でも利用増加</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>API Gateway JWTオーソライザーで<span class="keyword-tag">APIルートアクセス制限</span>が可能</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>より複雑な承認には<span class="keyword-tag">アプリケーション層での実装</span>が必要</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="protocol-box">
+            <div class="protocol-title">
+              <i class="fa-solid fa-shield-halved"></i> IPsec
+            </div>
+            <ul class="keyword-list" style="margin-top: 8px;">
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>IPレベルでの<span class="keyword-tag">暗号化と認証</span>を提供</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>VPN接続や<span class="keyword-tag">サイト間通信</span>に適している</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>通信パケット全体を保護することで<span class="keyword-tag">完全性も確保</span></span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-5);"></i>
+            用途に合わせて
+            <br>
+            最適な認証プロトコルを
+            <br>
+            選ぶことが大切だよ！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション8: AWS実装ツール -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-toolbox fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
+          <h2>AWS実装ツール</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="aws-service-box">
+            <div class="aws-service-icon">
+              <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+            </div>
+            <div class="aws-service-content">
+              <div class="aws-service-name">Amazon VPC Lattice</div>
+              <p>サービス間の通信に<span class="keyword-tag">SigV4認証</span>を使用し、認証ポリシーと組み合わせてアクセスを制御</p>
+            </div>
+          </div>
+          
+          <div class="aws-service-box">
+            <div class="aws-service-icon">
+              <i class="fa-solid fa-door-open" aria-hidden="true"></i>
+            </div>
+            <div class="aws-service-content">
+              <div class="aws-service-name">API Gateway</div>
+              <p><span class="keyword-tag">mTLS</span>や<span class="keyword-tag">JWTオーソライザー</span>を使用して、APIへのアクセスを認証・制御</p>
+            </div>
+          </div>
+          
+          <div class="aws-service-box">
+            <div class="aws-service-icon">
+              <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+            </div>
+            <div class="aws-service-content">
+              <div class="aws-service-name">Application Load Balancer</div>
+              <p>内部・外部向けワークロードの<span class="keyword-tag">mTLS認証</span>をサポート</p>
+            </div>
+          </div>
+          
+          <div class="aws-service-box">
+            <div class="aws-service-icon">
+              <i class="fa-solid fa-certificate" aria-hidden="true"></i>
+            </div>
+            <div class="aws-service-content">
+              <div class="aws-service-name">AWS Private CA</div>
+              <p>mTLSで使用する<span class="keyword-tag">X.509証明書</span>を発行できるプライベートCA階層を作成</p>
+            </div>
+          </div>
+          
+          <div class="aws-service-box">
+            <div class="aws-service-icon">
+              <i class="fa-solid fa-user-check" aria-hidden="true"></i>
+            </div>
+            <div class="aws-service-content">
+              <div class="aws-service-name">IAM Roles Anywhere</div>
+              <p>AWS環境外のリソースから<span class="keyword-tag">一時的なAWS認証情報</span>を取得し、SigV4でリクエストに署名</p>
+            </div>
+          </div>
+          
+          <div class="aws-service-box">
+            <div class="aws-service-icon">
+              <i class="fa-solid fa-microchip" aria-hidden="true"></i>
+            </div>
+            <div class="aws-service-content">
+              <div class="aws-service-name">AWS IoT Core</div>
+              <p>IoTデバイスとの通信に<span class="keyword-tag">複数の認証・暗号化方法</span>を提供</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-puzzle-piece fa-lg" style="color: var(--ui-color-2);"></i>
+            AWSは認証に必要な
+            <br>
+            道具をたくさん用意してくれてるから
+            <br>
+            組み合わせて使おう！
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- セクション9: 実装のガイダンス -->
+    <div class="section-layout">
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-compass fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
+          <h2>実装のガイダンス</h2>
+        </div>
+        
+        <div class="card-content">
+          <div style="padding: 15px; background-color: #f9f9f9; border-radius: 10px; margin-bottom: 15px;">
+            <h3 style="margin-top: 0; color: var(--ui-color-1);"><i class="fa-solid fa-sitemap" style="margin-right: 5px;"></i> 信頼のゼロトラスト原則</h3>
+            <p>最近のセキュリティ対策では、<span class="keyword-tag">ネットワークの設計だけで信頼関係を想定しない</span>というのが通例となっています。2つのサービスが共通のネットワーク境界内に存在する場合でも、それらのサービス間の通信を暗号化し、認証と認可を行うことがベストプラクティスです。</p>
+          </div>
+          
+          <div style="padding: 15px; background-color: #f9f9f9; border-radius: 10px; margin-bottom: 15px;">
+            <h3 style="margin-top: 0; color: var(--ui-color-1);"><i class="fa-solid fa-layer-group" style="margin-right: 5px;"></i> 多層防御の実現</h3>
+            <p>ネットワーク境界は、それだけでは十分なセキュリティ統制にはなりませんが、ワークロードを保護する<span class="keyword-tag">多層防御戦略の1層</span>にはなります。ネットワーク統制に認証と認可の制御を組み合わせることで、効果的な保護を実現できます。</p>
+          </div>
+          
+          <div style="padding: 15px; background-color: #f9f9f9; border-radius: 10px;">
+            <h3 style="margin-top: 0; color: var(--ui-color-1);"><i class="fa-solid fa-key" style="margin-right: 5px;"></i> 認証と認可の組み合わせ</h3>
+            <p>認証だけではなく、<span class="keyword-tag">適切な認可メカニズム</span>も組み合わせることが重要です。認証された通信相手に対して、本当に必要な操作だけを許可するようにしましょう。AWSのSigV4では、認証情報とIAMポリシーを組み合わせることで認可の決定が行われます。</p>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-5);"></i>
+            「内部だから安全」は
+            <br>
+            過去の考え方。今は
+            <br>
+            「すべての通信を疑う」時代だよ！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション10: 認証フロー例 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-diagram-project fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite linear;" aria-hidden="true"></i>
+          <h2>認証フローの例</h2>
+        </div>
+        
+        <div class="card-content">
+          <!-- SigV4認証フロー -->
+          <div style="background-color: #f9f9f9; border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+            <h3 style="margin-top: 0;"><i class="fa-solid fa-signature" style="color: var(--ui-color-2);"></i> SigV4認証フロー</h3>
+            <div class="auth-flow">
+              <div class="auth-step">
+                <i class="fa-solid fa-user" style="font-size: 18px; color: var(--ui-color-1);"></i>
+                <p>サービスA</p>
+              </div>
+              <div class="auth-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="auth-step">
+                <i class="fa-solid fa-file-signature" style="font-size: 18px; color: var(--ui-color-1);"></i>
+                <p>リクエスト作成<br>＆署名</p>
+              </div>
+              <div class="auth-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="auth-step">
+                <i class="fa-solid fa-paper-plane" style="font-size: 18px; color: var(--ui-color-1);"></i>
+                <p>署名付き<br>リクエスト</p>
+              </div>
+              <div class="auth-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="auth-step">
+                <i class="fa-solid fa-magnifying-glass-check" style="font-size: 18px; color: var(--ui-color-1);"></i>
+                <p>署名検証</p>
+              </div>
+              <div class="auth-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="auth-step">
+                <i class="fa-solid fa-check-circle" style="font-size: 18px; color: var(--ui-color-1);"></i>
+                <p>認可決定</p>
+              </div>
+              <div class="auth-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="auth-step">
+                <i class="fa-solid fa-server" style="font-size: 18px; color: var(--ui-color-1);"></i>
+                <p>サービスB</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- mTLS認証フロー -->
+          <div style="background-color: #f9f9f9; border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+            <h3 style="margin-top: 0;"><i class="fa-solid fa-handshake" style="color: var(--ui-color-2);"></i> mTLS認証フロー</h3>
+            <div class="auth-flow">
+              <div class="auth-step">
+                <i class="fa-solid fa-certificate" style="font-size: 18px; color: var(--ui-color-1);"></i>
+                <p>クライアント<br>証明書</p>
+              </div>
+              <div class="auth-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="auth-step">
+                <i class="fa-solid fa-handshake" style="font-size: 18px; color: var(--ui-color-1);"></i>
+                <p>TLS<br>ハンドシェイク</p>
+              </div>
+              <div class="auth-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="auth-step">
+                <i class="fa-solid fa-certificate" style="font-size: 18px; color: var(--ui-color-1);"></i>
+                <p>サーバー<br>証明書</p>
+              </div>
+              <div class="auth-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="auth-step">
+                <i class="fa-solid fa-check-double" style="font-size: 18px; color: var(--ui-color-1);"></i>
+                <p>相互証明書<br>検証</p>
+              </div>
+              <div class="auth-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="auth-step">
+                <i class="fa-solid fa-lock" style="font-size: 18px; color: var(--ui-color-1);"></i>
+                <p>暗号化<br>通信確立</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- OAuth/OIDC認証フロー -->
+          <div style="background-color: #f9f9f9; border-radius: 10px; padding: 15px;">
+            <h3 style="margin-top: 0;"><i class="fa-solid fa-id-card" style="color: var(--ui-color-2);"></i> OAuth/OIDC認証フロー</h3>
+            <div class="auth-flow">
+              <div class="auth-step">
+                <i class="fa-solid fa-user" style="font-size: 18px; color: var(--ui-color-1);"></i>
+                <p>サービスA</p>
+              </div>
+              <div class="auth-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="auth-step">
+                <i class="fa-solid fa-id-badge" style="font-size: 18px; color: var(--ui-color-1);"></i>
+                <p>IDプロバイダ<br>認証</p>
+              </div>
+              <div class="auth-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="auth-step">
+                <i class="fa-solid fa-key" style="font-size: 18px; color: var(--ui-color-1);"></i>
+                <p>JWTトークン<br>取得</p>
+              </div>
+              <div class="auth-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="auth-step">
+                <i class="fa-solid fa-paper-plane" style="font-size: 18px; color: var(--ui-color-1);"></i>
+                <p>トークン付き<br>リクエスト</p>
+              </div>
+              <div class="auth-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="auth-step">
+                <i class="fa-solid fa-check-circle" style="font-size: 18px; color: var(--ui-color-1);"></i>
+                <p>トークン<br>検証</p>
+              </div>
+              <div class="auth-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="auth-step">
+                <i class="fa-solid fa-server" style="font-size: 18px; color: var(--ui-color-1);"></i>
+                <p>サービスB</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-robot fa-lg" style="color: var(--ui-color-2);"></i>
+            どの認証方式も
+            <br>
+            「本人確認」が
+            <br>
+            大事なポイントだね！
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション11: 実装手順 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-list-check fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
+          <h2>実装手順</h2>
+        </div>
+        
+        <div class="card-content">
+          <div class="step-box">
+            <p><strong>1. ネットワークフローの定義と文書化</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>ワークロードの<span class="keyword-tag">データフロー図</span>を作成</li>
+              <li>サービス間でのデータ転送を<span class="keyword-tag">明確に定義</span></li>
+              <li>開発・テスト段階で<span class="keyword-tag">ワークロードを計測</span>し、実際の動作を確認</li>
+              <li>データフロー図は<span class="keyword-tag">脅威モデリング</span>にも活用</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>2. ネットワーク統制の確立</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>データフローに応じた<span class="keyword-tag">ネットワーク統制</span>を確立</li>
+              <li><span class="keyword-tag">セキュリティグループ</span>でリソース間のデータフローを制限</li>
+              <li>AWS PrivateLinkの活用で<span class="keyword-tag">公開インターネットを回避</span></li>
+              <li>多層防御戦略の<span class="keyword-tag">1層としてネットワーク境界</span>を位置づけ</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>3. サービス間認証と認可の実装</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>サービス間通信には<span class="keyword-tag">VPC Lattice</span>とSigV4認証を検討</li>
+              <li>mTLSを使用する場合は<span class="keyword-tag">API Gateway</span>や<span class="keyword-tag">ALB</span>の活用</li>
+              <li>AWS Private CAで<span class="keyword-tag">プライベートCA階層</span>を作成し証明書発行</li>
+              <li>OAuth 2.0/OIDCを使用する場合は<span class="keyword-tag">API Gatewayで JWTオーソライザー</span>を使用</li>
+              <li>IoTデバイスとの通信には<span class="keyword-tag">AWS IoT Core</span>の検討</li>
+            </ul>
+          </div>
+          
+          <div class="step-box">
+            <p><strong>4. 不正アクセスの監視</strong></p>
+            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
+              <li>意図しない通信チャネルや不正アクセスの<span class="keyword-tag">継続的なモニタリング</span></li>
+              <li>VPC Lattice使用時は<span class="keyword-tag">アクセスログ</span>を有効化</li>
+              <li>ネットワークフローのメタデータをキャプチャするために<span class="keyword-tag">VPCフローログ</span>の有効化</li>
+              <li>セキュリティインシデント発生時の<span class="keyword-tag">対応プラン</span>を事前に準備</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="speech-bubble variant-2 right">
+          <span class="handwritten">
+            <i class="fa-solid fa-check-double fa-lg" style="color: var(--ui-color-5);"></i>
+            まずは通信の流れを把握して
+            <br>
+            計画的に進めるのがポイント！
+            <br>
+            モニタリングも忘れずにね
+          </span>
+        </div>
+      </div>
+      
+      <!-- セクション12: まとめと効果 -->
+      <div class="section-card">
+        <div class="mega-icon-container">
+          <i class="fa-solid fa-check-circle fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
+          <h2>まとめと効果</h2>
+        </div>
+        
+        <div class="card-content">
+          <ul class="keyword-list">
+            <li>
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+              <span><span class="keyword-tag">多層防御</span>: ネットワーク統制と認証・認可の組み合わせで強固な保護</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-user-lock" aria-hidden="true"></i>
+              <span><span class="keyword-tag">信頼性向上</span>: 認証済みのエンティティだけがアクションを実行可能</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+              <span><span class="keyword-tag">サービス分離</span>: 明確に定義されたインターフェイスによる安全な連携</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+              <span><span class="keyword-tag">可視性向上</span>: リクエストの発信元が明確になりモニタリングが容易</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-shield-virus" aria-hidden="true"></i>
+              <span><span class="keyword-tag">被害範囲の最小化</span>: 不正アクセスが発生しても影響を局所化</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-lock" aria-hidden="true"></i>
+              <span><span class="keyword-tag">ゼロトラスト</span>: ネットワーク境界だけに依存しない現代的なセキュリティ</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="speech-bubble variant-1">
+          <span class="handwritten">
+            <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-2);"></i>
+            通信相手をしっかり確認して
+            <br>
+            より安全なシステムを
+            <br>
+            みんなで作っていこう！
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>title">
+              <i class="fa-solid fa-signature"></i> SigV4 (AWS Signature Version 4)
+            </div>
+            <ul class="keyword-list" style="margin-top: 8px;">
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>AWSサービスAPIへのリクエストを<span class="keyword-tag">認証</span>するプロトコル</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>ネットワークに関係なく<span class="keyword-tag">発信者を認証</span></span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>VPC Lattice、API Gatewayなどで<span class="keyword-tag">East-West</span>トラフィックにも利用可能</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="protocol-box">
+            <div class="protocol-title">
+              <i class="fa-solid fa-handshake"></i> mTLS (TLS相互認証)
+            </div>
+            <ul class="keyword-list" style="margin-top: 8px;">
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span><span class="keyword-tag">TLS通信の両端</span>がX.509証明書で互いの身元を認証</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>IoT、ビジネス間アプリケーション、<span class="keyword-tag">マイクロサービス</span>で一般的</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                <span>AWS Private CA、API Gateway、ALBで<span class="keyword-tag">実装可能</span></span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="protocol-box">
+            <div class="protocol-

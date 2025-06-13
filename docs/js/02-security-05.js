@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ja: "スケーラブルなデータのライフサイクル管理を定義する",
                 en: "Define scalable data lifecycle management"
             }
+         },
         // 保管中のデータの保護
         {
             name: "SEC08-BP01.html",

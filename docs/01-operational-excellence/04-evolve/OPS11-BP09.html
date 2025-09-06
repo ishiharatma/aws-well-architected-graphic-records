@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS11-BP09: 改善のための時間配分 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-clock fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS11-BP09: 改善のための時間配分</h1>
+            <p class="header-description">継続的な段階的改善を可能にするために、プロセス内で時間とリソースを専用に確保します。実験とテストのリスク、労力、コストを下げる環境複製や、ゲームデイの実施により改善を推進します。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_allocate_time_for_imp.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-info-circle fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level low">
+                        <h3><i class="fa-solid fa-info-circle"></i> 低リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-server" aria-hidden="true"></i>既知のパフォーマンス問題が計画機能実装の後に追加され<span class="keyword-tag">永続的に対処されない</span></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>管理者と開発者の余剰時間での改善選択・実装で<span class="keyword-tag">改善が完了しない</span></li>
+                        <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i>運用受け入れ完了後に<span class="keyword-tag">運用プラクティスを再テストしない</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-1);"></i>
+                        改善時間を確保しないと、
+                        <br>
+                        技術的負債が蓄積し
+                        <br>
+                        <span class="keyword-tag">長期的問題</span>に発展！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-copy" aria-hidden="true"></i>実験とテストのリスク、労力、コストを下げる<span class="keyword-tag">環境の一時的複製</span>作成</li>
+                        <li><i class="fa-solid fa-flask" aria-hidden="true"></i>分析結論のテスト、実験、計画改善の開発・テストでの<span class="keyword-tag">複製環境活用</span></li>
+                        <li><i class="fa-solid fa-gamepad" aria-hidden="true"></i><span class="keyword-tag">ゲームデイ</span>の実施</li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i>本番類似環境での実験に必要な制御とガードレールを提供する<span class="keyword-tag">Fault Injection Service (FIS)</span>使用</li>
+                        <li><i class="fa-solid fa-sync" aria-hidden="true"></i>継続的で段階的な<span class="keyword-tag">改善の実現</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        専用時間の確保により、
+                        <br>
+                        継続的改善が
+                        <br>
+                        <span class="keyword-tag">現実的</span>になります！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-server" aria-hidden="true"></i>アプリケーションサーバーの既知パフォーマンス問題が計画機能実装の後のバックログに追加され<span class="keyword-tag">永続的に対処されない</span></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>継続的改善サポートのため管理者と開発者の余剰時間での改善選択・実装を承認するが<span class="keyword-tag">改善が完了しない</span></li>
+                        <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i>運用受け入れ完了後に<span class="keyword-tag">運用プラクティスを再テストしない</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        「余った時間で改善」では
+                        <br>
+                        永遠に改善されません。
+                        <br>
+                        <span class="keyword-tag">専用時間</span>が必要！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-calendar-check" aria-hidden="true"></i>継続的段階的改善のための<span class="keyword-tag">プロセス内時間とリソース</span>の専用確保</li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i>改善のための変更実装と<span class="keyword-tag">成功判定のための結果評価</span></li>
+                        <li><i class="fa-solid fa-route" aria-hidden="true"></i>目標を満たさず改善が優先事項の場合の<span class="keyword-tag">代替行動方針</span>追求</li>
+                        <li><i class="fa-solid fa-gamepad" aria-hidden="true"></i>ゲームデイによる<span class="keyword-tag">本番ワークロードシミュレーション</span></li>
+                        <li><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>シミュレーションからの<span class="keyword-tag">学習を改善に活用</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        AWS Fault Injection Serviceを使って
+                        <br>
+                        安全に本番環境での
+                        <br>
+                        <span class="keyword-tag">実験</span>を実施！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスの利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-sync" aria-hidden="true"></i>プロセス内での時間とリソース確保による<span class="keyword-tag">継続的段階的改善</span>の実現</li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i>実験環境での<span class="keyword-tag">リスク軽減</span></li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>計画的改善による<span class="keyword-tag">長期的効率向上</span></li>
+                        <li><i class="fa-solid fa-gamepad" aria-hidden="true"></i>ゲームデイによる<span class="keyword-tag">運用プラクティス向上</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        時間投資により、
+                        <br>
+                        長期的な価値創造と
+                        <br>
+                        <span class="keyword-tag">競争優位</span>を実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book"></i> 関連ベストプラクティス</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span class="keyword-tag">OPS05-BP08</span>: 複数環境の使用</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-video"></i> 関連動画</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-play" aria-hidden="true"></i><span class="keyword-tag">AWS re:Invent 2023</span> - AWS Fault Injection Serviceによるアプリケーション回復力向上</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-tools"></i> 関連ツール</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i><span class="keyword-tag">AWS Fault Injection Service (FIS)</span>: 制御された障害注入</li>
+                        <li><i class="fa-solid fa-copy" aria-hidden="true"></i><span class="keyword-tag">環境複製</span>: CloudFormation、Terraform</li>
+                        <li><i class="fa-solid fa-gamepad" aria-hidden="true"></i><span class="keyword-tag">ゲームデイ</span>: AWS Well-Architected Labs</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap fa-lg" style="color: var(--ui-color-1);"></i>
+                        これらのリソースを活用して、
+                        <br>
+                        効果的な改善時間配分を
+                        <br>
+                        <span class="keyword-tag">実現</span>しましょう！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

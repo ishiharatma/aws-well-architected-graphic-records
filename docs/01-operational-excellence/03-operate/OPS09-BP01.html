@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS09-BP01: メトリクスによる運用目標とKPIの測定 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-chart-bar fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS09-BP01: メトリクスによる運用目標とKPIの測定</h1>
+            <p class="header-description">組織から運用成功を定義する目標とKPIを取得し、メトリクスがこれらを反映することを確認します。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_operations_health_measure_ops_goals_kpis.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level medium">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 中リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-calendar-times" aria-hidden="true"></i>開発者のトラブルシューティング作業による<span class="keyword-tag">デプロイメント期限の遅延</span></li>
+                        <li><i class="fa-solid fa-phone-slash" aria-hidden="true"></i>コール時間増加による<span class="keyword-tag">顧客満足度低下</span></li>
+                        <li><i class="fa-solid fa-file-times" aria-hidden="true"></i>適切な文書化不足による<span class="keyword-tag">トラブルシューティング時間延長</span></li>
+                        <li><i class="fa-solid fa-balance-scale" aria-hidden="true"></i>メトリクス不足による<span class="keyword-tag">説明責任の困難</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        運用メトリクスがないと、
+                        <br>
+                        問題の定量化ができず、
+                        <br>
+                        <span class="keyword-tag">適切な対策</span>が取れません！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-share-alt" aria-hidden="true"></i>組織による運用チーム向け<span class="keyword-tag">目標とKPIの公開・共有</span></li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>KPIを反映する<span class="keyword-tag">メトリクスの確立</span></li>
+                        <li><i class="fa-solid fa-ruler" aria-hidden="true"></i>参照点としての<span class="keyword-tag">ベースライン設定</span></li>
+                        <li><i class="fa-solid fa-sync-alt" aria-hidden="true"></i>定期的な<span class="keyword-tag">再評価</span></li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>チームからメトリクス収集する<span class="keyword-tag">メカニズム開発</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        DORAメトリクスなどの
+                        <br>
+                        実績のある手法を活用して、
+                        <br>
+                        <span class="keyword-tag">DevOps進歩</span>を測定！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 主要メトリクス例 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ul fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>主要メトリクス例</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-ticket-alt" aria-hidden="true"></i><span class="keyword-tag">チケットキューの深さ</span>：未解決チケット数</li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i><span class="keyword-tag">チケット平均経過時間</span>：問題解決までの時間</li>
+                        <li><i class="fa-solid fa-tags" aria-hidden="true"></i><span class="keyword-tag">問題タイプ別チケット数</span>：問題分類と頻度</li>
+                        <li><i class="fa-solid fa-book" aria-hidden="true"></i><span class="keyword-tag">SOP有無別作業時間</span>：標準手順書の効果測定</li>
+                        <li><i class="fa-solid fa-code-branch" aria-hidden="true"></i><span class="keyword-tag">失敗したコードプッシュ復旧時間</span>：デプロイメント品質</li>
+                        <li><i class="fa-solid fa-phone" aria-hidden="true"></i><span class="keyword-tag">コール量</span>：サポート負荷</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-1);"></i>
+                        ワークロード監視がアプリケーションの状態を示すなら、
+                        <br>
+                        運用メトリクスは<span class="keyword-tag">チームの健全性</span>を示します！
+                    </span>
+                </div>
+            </div>
+
+            <!-- DORAメトリクス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-rocket fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>DORAメトリクス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-shipping-fast" aria-hidden="true"></i><span class="keyword-tag">デプロイメント頻度</span>：ソフトウェア配信の頻度</li>
+                        <li><i class="fa-solid fa-stopwatch" aria-hidden="true"></i><span class="keyword-tag">変更のリードタイム</span>：コミットから本番までの時間</li>
+                        <li><i class="fa-solid fa-undo" aria-hidden="true"></i><span class="keyword-tag">変更失敗率</span>：本番で問題を引き起こすデプロイメントの割合</li>
+                        <li><i class="fa-solid fa-tools" aria-hidden="true"></i><span class="keyword-tag">サービス復旧時間</span>：障害からの平均復旧時間</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        DORAメトリクスは、
+                        <br>
+                        DevOps実践の進歩を測定する
+                        <br>
+                        <span class="keyword-tag">業界標準</span>の手法！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

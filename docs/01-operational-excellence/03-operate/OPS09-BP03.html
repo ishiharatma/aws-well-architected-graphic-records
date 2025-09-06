@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS09-BP03: 運用メトリクスのレビューと改善の優先順位付け - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-search-plus fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS09-BP03: 運用メトリクスのレビューと改善の優先順位付け</h1>
+            <p class="header-description">運用の状態をレビューするための専用の時間とリソースを確保することで、日々の事業運営が優先事項であり続けることを保証します。運用リーダーとステークホルダーが定期的に集まり、メトリクスをレビューし、目標と目的を再確認または修正し、改善の優先順位を付けます。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_operations_health_review_ops_metrics_prioritize_improvement.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level medium">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 中リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>運用メトリクスの<span class="keyword-tag">定期レビュー不足</span></li>
+                        <li><i class="fa-solid fa-lightbulb" aria-hidden="true"></i>改善機会の<span class="keyword-tag">特定困難</span></li>
+                        <li><i class="fa-solid fa-sort" aria-hidden="true"></i>改善活動の<span class="keyword-tag">優先順位付け不備</span></li>
+                        <li><i class="fa-solid fa-sync-alt" aria-hidden="true"></i>継続的改善の<span class="keyword-tag">機会損失</span></li>
+                        <li><i class="fa-solid fa-trending-down" aria-hidden="true"></i>サービスレベルの<span class="keyword-tag">緩やかな劣化</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        定期的なレビューがないと、
+                        <br>
+                        改善機会を見逃し、
+                        <br>
+                        <span class="keyword-tag">運用効率</span>が停滞します！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-calendar-check" aria-hidden="true"></i>運用リーダーとスタッフの<span class="keyword-tag">定期的なメトリクスレビュー</span></li>
+                        <li><i class="fa-solid fa-comments" aria-hidden="true"></i>課題の共有、成功の祝福、<span class="keyword-tag">学んだ教訓の共有</span></li>
+                        <li><i class="fa-solid fa-handshake" aria-hidden="true"></i>ステークホルダーとビジネスリーダーへの<span class="keyword-tag">定期的な運用状況報告</span></li>
+                        <li><i class="fa-solid fa-lightbulb" aria-hidden="true"></i>目標、KPI、将来のイニシアチブに関する<span class="keyword-tag">入力の要請</span></li>
+                        <li><i class="fa-solid fa-balance-scale" aria-hidden="true"></i>サービス提供、運用、保守間の<span class="keyword-tag">トレードオフの議論</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        定期的なレビューにより、
+                        <br>
+                        継続的な改善サイクルを確立し、
+                        <br>
+                        <span class="keyword-tag">運用効率</span>を向上！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-rocket" aria-hidden="true"></i>新製品ローンチ時の<span class="keyword-tag">運用チーム訓練不足</span></li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>チケット解決時間悪化の<span class="keyword-tag">メトリクス見落とし</span></li>
+                        <li><i class="fa-solid fa-users-slash" aria-hidden="true"></i>サブスクリプション数減少後の<span class="keyword-tag">遅れた対応</span></li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i>手動プロセスの<span class="keyword-tag">自動化優先度の誤判断</span></li>
+                        <li><i class="fa-solid fa-user-times" aria-hidden="true"></i>スタッフ離職後の<span class="keyword-tag">問題発覚</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        運用の変化に気づかないと、
+                        <br>
+                        手遅れになってから
+                        <br>
+                        <span class="keyword-tag">問題が発覚</span>することも...
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-calendar" aria-hidden="true"></i>ステークホルダーと運用チーム間の<span class="keyword-tag">定期レビュー時間</span>確保</li>
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i>組織目標と目的の文脈での<span class="keyword-tag">レポートデータ配置</span></li>
+                        <li><i class="fa-solid fa-question-circle" aria-hidden="true"></i>目標が不明確な<span class="keyword-tag">曖昧さの源泉</span>特定</li>
+                        <li><i class="fa-solid fa-users-cog" aria-hidden="true"></i>時間、人員、ツールが運用成果に与える<span class="keyword-tag">影響の特定</span></li>
+                        <li><i class="fa-solid fa-target" aria-hidden="true"></i>影響を受けるKPIと<span class="keyword-tag">成功目標</span>の決定</li>
+                        <li><i class="fa-solid fa-sync" aria-hidden="true"></i>事業運営サポートに十分な<span class="keyword-tag">リソース確保</span>の定期確認</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        定期的な見直しにより、
+                        <br>
+                        運用チームが事業変化に
+                        <br>
+                        <span class="keyword-tag">プロアクティブ</span>に対応！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスの利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i>運用が果たす<span class="keyword-tag">重要な役割の可視化</span>維持</li>
+                        <li><i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>リスクが深刻化する前の<span class="keyword-tag">早期特定</span></li>
+                        <li><i class="fa-solid fa-lightbulb" aria-hidden="true"></i>今後のビジネス変化への<span class="keyword-tag">洞察獲得</span></li>
+                        <li><i class="fa-solid fa-rocket" aria-hidden="true"></i>新しいイニシアチブへの<span class="keyword-tag">プロアクティブな取り組み</span></li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>顧客満足度における<span class="keyword-tag">運用チームの役割</span>明示</li>
+                        <li><i class="fa-solid fa-balance-scale" aria-hidden="true"></i>優先順位決定や<span class="keyword-tag">リソース配分</span>の改善</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        運用チームの価値を
+                        <br>
+                        リーダーシップに示すことで、
+                        <br>
+                        <span class="keyword-tag">適切な投資</span>を獲得！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-file-text"></i> 関連ドキュメント</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i><span class="keyword-tag">Amazon Athena</span>: データ分析サービス</li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span class="keyword-tag">Amazon CloudWatch</span>メトリクスとディメンション</li>
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i><span class="keyword-tag">Amazon QuickSight</span>: ビジネスインテリジェンス</li>
+                        <li><i class="fa-solid fa-database" aria-hidden="true"></i><span class="keyword-tag">AWS Glue</span>: データ統合サービス</li>
+                        <li><i class="fa-solid fa-folder" aria-hidden="true"></i><span class="keyword-tag">AWS Glue Data Catalog</span>: データカタログ</li>
+                        <li><i class="fa-solid fa-server" aria-hidden="true"></i><span class="keyword-tag">CloudWatch Agent</span>: メトリクスとログ収集</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap fa-lg" style="color: var(--ui-color-1);"></i>
+                        これらのAWSサービスを活用して、
+                        <br>
+                        効果的な運用メトリクス分析を
+                        <br>
+                        <span class="keyword-tag">実現</span>しましょう！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

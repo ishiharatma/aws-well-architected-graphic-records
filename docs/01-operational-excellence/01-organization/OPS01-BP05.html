@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS01-BP05: 脅威状況評価 - AWS Well-Architected グラフィックレコーディング</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+</head>
+<body>
+    <div class="container">        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-bullseye fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS01-BP05: 脅威状況評価</h1>
+                <p class="header-description">脅威の状況を理解し、セキュリティリスクを管理するために、脅威の状況を評価します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_eval_threat_landscape.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-info-circle fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-info" aria-hidden="true"></i>
+                            <span>このベストプラクティスを確立しない場合の<span class="keyword-tag">リスクレベル: 中</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-info fa-lg" style="color: var(--ui-color-2);"></i>
+                        脅威評価の不備は
+                        <br>
+                        <span class="keyword-tag">中リスク</span>
+                        <br>
+                        適切な対応優先順位が不明
+                    </span>
+                </div>
+            </div>
+
+            <!-- メインカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bug fa-5x" style="color: var(--ui-color-2); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>脅威状況評価</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-crosshairs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">競合・リスク・セキュリティ脅威</span>評価</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">リスクレジストリ</span>の維持管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Well-Architected Tool</span>活用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Trusted Advisor</span>推奨事項</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-eye fa-lg" style="color: var(--ui-color-1);"></i>
+                        脅威を特定・理解することで
+                        <br>
+                        <span class="keyword-tag">適切な優先順位</span>と
+                        <br>
+                        必要リソースが決まる！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-sync" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Well-Architected・Trusted Advisor</span>定期レビュー</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-download" aria-hidden="true"></i>
+                            <span>サービスの<span class="keyword-tag">最新パッチ状況</span>把握</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>既知脅威の<span class="keyword-tag">リスク・影響</span>理解</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>必要に応じた<span class="keyword-tag">緩和策実装</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-comments" aria-hidden="true"></i>
+                            <span>アクションと<span class="keyword-tag">コンテキスト</span>の伝達</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-chart-bar fa-lg" style="color: var(--ui-color-1);"></i>
+                        定期的な脅威評価で
+                        <br>
+                        <span class="keyword-tag">プロアクティブ</span>な
+                        <br>
+                        リスク管理を実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bomb fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>よくあるアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">古いライブラリ</span>使用によるセキュリティ脆弱性</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">競合製品</span>の顧客課題対応を無視</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-gavel" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">規制当局</span>の動向を軽視</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-skull-crossbones fa-lg" style="color: var(--ui-color-5);"></i>
+                        脅威の軽視は
+                        <br>
+                        <span class="keyword-tag">致命的な結果</span>を
+                        <br>
+                        招く可能性が！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-compass fa-5x" style="color: var(--ui-color-2); animation: fa-spin 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">脅威状況評価</span>の実施</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-list-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">脅威モデル</span>の確立・維持</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-brain fa-lg" style="color: var(--ui-color-2);"></i>
+                        <span class="keyword-tag">脅威モデル</span>で
+                        <br>
+                        リスクを体系的に
+                        <br>
+                        管理しよう！
+                    </span>
+                </div>
+            </div>
+
+            <!-- AWSツール活用 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>AWSツール活用</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-pie" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Well-Architected Tool</span>でアーキテクチャ評価</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Trusted Advisor</span>で最適化推奨</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ガイド付きレビュー</span>でクロスチーム理解</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-headset" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Enterprise Support</span>でOperations Review</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-aws fa-lg" style="color: var(--ui-color-1);"></i>
+                        AWSの豊富なツールで
+                        <br>
+                        <span class="keyword-tag">包括的な脅威評価</span>
+                        <br>
+                        を実現しよう！
+                    </span>
+                </div>
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer style="text-align: center; margin-top: 40px; padding: 20px; color: #777;">
+            <p>AWS Well-Architected Framework - Operational Excellence Pillar</p>
+            <p>OPS01-BP05: Evaluate threat landscape</p>
+        </footer>
+    </div>
+</body>
+</html>

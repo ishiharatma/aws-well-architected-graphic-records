@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS04-BP03: ユーザーエクスペリエンステレメトリの実装</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-user-check fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS04-BP03: ユーザーエクスペリエンステレメトリの実装</h1>
+                <p class="header-description">リアルユーザーモニタリング（RUM）と合成トランザクションを活用して、顧客体験とアプリケーションとの相互作用に関する深い洞察を獲得し、シームレスなデジタル体験を提供します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_customer_telemetry.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <main>
+            <div class="section-layout">
+                <!-- リスクレベル -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>リスクレベル</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="risk-level high">
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>High（高）</span>
+                        </div>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                RUM未実装は問題検知の<br>
+                                遅延を招き、顧客満足度<br>
+                                低下につながる！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 概要 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-users fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>概要</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                                <span>顧客体験・アプリケーション相互作用への深い洞察</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>リアルユーザー監視（RUM）による実際のユーザー相互作用データ</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                                <span>合成トランザクションによるユーザー相互作用シミュレーション</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>実ユーザー影響前の潜在問題検知</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                RUMと合成トランザクションで<br>
+                                シームレスなデジタル<br>
+                                体験を提供！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 期待される成果 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                        <h2>期待される成果</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                                <span>顧客体験の全体的視点</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-search-plus" aria-hidden="true"></i>
+                                <span>問題のプロアクティブ検知</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                                <span>シームレスなデジタル体験提供のためのユーザー相互作用最適化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-mobile-alt" aria-hidden="true"></i>
+                                <span>デバイス・ブラウザパフォーマンスへの洞察</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                                <span>ビジネスワークフローの検証</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2 right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                                継続的なフィードバックで<br>
+                                ユーザー体験を<br>
+                                常に改善！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 実装ガイダンス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                        <h2>実装ガイダンス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">Amazon CloudWatch RUM</span>のデプロイ</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-code" aria-hidden="true"></i>
+                                <span>CloudWatch RUM JavaScriptライブラリの統合</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">CloudWatch Synthetics</span>の設定</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-route" aria-hidden="true"></i>
+                                <span>重要アプリケーションワークフロー・パスの定義</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>データ分析・異常検知時の是正措置実行</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble top">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                実装レベル：中<br>
+                                継続的な監視で<br>
+                                最適な体験を！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-layout">
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>よくあるアンチパターン</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
+                                <span>RUM未実装：問題検知遅延、ユーザー体験洞察欠如</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                                <span>パフォーマンスボトルネック・問題のユーザー苦情まで未認識</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                                <span>合成トランザクション未実装：エッジケース見逃し</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                                <span>重要ビジネス機能の未使用パス・機能不具合の未検知</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                                ユーザー体験監視なしでは<br>
+                                顧客満足度の<br>
+                                維持は困難です！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ベネフィット -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                        <h2>ベネフィット</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>プロアクティブ問題検知：実ユーザー影響前の問題特定・対処</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                                <span>ユーザー体験最適化：RUMからの継続フィードバックによる改善</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-mobile-alt" aria-hidden="true"></i>
+                                <span>デバイス・ブラウザパフォーマンス洞察：さらなる最適化実現</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                                <span>ビジネスワークフロー検証：コア機能・重要パスの運用・効率性確保</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>アプリケーションパフォーマンス強化：実ユーザーデータ活用による改善</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                包括的なユーザー監視で<br>
+                                顧客満足度を<br>
+                                最大化しよう！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AWSサービス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-brands fa-aws fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>主要AWSサービス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">Amazon CloudWatch RUM</span> - リアルユーザーデータ収集・分析・表示</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">Amazon CloudWatch Synthetics</span> - ユーザー相互作用シミュレーション</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-code" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">CloudWatch RUM JavaScriptライブラリ</span> - アプリケーション統合</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-dashboard" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">CloudWatchダッシュボード・アラーム</span> - データ可視化・監視</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-cloud fa-lg" style="color: var(--ui-color-1);"></i>
+                                CloudWatchの<br>
+                                RUM・Syntheticsで<br>
+                                完璧なUX監視を！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AWS Well-Architected Framework グラフィックレコード</p>
+        </footer>
+    </div>
+</body>
+</html>

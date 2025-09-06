@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS05-BP09: 頻繁で小さく可逆的な変更</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <div class="container">        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-sync-alt fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS05-BP09: 頻繁で小さく可逆的な変更</h1>
+                <p class="header-description">自動化されたテストを実装してソフトウェアの品質を向上させ、手動テストのエラーを削減し、継続的な品質保証を提供します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_dev_integ_freq_sm_rev_chg.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <main>
+            <div class="section-layout">
+                <!-- リスクレベル -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-check-circle fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>リスクレベル</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="risk-level low">
+                            <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                            <span>Low（低）</span>
+                        </div>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                小さな変更は<br>
+                                リスクを最小化し<br>
+                                迅速な対応を可能に！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 概要 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-arrows-rotate fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>概要</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-compress" aria-hidden="true"></i>
+                                <span>変更の範囲・影響の削減</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                                <span>変更管理・構成管理・ビルド配信システムとの連携</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-search" aria-hidden="true"></i>
+                                <span>効果的なトラブルシューティング・迅速な修復</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-undo" aria-hidden="true"></i>
+                                <span>変更ロールバックオプション提供</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                頻繁で小さな変更で<br>
+                                ビジネス価値を<br>
+                                継続的に提供！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ベネフィット -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                        <h2>ベネフィット</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                                <span>小さな変更の頻繁デプロイによる開発努力の高速化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-search-plus" aria-hidden="true"></i>
+                                <span>意図しない結果の特定容易性</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-undo" aria-hidden="true"></i>
+                                <span>変更の簡単な逆転・復旧簡素化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>変更プロセスリスク削減・失敗変更影響軽減</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>ビジネス価値提供率の向上</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2 right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                                可逆的変更で<br>
+                                実装リスクを<br>
+                                大幅削減！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 実装ガイダンス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                        <h2>実装ガイダンス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-compress-arrows-alt" aria-hidden="true"></i>
+                                <span>変更範囲・影響削減のための頻繁で小さく可逆的な変更</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-bug" aria-hidden="true"></i>
+                                <span>トラブルシューティングの容易化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i>
+                                <span>迅速な修復支援</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-undo" aria-hidden="true"></i>
+                                <span>変更ロールバックオプション提供</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>ビジネス価値提供率の向上</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble top">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                小さな変更の積み重ねが<br>
+                                大きな成果を<br>
+                                生み出します！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-layout">
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>よくあるアンチパターン</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-calendar" aria-hidden="true"></i>
+                                <span>四半期アプリケーション新バージョンデプロイ：コアサービス停止変更ウィンドウ</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-database" aria-hidden="true"></i>
+                                <span>管理システムでの変更追跡なしの頻繁データベーススキーマ変更</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-tools" aria-hidden="true"></i>
+                                <span>手動インプレース更新：既存インストール・設定上書き・明確なロールバック計画不在</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                                <span>大規模変更による影響範囲拡大・復旧困難</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                                大きな変更は<br>
+                                リスクと影響を<br>
+                                増大させます！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 関連ベストプラクティス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>関連ベストプラクティス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">OPS05-BP03</span> 構成管理システムの使用</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-tools" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">OPS05-BP04</span> ビルド・デプロイメント管理システムの使用</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">OPS06-BP04</span> テスト・ロールバックの自動化</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-network-wired fa-lg" style="color: var(--ui-color-1);"></i>
+                                他のベストプラクティス<br>
+                                との連携で<br>
+                                効果を最大化！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 実装のポイント -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-lightbulb fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                        <h2>実装のポイント</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                                <span>頻繁：継続的な価値提供</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-compress" aria-hidden="true"></i>
+                                <span>小さく：影響範囲の最小化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-undo" aria-hidden="true"></i>
+                                <span>可逆的：安全な実験・迅速な復旧</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>継続的改善：フィードバックループの活用</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                この3つの原則が<br>
+                                現代的な開発の<br>
+                                基盤です！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AWS Well-Architected Framework グラフィックレコード</p>
+        </footer>
+    </div>
+</body>
+</html>

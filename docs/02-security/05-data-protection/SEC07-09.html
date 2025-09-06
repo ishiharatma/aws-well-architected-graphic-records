@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC07-09 データ保護 - ベストプラクティス一覧</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+        
+        .bp-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .bp-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .bp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .bp-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .bp-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+            color: var(--ui-color-1);
+        }
+        
+        .bp-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--ui-color-4);
+            margin: 0;
+        }
+        
+        .bp-description {
+            color: #666;
+            line-height: 1.5;
+            margin: 10px 0;
+        }
+        
+        .risk-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .risk-high {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        
+        .risk-medium {
+            background-color: #fff3e0;
+            color: #ef6c00;
+            border: 1px solid #ffcc02;
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, var(--ui-color-1), var(--ui-color-2));
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 1.8em;
+            color: var(--ui-color-1);
+            margin: 40px 0 20px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-lock fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>SEC07-09 データ保護</h1>
+            <p class="header-description">
+                データの分類、保存時および転送中のデータ保護を実装し、機密性と整合性を維持します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 統計情報 -->
+        <div class="stats-section">
+            <h2><i class="fa-solid fa-chart-bar"></i> SEC07-09 統計情報</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">11</span>
+                    <span class="stat-label">ベストプラクティス</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">8</span>
+                    <span class="stat-label">高リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">中リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">低リスク</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 個別セクションへのリンク -->
+        <div class="bp-grid" style="margin: 40px 0;">
+            <a href="SEC07.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-tags bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC07</h3>
+                </div>
+                <h4>データ分類</h4>
+                <p class="bp-description">
+                    重要度と機密性に基づいてデータを分類し、適切な保護と保持制御を決定します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-list"></i> 4つのベストプラクティス
+                </span>
+            </a>
+            
+            <a href="SEC08.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-hdd bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC08</h3>
+                </div>
+                <h4>保存時のデータ保護</h4>
+                <p class="bp-description">
+                    複数の制御を実装して、不正アクセスや誤った取り扱いのリスクを軽減し、保存時のデータを保護します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-list"></i> 4つのベストプラクティス
+                </span>
+            </a>
+            
+            <a href="SEC09.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-exchange-alt bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC09</h3>
+                </div>
+                <h4>転送中のデータ保護</h4>
+                <p class="bp-description">
+                    複数の制御を実装して、不正アクセスや損失のリスクを軽減し、転送中のデータを保護します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-list"></i> 3つのベストプラクティス
+                </span>
+            </a>
+        </div>
+
+        <div class="section-divider"></div>
+        <!-- SEC07: データ分類 -->
+        <h2 class="section-title">
+            <i class="fa-solid fa-tags"></i> SEC07: データ分類
+        </h2>
+        
+        <div class="bp-grid">
+            <a href="SEC07-BP01.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-clipboard-list bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC07-BP01</h3>
+                </div>
+                <h4>データ分類スキームを特定する</h4>
+                <p class="bp-description">
+                    組織のデータに適した分類スキームを特定し、実装します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+            <a href="SEC07-BP02.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-tag bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC07-BP02</h3>
+                </div>
+                <h4>データ分類に基づいてデータを分類する</h4>
+                <p class="bp-description">
+                    定義された分類スキームに基づいてデータを適切に分類します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+            <a href="SEC07-BP03.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-robot bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC07-BP03</h3>
+                </div>
+                <h4>データ分類を自動化する</h4>
+                <p class="bp-description">
+                    データ分類プロセスを自動化して一貫性と効率性を向上させます。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+            <a href="SEC07-BP04.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-calendar-alt bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC07-BP04</h3>
+                </div>
+                <h4>データ保持要件を定義する</h4>
+                <p class="bp-description">
+                    データの種類に応じた適切な保持要件を定義し、実装します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+        </div>
+
+        <div class="section-divider"></div>
+        <!-- SEC08: 保存時のデータ保護 -->
+        <h2 class="section-title">
+            <i class="fa-solid fa-hdd"></i> SEC08: 保存時のデータ保護
+        </h2>
+        
+        <div class="bp-grid">
+            <a href="SEC08-BP01.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-key bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC08-BP01</h3>
+                </div>
+                <h4>安全なキー管理を実装する</h4>
+                <p class="bp-description">
+                    暗号化キーのライフサイクル全体を通じて安全な管理を実装します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+            <a href="SEC08-BP02.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-lock bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC08-BP02</h3>
+                </div>
+                <h4>保存時の暗号化を強制する</h4>
+                <p class="bp-description">
+                    すべての保存データに対して暗号化を強制的に適用します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+            <a href="SEC08-BP03.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-robot bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC08-BP03</h3>
+                </div>
+                <h4>保存時のデータ保護を自動化する</h4>
+                <p class="bp-description">
+                    データ保護プロセスを自動化して一貫性と効率性を確保します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+            <a href="SEC08-BP04.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-user-shield bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC08-BP04</h3>
+                </div>
+                <h4>アクセス制御を強制する</h4>
+                <p class="bp-description">
+                    データへのアクセスを適切に制御し、最小権限の原則を適用します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+        </div>
+
+        <div class="section-divider"></div>
+        <!-- SEC09: 転送中のデータ保護 -->
+        <h2 class="section-title">
+            <i class="fa-solid fa-exchange-alt"></i> SEC09: 転送中のデータ保護
+        </h2>
+        
+        <div class="bp-grid">
+            <a href="SEC09-BP01.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-certificate bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC09-BP01</h3>
+                </div>
+                <h4>安全なキーと証明書管理を実装する</h4>
+                <p class="bp-description">
+                    転送中のデータ暗号化に使用するキーと証明書を安全に管理します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+            <a href="SEC09-BP02.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-lock bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC09-BP02</h3>
+                </div>
+                <h4>転送中の暗号化を強制する</h4>
+                <p class="bp-description">
+                    すべてのデータ転送において暗号化を強制的に適用します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+            <a href="SEC09-BP03.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-handshake bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC09-BP03</h3>
+                </div>
+                <h4>ネットワーク通信を認証する</h4>
+                <p class="bp-description">
+                    ネットワーク通信の両端で相互認証を実装して信頼性を確保します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>セキュリティの柱に戻る</h3>
+                    <a href="../02-security.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-shield"></i> セキュリティ一覧
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

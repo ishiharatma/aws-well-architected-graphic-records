@@ -1,785 +1,142 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEC01-BP02 セキュアアカウントのルートユーザーおよびプロパティ</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
-    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
-    
-    :root {
-      --ui-color-1: #1B6C8C;
-      --ui-color-2: #BF8136;
-      --ui-color-3: #F2E8E4;
-      --ui-color-4: #260101;
-      --ui-color-5: #BF5656;
-    }
-    
-    body {
-      font-family: 'Zen Kurenaido', sans-serif;
-      background-color: #FFF8F5;
-      color: #333333;
-      line-height: 1.6;
-      margin: 0;
-      padding: 20px;
-    }
-    
-    .container {
-      max-width: 2000px;
-      margin: 0 auto;
-    }
-    
-    /* ヘッダースタイル */
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-      position: relative;
-      padding: 20px;
-      background-color: white;
-      border-radius: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    
-    .title {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-    
-    .title h1 {
-      font-size: 36px;
-      color: var(--ui-color-1);
-      margin: 15px 0;
-      line-height: 1.2;
-    }
-    
-    .date {
-      font-size: 14px;
-      color: #777777;
-    }
-    
-    /* セクションレイアウト */
-    .section-layout {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-bottom: 20px;
-      justify-content: center;
-    }
-    
-    /* カードスタイル */
-    .section-card {
-      flex: 1;
-      min-width: 220px;
-      max-width: 450px;
-      background-color: white;
-      border-radius: 20px;
-      padding: 15px;
-      box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
-      position: relative;
-      overflow: hidden;
-      animation: fadeInScale 0.5s ease-out;
-    }
-    
-    @keyframes fadeInScale {
-      0% {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-    
-    /* カード内アイコンコンテナ */
-    .mega-icon-container {
-      text-align: center;
-      margin: 15px 0;
-    }
-    
-    /* カードコンテンツ */
-    .card-content {
-      padding: 0 10px 15px;
-    }
-    
-    /* キーワードリスト */
-    .keyword-list {
-      margin: 15px 0;
-      padding: 0;
-      list-style-type: none;
-    }
-    
-    .keyword-list li {
-      margin-bottom: 12px;
-      display: flex;
-      align-items: flex-start;
-    }
-    
-    .keyword-list li i {
-      margin-right: 8px;
-      color: var(--ui-color-2);
-      min-width: 16px;
-      margin-top: 4px;
-    }
-    
-    /* キーワードタグ */
-    .keyword-tag {
-      background-color: var(--ui-color-3);
-      color: var(--ui-color-4);
-      padding: 3px 8px;
-      border-radius: 5px;
-      margin-right: 5px;
-      display: inline-block;
-      font-weight: bold;
-    }
-    
-    .risk-tag {
-      background-color: #FF5555;
-      color: white;
-      padding: 3px 10px;
-      border-radius: 5px;
-      display: inline-block;
-      font-weight: bold;
-    }
-    
-    /* 手書き風吹き出し */
-    .speech-bubble {
-      position: relative;
-      background: #fff;
-      border: 3px solid var(--ui-color-1);
-      border-radius: 20px;
-      padding: 10px 15px;
-      margin: 15px 5px;
-      font-family: 'Yomogi', cursive;
-      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
-      transform: rotate(-1deg);
-    }
-    
-    .speech-bubble::after {
-      content: '';
-      position: absolute;
-      bottom: -13px;
-      left: 20px;
-      border-width: 12px 8px 0;
-      border-style: solid;
-      border-color: var(--ui-color-1) transparent;
-      display: block;
-      width: 0;
-    }
-    
-    /* 吹き出しバリエーション */
-    .speech-bubble.right::after {
-      left: auto;
-      right: 20px;
-      transform: rotate(15deg);
-    }
-    
-    .speech-bubble.top::after {
-      bottom: auto;
-      top: -13px;
-      border-width: 0 8px 12px;
-      transform: rotate(-5deg);
-    }
-    
-    .speech-bubble.variant-1 {
-      background: #FFF9E3;
-      border-color: var(--ui-color-2);
-      transform: rotate(1deg);
-    }
-    
-    .speech-bubble.variant-1::after {
-      border-color: var(--ui-color-2) transparent;
-    }
-    
-    .speech-bubble.variant-2 {
-      background: #FFE9E9;
-      border-color: var(--ui-color-5);
-      transform: rotate(-2deg);
-    }
-    
-    .speech-bubble.variant-2::after {
-      border-color: var(--ui-color-5) transparent;
-    }
-    
-    /* 手書き文字 */
-    .handwritten {
-      font-family: 'Yomogi', cursive;
-      font-size: 15px;
-      line-height: 1.5;
-      color: #333;
-    }
-    
-    /* コードプレビュー */
-    pre {
-      background: #f5f5f5;
-      padding: 8px;
-      border-radius: 5px;
-      font-size: 12px;
-      margin-top: 10px;
-      overflow-x: auto;
-    }
-    
-    /* 実装ステップボックス */
-    .step-box {
-      border-left: 4px solid var(--ui-color-1);
-      padding-left: 12px;
-      margin: 10px 0;
-    }
-    
-    /* カテゴリボックス */
-    .category-box {
-      margin: 15px 0;
-      padding: 15px;
-      background-color: #f9f9f9;
-      border-radius: 10px;
-      border-left: 4px solid var(--ui-color-1);
-    }
-    
-    .category-title {
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: var(--ui-color-1);
-    }
-    
-    /* レスポンシブ対応 */
-    @media (max-width: 1600px) {
-      .section-card {
-        min-width: 280px;
-      }
-    }
-    
-    @media (max-width: 1200px) {
-      .section-card {
-        min-width: 320px;
-      }
-    }
-    
-    @media (max-width: 900px) {
-      .section-card {
-        min-width: 380px;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .section-layout {
-        flex-direction: column;
-      }
-      
-      .section-card {
-        width: 100%;
-        min-width: auto;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC01-BP02 アカウントルートユーザーとプロパティを保護する</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
 </head>
 <body>
-  <div class="container">
-    <!-- ヘッダー -->
-    <div class="header">
-      <div class="title">
-        <i class="fa-solid fa-user-shield fa-7x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
-        <h1>SEC01-BP02 セキュアアカウントのルートユーザーおよびプロパティ</h1>
-      </div>
-      <div class="date">2025年3月29日</div>
-    </div>
-    
-    <!-- セクション1: 概要 -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-key fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>概要</h2>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-shield-halved fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>SEC01-BP02 アカウントルートユーザーとプロパティを保護する</h1>
+            <p class="header-description">
+                ルートユーザーは最も特権的なユーザーであり、適切な制御を確立し、日常的な使用を避けることでリスクを軽減します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
         </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-crown" aria-hidden="true"></i>
-              <span>ルートユーザーは<span class="keyword-tag">最も権限が高い</span>ユーザー</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-unlock-keyhole" aria-hidden="true"></i>
-              <span>アカウント内の<span class="keyword-tag">全リソース</span>に対する<span class="keyword-tag">完全な管理者アクセス</span></span>
-            </li>
-            <li>
-              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-              <span>場合によっては<span class="keyword-tag">セキュリティポリシー</span>による制限の対象外</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-ban" aria-hidden="true"></i>
-              <span>ルートユーザーへの<span class="keyword-tag">プログラムによるアクセスを無効化</span>し、適切なコントロールを確立</span>
-            </li>
-          </ul>
+    </header>
+
+    <main>
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                        <span>高リスク</span>
+                    </div>
+                    <p>このベストプラクティスを確立しない場合のリスクレベルです。</p>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation" style="color: var(--ui-color-5);"></i>
+                        適切な実装で<br>
+                        <span class="keyword-tag">リスク軽減</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                <div class="card-content">
+                    <p>ルートユーザー認証情報の誤用による意図的・偶発的な損害の可能性を軽減し、ルートユーザー使用時の適切な担当者への警告を提供します。</p>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star" style="color: var(--ui-color-2);"></i>
+                        明確な<br>
+                        <span class="keyword-tag">目標設定</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-user" aria-hidden="true"></i>
+                            <span>ルート認証情報を必要とする以外のタスクでルートユーザーを使用する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-vial" aria-hidden="true"></i>
+                            <span>緊急時の重要インフラ・プロセス・担当者の機能を定期的にテストしない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-route" aria-hidden="true"></i>
+                            <span>代替アカウント復旧方法を考慮・テストしない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span>DNS・メールサーバー・電話プロバイダーをセキュリティ境界として扱わない</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star" style="color: var(--ui-color-2);"></i>
+                        これらの落とし穴を<br><span class="keyword-tag">回避</span>しよう！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>現状の評価と分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-map" aria-hidden="true"></i>
+                            <span>実装計画の策定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span>段階的な実装</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>効果測定と改善</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-check-circle" style="color: var(--ui-color-2);"></i>
+                        段階的な<br>
+                        <span class="keyword-tag">実装</span>で確実に！
+                    </span>
+                </div>
+            </div>
         </div>
-        
-        <div class="speech-bubble">
-          <span class="handwritten">
-            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
-            ルートユーザーは「最強の管理者」！
-            <br>
-            だからこそ厳重に管理して
-            <br>
-            必要なときだけ使うべきなんだ
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション2: 期待される成果 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-check-double fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
-          <h2>期待される成果</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-lock" aria-hidden="true"></i>
-              <span>ルートユーザーの<span class="keyword-tag">セキュリティ保護</span>による不正利用リスクの軽減</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-shield-virus" aria-hidden="true"></i>
-              <span>認証情報が不正利用された場合の<span class="keyword-tag">付帯的・意図的な損害</span>の可能性を抑制</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-bell" aria-hidden="true"></i>
-              <span><span class="keyword-tag">検出コントロール</span>によりルートユーザーのアクションが実行された際に適切な担当者へアラート送信</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-1 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-shield-halved fa-lg" style="color: var(--ui-color-2);"></i>
-            しっかり守れば安心！
-            <br>
-            何かあってもすぐに
-            <br>
-            気づけるようにしておこう
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション3: アンチパターン -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 3s;" aria-hidden="true"></i>
-          <h2>一般的なアンチパターン</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span><span class="keyword-tag">ルートユーザー</span>を必要以外のタスクにも使用する</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>定期的な<span class="keyword-tag">緊急時対応計画のテスト</span>を怠る</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>典型的なログインフローのみを考慮し、<span class="keyword-tag">代替アカウント回復方法</span>を考慮・テストしていない</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span><span class="keyword-tag">DNS</span>、<span class="keyword-tag">Eメールサーバー</span>、<span class="keyword-tag">携帯電話会社</span>を重要なセキュリティ境界の一部として対処していない</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-triangle-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
-            ルートユーザーを日常的に
-            <br>
-            使うのは超危険！
-            <br>
-            回復フローも忘れずに確認しよう
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション4: メリット -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-2); animation: fa-spin 6s linear infinite;" aria-hidden="true"></i>
-          <h2>このベストプラクティスを活用するメリット</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-thumbs-up" aria-hidden="true"></i>
-              <span>ルートユーザーへのアクセスを確保することで<span class="keyword-tag">安心感</span>が得られる</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
-              <span>アカウントで行われるアクションは<span class="keyword-tag">制御され監査</span>されている</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-shield-heart" aria-hidden="true"></i>
-              <span>組織全体の<span class="keyword-tag">セキュリティ態勢</span>が強化される</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-thumbs-up fa-lg" style="color: var(--ui-color-2);"></i>
-            しっかり管理すれば
-            <br>
-            安全に使える！
-            <br>
-            監査もバッチリだね
-          </span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- セクション5: リスクレベル -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: #FF5555; animation: fa-beat-fade 2s infinite;" aria-hidden="true"></i>
-          <h2>リスクレベル</h2>
-        </div>
-        
-        <div class="card-content" style="text-align: center;">
-          <p style="font-size: 24px; margin: 20px 0;">
-            <span class="risk-tag">高</span>
-          </p>
-          <p>このベストプラクティスを活用しない場合のリスクレベル</p>
-        </div>
-        
-        <div class="speech-bubble right">
-          <span class="handwritten">
-            <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-2);"></i>
-            リスクレベルは「高」！
-            <br>
-            対策を怠ると大変なことに
-            <br>
-            なる可能性があるよ！
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション6: 実装のガイダンス -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-compass fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>実装のガイダンス</h2>
-        </div>
-        
-        <div class="card-content">
-          <p>AWS は、アカウントを保護するのに役立つ多くのツールを提供しています。これらの対策の一部は既定では有効になっていないため、実装するには直接的な措置を講じる必要があります。</p>
-          
-          <p>AWS アカウントを初めて作成する際は、アカウント内のすべての AWS のサービスとリソースに完全なアクセス許可を持つ 1 つの ID から始めます。この ID は、<span class="keyword-tag">AWS アカウントのルートユーザー</span>と呼ばれます。</p>
-          
-          <p>AWS Organizations を使用する場合、それぞれにルートユーザーが含まれる AWS アカウントが複数あります。<span class="keyword-tag">管理アカウント</span>のルートユーザーのセキュリティ保護を優先してから、<span class="keyword-tag">メンバーアカウント</span>のルートユーザーに対処してください。</p>
-        </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
-            Organizations使うなら
-            <br>
-            管理アカウントを最初に守ろう！
-            <br>
-            それが最重要だよ
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション7: 予防的コントロール -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-shield-alt fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
-          <h2>予防的コントロール</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-address-book" style="margin-right: 5px;"></i>連絡先情報</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>アカウントの<span class="keyword-tag">正確な連絡先情報</span>を設定</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-envelope" aria-hidden="true"></i>
-                <span><span class="keyword-tag">企業ドメイン</span>のEメールアドレスを使用（できれば<span class="keyword-tag">配布リスト</span>）</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-phone" aria-hidden="true"></i>
-                <span>専用の<span class="keyword-tag">安全な電話番号</span>を設定（共有しない）</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-key" style="margin-right: 5px;"></i>アクセスキー</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>ルートユーザーには<span class="keyword-tag">アクセスキーを作成しない</span></span>
-              </li>
-              <li>
-                <i class="fa-solid fa-trash" aria-hidden="true"></i>
-                <span>既存のアクセスキーは<span class="keyword-tag">削除</span>する（CIS 1.4）</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-exchange-alt" aria-hidden="true"></i>
-                <span>必要なプロセスは<span class="keyword-tag">IAMロール</span>の一時的なアクセスキーを使用するよう移行</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-fingerprint" style="margin-right: 5px;"></i>認証情報</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span><span class="keyword-tag">複雑なパスワード</span>を使用</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>
-                <span><span class="keyword-tag">多要素認証（MFA）</span>を有効化（CIS 1.5）</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-tablet" aria-hidden="true"></i>
-                <span>回復力とセキュリティのために<span class="keyword-tag">ハードウェアMFAデバイス</span>を検討</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-copy" aria-hidden="true"></i>
-                <span>バックアップ用に<span class="keyword-tag">複数のMFAデバイス</span>を登録（最大8台）</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-vault" aria-hidden="true"></i>
-                <span>パスワードは<span class="keyword-tag">安全に保管</span>（循環依存関係に注意）</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-5);"></i>
-            ハードウェアMFAが一番安全！
-            <br>
-            バックアップも忘れずに
-            <br>
-            登録しておこう
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション8: 発見的コントロール -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-magnifying-glass fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>発見的コントロール</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-bell" aria-hidden="true"></i>
-              <span>ルート認証情報の使用を検出する<span class="keyword-tag">アラーム</span>を作成（CIS 1.7）</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-shield-dog" aria-hidden="true"></i>
-              <span><span class="keyword-tag">Amazon GuardDuty</span>を使用してルートユーザーAPI認証情報の使用状況をモニタリング</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-list-check" aria-hidden="true"></i>
-              <span><span class="keyword-tag">AWS Config</span>用のWell-Architectedセキュリティの柱コンフォーマンスパックの検出管理を実装</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-tower-observation" aria-hidden="true"></i>
-              <span>AWS Control Towerを使用している場合は、提供されている<span class="keyword-tag">強く推奨されるコントロール</span>を実装</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-search fa-lg" style="color: var(--ui-color-2);"></i>
-            異常があったらすぐに
-            <br>
-            気づける仕組みを作ろう！
-            <br>
-            GuardDutyが強い味方だよ
-          </span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- セクション9: 運用ガイダンス -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-gears fa-5x" style="color: var(--ui-color-1); animation: fa-spin 4s linear infinite;" aria-hidden="true"></i>
-          <h2>運用ガイダンス</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="step-box">
-            <p><strong>1. アクセス権限の設計</strong></p>
-            <p>組織でルートユーザー認証情報へのアクセスが必要な担当者を決定</p>
-            <p><span class="keyword-tag">2人制</span>を採用して、1人の担当者がすべての認証情報にアクセスするのを回避</p>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>2. 組織管理の徹底</strong></p>
-            <p>アカウントに関連付けられた<span class="keyword-tag">電話番号</span>と<span class="keyword-tag">Eメールエイリアス</span>は、個人ではなく<span class="keyword-tag">組織が管理</span></p>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>3. ルートユーザーの適切な使用</strong></p>
-            <p>ルートユーザーは<span class="keyword-tag">例外的にのみ使用</span>（CIS 1.7）</p>
-            <p>日常的なタスクには使用せず、ルートユーザーを必要とするAWSタスクのみに使用</p>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>4. 定期的な検証</strong></p>
-            <p>ルートユーザーに<span class="keyword-tag">アクセスできることを定期的にチェック</span></p>
-            <p>関連付けられている<span class="keyword-tag">Eメールアドレス</span>と<span class="keyword-tag">電話番号</span>が有効であることを確認</p>
-            <p>セキュリティに関する通知が<span class="keyword-tag">abuse@amazon.com</span>から届いていないか監視</p>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>5. インシデント対応の準備</strong></p>
-            <p>ルートアカウントの不正使用に対処する<span class="keyword-tag">インシデント対応手順</span>を準備</p>
-            <p>「AWSセキュリティインシデント対応ガイド」を参照</p>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-check-double fa-lg" style="color: var(--ui-color-5);"></i>
-            2人制のアクセス管理と
-            <br>
-            定期的なチェックが鍵！
-            <br>
-            いざという時の手順も用意しよう
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション10: AWS Organizations対応 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-sitemap fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
-          <h2>AWS Organizations対応</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-building" style="margin-right: 5px;"></i>管理アカウント</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-                <span><span class="keyword-tag">管理アカウント</span>のルートユーザーを最優先で保護</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-key" aria-hidden="true"></i>
-                <span>認証情報を作成して<span class="keyword-tag">安全に保管</span></span>
-              </li>
-              <li>
-                <i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>
-                <span>ハードウェアMFAを含む<span class="keyword-tag">厳格な保護</span>を実装</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-users" style="margin-right: 5px;"></i>メンバーアカウント</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-lock" aria-hidden="true"></i>
-                <span>メンバーアカウントには<span class="keyword-tag">予防的ガードレール</span>を使用</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-ban" aria-hidden="true"></i>
-                <span>ルートユーザー向けの<span class="keyword-tag">ルートアクセスキーの作成を拒否</span></span>
-              </li>
-              <li>
-                <i class="fa-solid fa-ban" aria-hidden="true"></i>
-                <span>ルートユーザーとしての<span class="keyword-tag">アクションを拒否</span>する予防的ガードレール</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-rotate" aria-hidden="true"></i>
-                <span>必要に応じて<span class="keyword-tag">パスワードリセットフロー</span>を使用</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-1 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-building fa-lg" style="color: var(--ui-color-2);"></i>
-            マルチアカウント環境なら
-            <br>
-            管理アカウントとメンバーアカウントで
-            <br>
-            保護戦略を分けよう！
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション11: まとめ -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-check-circle fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
-          <h2>まとめと効果</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-              <span><span class="keyword-tag">多層防御</span>: 複数の保護メカニズムでルートユーザーを守る</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-user-lock" aria-hidden="true"></i>
-              <span><span class="keyword-tag">アクセス制限</span>: 限定的な使用と厳格な認証でリスクを低減</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-bell" aria-hidden="true"></i>
-              <span><span class="keyword-tag">監視体制</span>: 異常な使用を検出し迅速に対応</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-users-gear" aria-hidden="true"></i>
-              <span><span class="keyword-tag">責任分散</span>: 2人制による管理で不正アクセスを防止</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-rotate" aria-hidden="true"></i>
-              <span><span class="keyword-tag">定期検証</span>: 継続的なセキュリティ確保のための運用体制</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
-              <span><span class="keyword-tag">インシデント準備</span>: 不正使用時の迅速な対応手順の確立</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
-            ルートユーザーの保護は
-            <br>
-            AWSセキュリティの基本中の基本！
-            <br>
-            しっかり守って安全に使おう
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
+    </main>
 </body>
 </html>

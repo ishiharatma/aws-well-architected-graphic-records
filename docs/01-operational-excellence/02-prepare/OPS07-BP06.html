@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS07-BP06: 本番ワークロード用のサポートプランの作成 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-life-ring fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS07-BP06: 本番ワークロード用のサポートプランの作成</h1>
+            <p class="header-description">本番ワークロードが依存するソフトウェアとサービスのサポートを有効にします。本番サービスレベルのニーズを満たす適切なサポートレベルを選択します。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_enable_support_plans.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-info-circle fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level low">
+                        <h3><i class="fa-solid fa-info-circle"></i> 低リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>重要ソフトウェアベンダーの<span class="keyword-tag">サポートプラン不在</span></li>
+                        <li><i class="fa-solid fa-user-times" aria-hidden="true"></i>主要連絡先の<span class="keyword-tag">退職による連絡不能</span></li>
+                        <li><i class="fa-solid fa-file-times" aria-hidden="true"></i>サポートケース申請の<span class="keyword-tag">手順未文書化</span></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>インシデント対応の<span class="keyword-tag">時間延長</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        サポートプランがないと、
+                        <br>
+                        本番障害時に迅速な対応ができず、
+                        <br>
+                        <span class="keyword-tag">ビジネス影響</span>が拡大します！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i>本番ワークロード依存の<span class="keyword-tag">ソフトウェア・サービスサポート</span>実装</li>
+                        <li><i class="fa-solid fa-level-up-alt" aria-hidden="true"></i>サービスレベルニーズに基づく<span class="keyword-tag">適切なサポートプラン</span>選択</li>
+                        <li><i class="fa-solid fa-file-alt" aria-hidden="true"></i>サポートプラン、レベル、申請方法の<span class="keyword-tag">文書化</span></li>
+                        <li><i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i>サービスレベルニーズを満たす<span class="keyword-tag">適切な応答時間</span></li>
+                        <li><i class="fa-solid fa-users-cog" aria-hidden="true"></i>インシデント時の<span class="keyword-tag">ベンダー支援</span>利用可能</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        適切なサポートレベルにより、
+                        <br>
+                        必要な時間枠での対応を確保し、
+                        <br>
+                        <span class="keyword-tag">エスカレーション</span>も可能！
+                    </span>
+                </div>
+            </div>
+
+            <!-- サポートプランの利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-handshake fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>サポートプランの利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i><span class="keyword-tag">適切な応答時間</span>：サービスレベルニーズを満たす対応</li>
+                        <li><i class="fa-solid fa-level-up-alt" aria-hidden="true"></i><span class="keyword-tag">エスカレーション権限</span>：本番問題時の優先対応</li>
+                        <li><i class="fa-solid fa-tools" aria-hidden="true"></i><span class="keyword-tag">専門家支援</span>：インシデント時のトラブルシューティング</li>
+                        <li><i class="fa-solid fa-phone" aria-hidden="true"></i><span class="keyword-tag">直接連絡</span>：迅速なサポートアクセス</li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span class="keyword-tag">プロアクティブサポート</span>：パフォーマンス最適化支援</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-1);"></i>
+                        サポートされた顧客として、
+                        <br>
+                        本番問題時に<span class="keyword-tag">優先対応</span>を受けられます！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-1" aria-hidden="true"></i><span class="keyword-tag">依存関係特定</span>：ワークロード依存のソフトウェア・サービス文書化</li>
+                        <li><i class="fa-solid fa-2" aria-hidden="true"></i><span class="keyword-tag">サービスレベル決定</span>：ワークロードのサービスレベルニーズ確定</li>
+                        <li><i class="fa-solid fa-3" aria-hidden="true"></i><span class="keyword-tag">サポートプラン確立</span>：商用ソフトウェア・サービスベンダーとの契約</li>
+                        <li><i class="fa-solid fa-4" aria-hidden="true"></i><span class="keyword-tag">AWS Business Support</span>：本番アカウントでの有効化推奨</li>
+                        <li><i class="fa-solid fa-5" aria-hidden="true"></i><span class="keyword-tag">文書化</span>：サポート申請方法とエスカレーション手順</li>
+                        <li><i class="fa-solid fa-6" aria-hidden="true"></i><span class="keyword-tag">定期更新</span>：サポート連絡先の最新状態維持</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-2);"></i>
+                        Wikiなどの知識管理ツールで、
+                        <br>
+                        チーム全体がアクセス可能に！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- AWSサポートプラン -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-brands fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>AWSサポートプラン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-business-time" aria-hidden="true"></i><span class="keyword-tag">AWS Business Support</span>：本番ワークロード推奨</li>
+                        <li><i class="fa-solid fa-crown" aria-hidden="true"></i><span class="keyword-tag">AWS Enterprise Support</span>：ミッションクリティカル対応</li>
+                        <li><i class="fa-solid fa-code" aria-hidden="true"></i><span class="keyword-tag">API Access</span>：Trusted Advisor、AWS Health</li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span class="keyword-tag">プログラム統合</span>：システムとの自動連携</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-book fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連ドキュメント</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS Support Plans</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS Business Support</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS Enterprise Support</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>OPS02-BP02: プロセスと手順の所有者特定</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

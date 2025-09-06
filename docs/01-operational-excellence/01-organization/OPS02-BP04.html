@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS02-BP04: 責任・所有権管理メカニズム - AWS Well-Architected グラフィックレコーディング</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+</head>
+<body>
+    <div class="container">        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-sitemap fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS02-BP04: 責任・所有権管理メカニズム</h1>
+                <p class="header-description">新しいアプリケーションの運用準備状況を評価し、本番環境への移行前に必要な要件を満たすことを確認します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_responsibilities_ownership.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-warning" aria-hidden="true"></i>
+                            <span>このベストプラクティスを確立しない場合の<span class="keyword-tag">リスクレベル: 高</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        責任管理メカニズム不備は
+                        <br>
+                        <span class="keyword-tag">高リスク</span>！
+                        <br>
+                        無行動・重複努力のリスク
+                    </span>
+                </div>
+            </div>
+
+            <!-- メインカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-sitemap fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>責任・所有権管理メカニズム</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-user-check" aria-hidden="true"></i>
+                            <span>役割の<span class="keyword-tag">責任理解</span>とビジネス成果への貢献</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+                            <span>タスク<span class="keyword-tag">優先順位付け</span>の根拠</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">改善機会特定</span>・適切な変更影響</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+                            <span>責任不明時の<span class="keyword-tag">エスカレーション経路</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        明確な責任で
+                        <br>
+                        <span class="keyword-tag">自律性・所有権</span>を
+                        <br>
+                        チームメンバーに付与！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">明確に定義</span>された組織内チーム責任</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-link" aria-hidden="true"></i>
+                            <span>リソース・アクション・プロセスとの<span class="keyword-tag">関連性</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                            <span>チーム・組織目標との<span class="keyword-tag">責任整合</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">一貫した発見可能</span>なエスカレーション経路</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">責任マトリックス・Wiki</span>への文書化</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-users fa-lg" style="color: var(--ui-color-2);"></i>
+                        明確な責任で
+                        <br>
+                        <span class="keyword-tag">混乱・緊張回避</span>と
+                        <br>
+                        適切なワークロード管理！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>よくあるアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-question" aria-hidden="true"></i>
+                            <span>チーム責任の<span class="keyword-tag">曖昧・不明確</span>定義</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-disconnect" aria-hidden="true"></i>
+                            <span>役割と責任の<span class="keyword-tag">不整合</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-target" aria-hidden="true"></i>
+                            <span>目標・責任の<span class="keyword-tag">不整合</span>による成功測定困難</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-times" aria-hidden="true"></i>
+                            <span>責任の<span class="keyword-tag">更新不足</span>・実際業務との不一致</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">エスカレーション経路</span>未定義・不明確</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search-minus" aria-hidden="true"></i>
+                            <span>役割・責任・エスカレーション経路が<span class="keyword-tag">発見不可能</span></span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                        責任不明は
+                        <br>
+                        <span class="keyword-tag">高リスク</span>！
+                        <br>
+                        無行動・未対応ニーズのリスク
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-route fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-user-cog" aria-hidden="true"></i>
+                            <span>チームメンバーの<span class="keyword-tag">役割・責任特定</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>組織メンバーが<span class="keyword-tag">発見可能</span>な情報提供</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+                            <span>責任・所有権特定の<span class="keyword-tag">エスカレーション</span>受信役割決定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-tools" aria-hidden="true"></i>
+                            <span>所有権・責任発見の<span class="keyword-tag">アクセス可能メカニズム</span></span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-cogs fa-lg" style="color: var(--ui-color-2);"></i>
+                        体系的なアプローチで
+                        <br>
+                        <span class="keyword-tag">効果的な</span>
+                        <br>
+                        責任管理を実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 顧客事例 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-store fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>顧客事例</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shopping-cart" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AnyCompany Retail</span>のAWS移行後レビュー</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">運用レビュー</span>で責任マトリックス検証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span>インフラチームの<span class="keyword-tag">ハードウェア責任削減</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+                            <span>新しい<span class="keyword-tag">運用モデル進化</span>機会発見</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+                            <span>見落とし責任の<span class="keyword-tag">エスカレーション経路</span>定義</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-chart-line fa-lg" style="color: var(--ui-color-2);"></i>
+                        移行・モダナイゼーション時は
+                        <br>
+                        <span class="keyword-tag">責任見直し</span>の
+                        <br>
+                        絶好の機会！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">既存文書</span>から開始</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-comments" aria-hidden="true"></i>
+                            <span>文書化された<span class="keyword-tag">責任レビュー・議論</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span>不整合の<span class="keyword-tag">分析・対処</span></span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-1 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-check-circle fa-lg" style="color: var(--ui-color-1);"></i>
+                        体系的なレビューで
+                        <br>
+                        <span class="keyword-tag">責任の明確化</span>と
+                        <br>
+                        継続的改善を実現！
+                    </span>
+                </div>
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer style="text-align: center; margin-top: 40px; padding: 20px; color: #777;">
+            <p>AWS Well-Architected Framework - Operational Excellence Pillar</p>
+            <p>OPS02-BP04: Mechanisms exist to manage responsibilities and ownership</p>
+        </footer>
+    </div>
+</body>
+</html>

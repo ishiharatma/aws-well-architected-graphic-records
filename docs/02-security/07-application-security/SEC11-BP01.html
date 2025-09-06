@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC11-BP01 アプリケーション設計でセキュリティを組み込む</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-shield-halved fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>SEC11-BP01 アプリケーション設計でセキュリティを組み込む</h1>
+            <p class="header-description">
+                アプリケーションの設計段階からセキュリティを組み込み、脆弱性を最小化します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                        <span>高リスク</span>
+                    </div>
+                    <p>このベストプラクティスを確立しない場合のリスクレベルです。</p>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation" style="color: var(--ui-color-5);"></i>
+                        適切な実装で<br>
+                        <span class="keyword-tag">リスク軽減</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                <div class="card-content">
+                    <p>セキュリティが設計段階から組み込まれ、脆弱性が最小化されたアプリケーションを構築します。</p>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star" style="color: var(--ui-color-2);"></i>
+                        明確な<br>
+                        <span class="keyword-tag">目標設定</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 設計原則 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-drafting-compass fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>設計原則</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-check" aria-hidden="true"></i>
+                            <span>セキュリティバイデザイン</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-minimize" aria-hidden="true"></i>
+                            <span>攻撃面の最小化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span>多層防御</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                            <span>デフォルトセキュア</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star" style="color: var(--ui-color-2);"></i>
+                        設計段階から<br><span class="keyword-tag">セキュリティ組込</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>現状の評価と分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-map" aria-hidden="true"></i>
+                            <span>実装計画の策定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span>段階的な実装</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>効果測定と改善</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-check-circle" style="color: var(--ui-color-2);"></i>
+                        段階的な<br>
+                        <span class="keyword-tag">実装</span>で確実に！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

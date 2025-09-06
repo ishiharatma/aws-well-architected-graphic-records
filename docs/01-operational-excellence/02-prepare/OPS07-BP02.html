@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS07-BP02: 運用準備の一貫したレビューの確保 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-clipboard-check fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS07-BP02: 運用準備の一貫したレビューの確保</h1>
+            <p class="header-description">運用準備レビュー（ORR）を使用して、ワークロードを運用できることを検証します。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_const_orr.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 高リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-question-circle" aria-hidden="true"></i>運用可能性が<span class="keyword-tag">不明</span>なままローンチ</li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i>ガバナンス・セキュリティ要件の<span class="keyword-tag">未確認</span></li>
+                        <li><i class="fa-solid fa-sync-alt" aria-hidden="true"></i>ワークロードの<span class="keyword-tag">定期評価不足</span></li>
+                        <li><i class="fa-solid fa-repeat" aria-hidden="true"></i>同じ根本原因による<span class="keyword-tag">障害の繰り返し</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        ORRなしでワークロードをローンチすると、
+                        <br>
+                        運用時に予期しない問題が発生し、
+                        <br>
+                        <span class="keyword-tag">重大な影響</span>を受ける可能性があります！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>組織の<span class="keyword-tag">ORRチェックリスト</span>とベストプラクティス</li>
+                        <li><i class="fa-solid fa-rocket" aria-hidden="true"></i>ワークロードローンチ前の<span class="keyword-tag">ORR実施</span></li>
+                        <li><i class="fa-solid fa-calendar-check" aria-hidden="true"></i>ライフサイクル全体での<span class="keyword-tag">定期的ORR実行</span></li>
+                        <li><i class="fa-solid fa-lightbulb" aria-hidden="true"></i>教訓の<span class="keyword-tag">ORRプロセスへの組み込み</span></li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i>必要な手順の<span class="keyword-tag">ローンチ時配置</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        ORRにより、アーキテクチャ、プロセス、
+                        <br>
+                        管理のベストプラクティスを確保！
+                    </span>
+                </div>
+            </div>
+
+            <!-- ORRの構成要素 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-puzzle-piece fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>ORRの構成要素</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-building" aria-hidden="true"></i><span class="keyword-tag">アーキテクチャ推奨事項</span>：設計ベストプラクティス</li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i><span class="keyword-tag">運用プロセス</span>：日常運用手順</li>
+                        <li><i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i><span class="keyword-tag">イベント管理</span>：インシデント対応</li>
+                        <li><i class="fa-solid fa-rocket" aria-hidden="true"></i><span class="keyword-tag">リリース品質</span>：デプロイメント基準</li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i><span class="keyword-tag">セキュリティ・ガバナンス</span>：コンプライアンス要件</li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i><span class="keyword-tag">CoE分析</span>：障害分析からの教訓</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-1);"></i>
+                        ORRは単なるベストプラクティスではなく、
+                        <br>
+                        <span class="keyword-tag">過去の障害</span>の再発防止策！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-1" aria-hidden="true"></i><span class="keyword-tag">ORRプロセス確立</span>：組織全体での採用と経営陣支援</li>
+                        <li><i class="fa-solid fa-2" aria-hidden="true"></i><span class="keyword-tag">チェックリスト作成</span>：ベストプラクティスと要件の文書化</li>
+                        <li><i class="fa-solid fa-3" aria-hidden="true"></i><span class="keyword-tag">ローンチ前実施</span>：一般提供前の必須ORR実行</li>
+                        <li><i class="fa-solid fa-4" aria-hidden="true"></i><span class="keyword-tag">定期的見直し</span>：ライフサイクル全体での継続実施</li>
+                        <li><i class="fa-solid fa-5" aria-hidden="true"></i><span class="keyword-tag">自動化統合</span>：AWS Config、Security Hub活用</li>
+                        <li><i class="fa-solid fa-6" aria-hidden="true"></i><span class="keyword-tag">継続改善</span>：教訓とベストプラクティスの更新</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-2);"></i>
+                        段階的な実装により、
+                        <br>
+                        包括的なORRプロセスを構築！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- AWSサービス -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-brands fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>ORR自動化サービス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-cog" aria-hidden="true"></i><span class="keyword-tag">AWS Config</span>：設定ベストプラクティスの自動検出</li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i><span class="keyword-tag">AWS Security Hub</span>：セキュリティ基準の統合監視</li>
+                        <li><i class="fa-solid fa-tower-control" aria-hidden="true"></i><span class="keyword-tag">AWS Control Tower</span>：ガードレールによる自動制御</li>
+                        <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i><span class="keyword-tag">AWS Systems Manager</span>：コンプライアンス監視</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-book fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連ドキュメント</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>Operational Readiness Reviews (ORR) ホワイトペーパー</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS Config ユーザーガイド</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS Security Hub ユーザーガイド</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS Control Tower ガードレール</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

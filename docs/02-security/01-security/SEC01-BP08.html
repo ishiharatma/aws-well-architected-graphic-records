@@ -1,957 +1,272 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEC01-BP08 新しいセキュリティサービスと機能を定期的に評価および実装する</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
-    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
-    
-    :root {
-      --ui-color-1: #1B6C8C;
-      --ui-color-2: #BF8136;
-      --ui-color-3: #F2E8E4;
-      --ui-color-4: #260101;
-      --ui-color-5: #BF5656;
-    }
-    
-    body {
-      font-family: 'Zen Kurenaido', sans-serif;
-      background-color: #FFF8F5;
-      color: #333333;
-      line-height: 1.6;
-      margin: 0;
-      padding: 20px;
-    }
-    
-    .container {
-      max-width: 2000px;
-      margin: 0 auto;
-    }
-    
-    /* ヘッダースタイル */
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-      position: relative;
-      padding: 20px;
-      background-color: white;
-      border-radius: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    
-    .title {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-    
-    .title h1 {
-      font-size: 36px;
-      color: var(--ui-color-1);
-      margin: 15px 0;
-      line-height: 1.2;
-    }
-    
-    .date {
-      font-size: 14px;
-      color: #777777;
-    }
-    
-    /* セクションレイアウト */
-    .section-layout {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-bottom: 20px;
-      justify-content: center;
-    }
-    
-    /* カードスタイル */
-    .section-card {
-      flex: 1;
-      min-width: 220px;
-      max-width: 450px;
-      background-color: white;
-      border-radius: 20px;
-      padding: 15px;
-      box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
-      position: relative;
-      overflow: hidden;
-      animation: fadeInScale 0.5s ease-out;
-    }
-    
-    @keyframes fadeInScale {
-      0% {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-    
-    /* カード内アイコンコンテナ */
-    .mega-icon-container {
-      text-align: center;
-      margin: 15px 0;
-    }
-    
-    /* カードコンテンツ */
-    .card-content {
-      padding: 0 10px 15px;
-    }
-    
-    /* キーワードリスト */
-    .keyword-list {
-      margin: 15px 0;
-      padding: 0;
-      list-style-type: none;
-    }
-    
-    .keyword-list li {
-      margin-bottom: 12px;
-      display: flex;
-      align-items: flex-start;
-    }
-    
-    .keyword-list li i {
-      margin-right: 8px;
-      color: var(--ui-color-2);
-      min-width: 16px;
-      margin-top: 4px;
-    }
-    
-    /* キーワードタグ */
-    .keyword-tag {
-      background-color: var(--ui-color-3);
-      color: var(--ui-color-4);
-      padding: 3px 8px;
-      border-radius: 5px;
-      margin-right: 5px;
-      display: inline-block;
-      font-weight: bold;
-    }
-    
-    .risk-tag {
-      background-color: #77BB44;
-      color: white;
-      padding: 3px 10px;
-      border-radius: 5px;
-      display: inline-block;
-      font-weight: bold;
-    }
-    
-    /* 手書き風吹き出し */
-    .speech-bubble {
-      position: relative;
-      background: #fff;
-      border: 3px solid var(--ui-color-1);
-      border-radius: 20px;
-      padding: 10px 15px;
-      margin: 15px 5px;
-      font-family: 'Yomogi', cursive;
-      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
-      transform: rotate(-1deg);
-    }
-    
-    .speech-bubble::after {
-      content: '';
-      position: absolute;
-      bottom: -13px;
-      left: 20px;
-      border-width: 12px 8px 0;
-      border-style: solid;
-      border-color: var(--ui-color-1) transparent;
-      display: block;
-      width: 0;
-    }
-    
-    /* 吹き出しバリエーション */
-    .speech-bubble.right::after {
-      left: auto;
-      right: 20px;
-      transform: rotate(15deg);
-    }
-    
-    .speech-bubble.top::after {
-      bottom: auto;
-      top: -13px;
-      border-width: 0 8px 12px;
-      transform: rotate(-5deg);
-    }
-    
-    .speech-bubble.variant-1 {
-      background: #FFF9E3;
-      border-color: var(--ui-color-2);
-      transform: rotate(1deg);
-    }
-    
-    .speech-bubble.variant-1::after {
-      border-color: var(--ui-color-2) transparent;
-    }
-    
-    .speech-bubble.variant-2 {
-      background: #FFE9E9;
-      border-color: var(--ui-color-5);
-      transform: rotate(-2deg);
-    }
-    
-    .speech-bubble.variant-2::after {
-      border-color: var(--ui-color-5) transparent;
-    }
-    
-    /* 手書き文字 */
-    .handwritten {
-      font-family: 'Yomogi', cursive;
-      font-size: 15px;
-      line-height: 1.5;
-      color: #333;
-    }
-    
-    /* 情報源ボックス */
-    .source-box {
-      background-color: #f0f8ff;
-      border: 1px solid #d0e5ff;
-      border-radius: 8px;
-      padding: 12px;
-      margin: 10px 0;
-      display: flex;
-      align-items: flex-start;
-    }
-    
-    .source-icon {
-      margin-right: 10px;
-      color: var(--ui-color-1);
-      font-size: 24px;
-      min-width: 30px;
-      text-align: center;
-    }
-    
-    .source-content {
-      flex-grow: 1;
-    }
-    
-    .source-name {
-      font-weight: bold;
-      color: var(--ui-color-1);
-      margin-bottom: 5px;
-    }
-    
-    /* 実装ステップボックス */
-    .step-box {
-      border-left: 4px solid var(--ui-color-1);
-      padding-left: 12px;
-      margin: 15px 0;
-    }
-    
-    /* カテゴリボックス */
-    .category-box {
-      margin: 15px 0;
-      padding: 15px;
-      background-color: #f9f9f9;
-      border-radius: 10px;
-      border-left: 4px solid var(--ui-color-1);
-    }
-    
-    .category-title {
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: var(--ui-color-1);
-    }
-    
-    /* イベントボックス */
-    .event-box {
-      background-color: #f9f9f9;
-      border-radius: 8px;
-      padding: 12px;
-      margin: 10px 0;
-      border-left: 4px solid var(--ui-color-2);
-    }
-    
-    .event-title {
-      font-weight: bold;
-      margin-bottom: 5px;
-      color: var(--ui-color-2);
-      display: flex;
-      align-items: center;
-    }
-    
-    .event-title i {
-      margin-right: 8px;
-    }
-    
-    /* レスポンシブ対応 */
-    @media (max-width: 1600px) {
-      .section-card {
-        min-width: 280px;
-      }
-    }
-    
-    @media (max-width: 1200px) {
-      .section-card {
-        min-width: 320px;
-      }
-    }
-    
-    @media (max-width: 900px) {
-      .section-card {
-        min-width: 380px;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .section-layout {
-        flex-direction: column;
-      }
-      
-      .section-card {
-        width: 100%;
-        min-width: auto;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC01-BP08 新しいセキュリティサービスと機能を定期的に評価し実装する</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
 </head>
 <body>
-  <div class="container">
-    <!-- ヘッダー -->
-    <div class="header">
-      <div class="title">
-        <i class="fa-solid fa-arrows-rotate fa-7x" style="color: var(--ui-color-1); animation: fa-spin 6s linear infinite;" aria-hidden="true"></i>
-        <h1>SEC01-BP08 新しいセキュリティサービスと機能を定期的に評価および実装する</h1>
-      </div>
-      <div class="date">2025年3月29日</div>
-    </div>
-    
-    <!-- セクション1: 概要 -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-magnifying-glass-chart fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>概要</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-              <span>ワークロードの<span class="keyword-tag">セキュリティ体制</span>を進化させるために役立つサービスと機能を評価</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-cloud" aria-hidden="true"></i>
-              <span><span class="keyword-tag">AWS</span>および<span class="keyword-tag">AWSパートナー</span>のセキュリティサービスと機能を実装</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-rotate" aria-hidden="true"></i>
-              <span><span class="keyword-tag">定期的</span>に最新のセキュリティ機能を評価</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
-              <span>セキュリティ対策を<span class="keyword-tag">継続的に向上</span>させる</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble">
-          <span class="handwritten">
-            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
-            セキュリティ対策は
-            <br>
-            進化し続けることが大切！
-            <br>
-            常に最新の機能をチェックしよう
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション2: 期待される成果 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-check-double fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
-          <h2>期待される成果</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-bullhorn" aria-hidden="true"></i>
-              <span>AWS や AWS パートナーの<span class="keyword-tag">新機能・サービス</span>について知らせるための<span class="keyword-tag">標準的な実践方法</span>が確立</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-scale-balanced" aria-hidden="true"></i>
-              <span>新機能が環境とワークロードに対する<span class="keyword-tag">既存</span>および<span class="keyword-tag">新規の統制</span>の設計に与える影響を評価</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i>
-              <span>セキュリティ対策を<span class="keyword-tag">継続的に改善</span>できる体制の構築</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-1 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-bell fa-lg" style="color: var(--ui-color-2);"></i>
-            新機能をいち早くキャッチする
-            <br>
-            仕組みを作っておけば
-            <br>
-            常に最新・最適な対策ができるよ！
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション3: アンチパターン -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 3s;" aria-hidden="true"></i>
-          <h2>一般的なアンチパターン</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>関連する新しい機能やサービスの情報を迅速に入手するための<span class="keyword-tag">AWS のブログや RSS フィード</span>を購読していない</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>セキュリティサービスや機能に関するニュースや最新情報を<span class="keyword-tag">二次情報源</span>から入手している</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>組織内の AWS ユーザーに、常に<span class="keyword-tag">最新情報に触れるよう推奨</span>していない</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-triangle-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
-            一次情報を直接入手しないと
-            <br>
-            情報の遅れや誤解が生じる
-            <br>
-            可能性があるよ！
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション4: メリット -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-2); animation: fa-spin 6s linear infinite;" aria-hidden="true"></i>
-          <h2>このベストプラクティスを活用するメリット</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-thumbs-up" aria-hidden="true"></i>
-              <span>新しいセキュリティサービスや機能を常に把握することで、<span class="keyword-tag">情報に基づいた決断</span>が可能</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-              <span>クラウド環境やワークロードへの<span class="keyword-tag">統制の実装</span>が向上</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-virus-slash" aria-hidden="true"></i>
-              <span><span class="keyword-tag">進化するセキュリティ環境</span>や<span class="keyword-tag">新たに出現した脅威</span>への対策としてAWSサービスを活用する方法を把握</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-rocket" aria-hidden="true"></i>
-              <span>新機能を早期導入することで<span class="keyword-tag">競争優位性</span>を確保</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-thumbs-up fa-lg" style="color: var(--ui-color-2);"></i>
-            最新情報をキャッチすれば
-            <br>
-            新しい脅威にも素早く対応！
-            <br>
-            セキュリティ対策が一歩先を行くよ
-          </span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- セクション5: リスクレベル -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: #77BB44; animation: fa-beat-fade 2s infinite;" aria-hidden="true"></i>
-          <h2>リスクレベル</h2>
-        </div>
-        
-        <div class="card-content" style="text-align: center;">
-          <p style="font-size: 24px; margin: 20px 0;">
-            <span class="risk-tag">低</span>
-          </p>
-          <p>このベストプラクティスを活用しない場合のリスクレベル</p>
-        </div>
-        
-        <div class="speech-bubble right">
-          <span class="handwritten">
-            <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-2);"></i>
-            リスクレベルは「低」だけど
-            <br>
-            取り入れれば大きなメリットが！
-            <br>
-            機会損失を避けよう
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション6: AWS情報源 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-newspaper fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>AWS情報源</h2>
-        </div>
-        
-        <div class="card-content">
-          <p>AWSでは、新しいセキュリティサービスや機能について、複数のチャネルを通じてお客様にご案内しています。</p>
-          
-          <div class="source-box">
-            <div class="source-icon">
-              <i class="fa-solid fa-rss" aria-hidden="true"></i>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-shield-halved fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>SEC01-BP08 新しいセキュリティサービスと機能を定期的に評価し実装する</h1>
+            <p class="header-description">
+                セキュリティ基盤における重要なベストプラクティスです。適切な実装により、セキュリティ態勢を大幅に向上させることができます。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
             </div>
-            <div class="source-content">
-              <div class="source-name">AWS の最新情報</div>
-              <p>新しいサービスや機能の発表、アップデート情報を提供</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                        <span>高リスク</span>
+                    </div>
+                    <p>このベストプラクティスを確立しない場合、セキュリティ態勢に重大な影響を与える可能性があります。</p>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation" style="color: var(--ui-color-5);"></i>
+                        適切な実装で<br>
+                        <span class="keyword-tag">リスク軽減</span>！
+                    </span>
+                </div>
             </div>
-          </div>
-          
-          <div class="source-box">
-            <div class="source-icon">
-              <i class="fa-solid fa-blog" aria-hidden="true"></i>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                <div class="card-content">
+                    <p>このベストプラクティスの実装により、セキュリティ基盤における以下の成果が期待されます：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-check" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">セキュリティ態勢</span>の大幅な向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-minimize" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">攻撃面</span>の効果的な削減</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">可視性</span>と監視能力の向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動化</span>による運用効率化</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star" style="color: var(--ui-color-2);"></i>
+                        明確な<br>
+                        <span class="keyword-tag">目標設定</span>！
+                    </span>
+                </div>
             </div>
-            <div class="source-content">
-              <div class="source-name">AWS ニュースブログ</div>
-              <p>新機能や製品の発表、サービスに関する深い洞察を提供</p>
+
+            <!-- 主要概念 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-shield-halved fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>主要概念</h2>
+                </div>
+                <div class="card-content">
+                    <p>セキュリティ基盤における重要な概念と原則：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">多層防御</span> - 複数のセキュリティレイヤーによる保護</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-minimize" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">最小権限の原則</span> - 必要最小限のアクセス権限</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">デフォルトセキュア</span> - 安全な初期設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sync" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">継続的改善</span> - 定期的な見直しと更新</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb" style="color: var(--ui-color-2);"></i>
+                        基本原則を<br>
+                        <span class="keyword-tag">理解</span>しよう！
+                    </span>
+                </div>
             </div>
-          </div>
-          
-          <div class="source-box">
-            <div class="source-icon">
-              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+
+            <!-- 実装アプローチ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-route fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>実装アプローチ</h2>
+                </div>
+                <div class="card-content">
+                    <p>効果的な実装のための段階的アプローチ：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">現状評価</span> - 既存環境の詳細分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-map" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">計画策定</span> - 実装ロードマップの作成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">段階実装</span> - リスクを最小化した展開</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">効果測定</span> - 継続的な監視と改善</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket" style="color: var(--ui-color-1);"></i>
+                        段階的な<br>
+                        <span class="keyword-tag">実装</span>が鍵！
+                    </span>
+                </div>
             </div>
-            <div class="source-content">
-              <div class="source-name">AWS セキュリティブログ</div>
-              <p>セキュリティ特化の情報、ベストプラクティス、新機能を紹介</p>
+
+            <!-- AWSサービス活用 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>AWSサービス活用</h2>
+                </div>
+                <div class="card-content">
+                    <p>セキュリティ基盤で活用できる主要AWSサービス：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Security Hub</span> - 統合セキュリティ管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon GuardDuty</span> - 脅威検出サービス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Config</span> - 設定管理と監査</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-trail" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS CloudTrail</span> - API呼び出し記録</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic" style="color: var(--ui-color-2);"></i>
+                        AWSサービスで<br>
+                        <span class="keyword-tag">効率化</span>！
+                    </span>
+                </div>
             </div>
-          </div>
-          
-          <div class="source-box">
-            <div class="source-icon">
-              <i class="fa-solid fa-bell" aria-hidden="true"></i>
+
+            <!-- ベストプラクティス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>ベストプラクティス</h2>
+                </div>
+                <div class="card-content">
+                    <p>実装時に考慮すべき重要なポイント：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動化優先</span> - 手動作業の最小化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">メトリクス監視</span> - 定量的な効果測定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">チーム教育</span> - 継続的なスキル向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-book" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">文書化</span> - 手順とプロセスの明文化</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-check-circle" style="color: var(--ui-color-2);"></i>
+                        ベストプラクティスで<br>
+                        <span class="keyword-tag">成功確率向上</span>！
+                    </span>
+                </div>
             </div>
-            <div class="source-content">
-              <div class="source-name">AWS セキュリティ速報</div>
-              <p>セキュリティ関連の重要なアップデートや脆弱性情報を提供</p>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book" aria-hidden="true"></i> 学習リソース</h3>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                            <span>AWS Well-Architected Labs</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-video" aria-hidden="true"></i>
+                            <span>AWS re:Invent セッション</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span>AWS公式ドキュメント</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span>AWSコミュニティフォーラム</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap" style="color: var(--ui-color-1);"></i>
+                        豊富な<br>
+                        <span class="keyword-tag">学習リソース</span>で<br>
+                        理解を深めよう！
+                    </span>
+                </div>
             </div>
-          </div>
-          
-          <div class="source-box">
-            <div class="source-icon">
-              <i class="fa-solid fa-book" aria-hidden="true"></i>
-            </div>
-            <div class="source-content">
-              <div class="source-name">AWS ドキュメントの概要</div>
-              <p>詳細な技術情報や設定方法、リファレンスを提供</p>
-            </div>
-          </div>
         </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
-            自分に合った情報源を選んで
-            <br>
-            定期的にチェックする習慣を
-            <br>
-            つけるといいよ！
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション7: 通知とサブスクリプション -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-bell fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
-          <h2>通知とサブスクリプション</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-envelope-open-text" style="margin-right: 5px;"></i>Amazon SNSトピック</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span><span class="keyword-tag">AWS Daily Feature Updates</span>トピックを購読して最新情報の包括的なサマリーを確認</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span><span class="keyword-tag">Amazon GuardDuty</span>や<span class="keyword-tag">AWS Security Hub</span>などのセキュリティサービス固有のSNSトピックを購読</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>各サービスに関する新しい<span class="keyword-tag">標準</span>、<span class="keyword-tag">検出結果</span>、その他の<span class="keyword-tag">最新情報</span>を入手</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-rss" style="margin-right: 5px;"></i>RSSフィード</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>お気に入りの<span class="keyword-tag">RSSリーダー</span>でさまざまなブログや速報を購読</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>各ブログの<span class="keyword-tag">カテゴリ別フィード</span>も利用可能</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-envelope" style="margin-right: 5px;"></i>メールサブスクリプション</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>各種<span class="keyword-tag">ニュースレター</span>や<span class="keyword-tag">アップデート情報</span>をメールで受信</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span><span class="keyword-tag">AWS アカウントセンター</span>からサブスクリプション設定が可能</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-bell fa-lg" style="color: var(--ui-color-5);"></i>
-            SNSトピックを購読すれば
-            <br>
-            自動で最新情報をお知らせ！
-            <br>
-            見逃しを防止できるよ
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション8: AWSイベントとカンファレンス -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-calendar-days fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite linear;" aria-hidden="true"></i>
-          <h2>AWSイベントとカンファレンス</h2>
-        </div>
-        
-        <div class="card-content">
-          <p>AWS主催のカンファレンス、イベント、ウェビナーでは、新しいサービスや機能が発表され、詳しく説明されています。</p>
-          
-          <div class="event-box">
-            <div class="event-title">
-              <i class="fa-solid fa-shield-halved"></i>AWS re:Inforce
-            </div>
-            <p>毎年開催されるAWS専門のセキュリティカンファレンス。最新のセキュリティ機能やベストプラクティスに特化。</p>
-          </div>
-          
-          <div class="event-box">
-            <div class="event-title">
-              <i class="fa-solid fa-cloud"></i>AWS re:Invent
-            </div>
-            <p>年次の大規模カンファレンス。新サービスや機能の発表が多数行われる。セキュリティ関連のセッションも充実。</p>
-          </div>
-          
-          <div class="event-box">
-            <div class="event-title">
-              <i class="fa-solid fa-video"></i>AWS Webinars
-            </div>
-            <p>定期的に開催されるオンラインセミナー。特定のセキュリティトピックに焦点を当てた詳細な解説が視聴可能。</p>
-          </div>
-          
-          <div class="event-box">
-            <div class="event-title">
-              <i class="fa-brands fa-youtube"></i>AWS Events YouTube
-            </div>
-            <p>YouTube の AWS Events チャンネルでは、過去のカンファレンスセッションやウェビナーを視聴可能。</p>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-calendar-check fa-lg" style="color: var(--ui-color-2);"></i>
-            イベントは情報収集と
-            <br>
-            ネットワーキングの宝庫！
-            <br>
-            可能な限り参加しよう
-          </span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- セクション9: AWSアカウントチームとの連携 -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-users fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>AWSアカウントチームとの連携</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-handshake" aria-hidden="true"></i>
-              <span>セキュリティサービスの最新情報や新しい推奨事項について<span class="keyword-tag">AWS アカウントチーム</span>に問い合わせ</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-address-book" aria-hidden="true"></i>
-              <span>セールスサポートチーム直通の連絡先がない場合は<span class="keyword-tag">セールスサポートフォーム</span>から問い合わせ</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-headset" aria-hidden="true"></i>
-              <span><span class="keyword-tag">AWS エンタープライズサポート</span>登録で<span class="keyword-tag">Technical Account Manager (TAM)</span>から毎週最新情報を入手</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
-              <span>TAMとの<span class="keyword-tag">定期的なレビューミーティング</span>を設定可能</span>
-            </li>
-          </ul>
-          
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-gem" style="margin-right: 5px;"></i>エンタープライズサポートのメリット</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>専任の<span class="keyword-tag">TAM</span>によるプロアクティブなガイダンス</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>セキュリティベストプラクティスの<span class="keyword-tag">個別アドバイス</span></span>
-              </li>
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>新機能の<span class="keyword-tag">早期アクセス</span>や<span class="keyword-tag">パイロット参加</span>の機会</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>重要なセキュリティイベントに関する<span class="keyword-tag">優先通知</span></span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-comments fa-lg" style="color: var(--ui-color-5);"></i>
-            アカウントチームは
-            <br>
-            頼れる情報源！
-            <br>
-            積極的に連携しよう
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション10: 実装手順 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-list-check fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
-          <h2>実装手順</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="step-box">
-            <p><strong>1. 情報源のサブスクリプション設定</strong></p>
-            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
-              <li>お気に入りの<span class="keyword-tag">RSSリーダー</span>でさまざまなブログや速報を購読</li>
-              <li><span class="keyword-tag">「Daily Feature Updates」SNSトピック</span>を購読</li>
-              <li>セキュリティ関連サービスの<span class="keyword-tag">専用SNSトピック</span>を購読</li>
-            </ul>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>2. AWSイベント参加計画</strong></p>
-            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
-              <li>新しい機能やサービスについて直に学ぶため、どの<span class="keyword-tag">AWSイベント</span>に参加すべきか評価</li>
-              <li>参加できない場合は<span class="keyword-tag">オンラインセッション</span>や<span class="keyword-tag">録画</span>を視聴</li>
-            </ul>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>3. アカウントチームとの連携</strong></p>
-            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
-              <li>セキュリティサービスや機能の更新について<span class="keyword-tag">AWS アカウントチーム</span>とのミーティングを設定</li>
-              <li>最新のセキュリティ推奨事項や<span class="keyword-tag">ベストプラクティス</span>について相談</li>
-            </ul>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>4. サポートレベルの検討</strong></p>
-            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
-              <li><span class="keyword-tag">エンタープライズサポート</span>への登録を検討</li>
-              <li>登録すると、<span class="keyword-tag">Technical Account Manager (TAM)</span>に定期的に相談可能</li>
-              <li>TAMとの<span class="keyword-tag">定期レビュー</span>で最新の推奨事項を入手</li>
-            </ul>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>5. 評価と実装プロセスの確立</strong></p>
-            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
-              <li>新しいセキュリティサービスや機能を<span class="keyword-tag">評価するプロセス</span>を確立</li>
-              <li>環境への<span class="keyword-tag">影響評価</span>と<span class="keyword-tag">リスク分析</span>を実施</li>
-              <li><span class="keyword-tag">テスト環境</span>での試験を経て本番環境に実装</li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-1 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-check-double fa-lg" style="color: var(--ui-color-2);"></i>
-            情報収集→評価→実装の
-            <br>
-            サイクルを確立して
-            <br>
-            継続的に改善していこう！
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション11: 組織内での情報共有 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-share-nodes fa-5x" style="color: var(--ui-color-1); animation: fa-spin 4s linear infinite;" aria-hidden="true"></i>
-          <h2>組織内での情報共有</h2>
-        </div>
-        
-        <div class="card-content">
-          <p>新しいセキュリティサービスや機能の情報を組織内で効果的に共有するための方法：</p>
-          
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-bullhorn" style="margin-right: 5px;"></i>定期的な情報共有の仕組み</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-newspaper" aria-hidden="true"></i>
-                <span>セキュリティ関連の<span class="keyword-tag">社内ニュースレター</span>の発行</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-chalkboard" aria-hidden="true"></i>
-                <span>新機能や注目のアップデートに関する<span class="keyword-tag">社内勉強会</span>の開催</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-comments" aria-hidden="true"></i>
-                <span>セキュリティ関連情報を共有するための<span class="keyword-tag">専用チャットチャネル</span>の設置</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-users-gear" style="margin-right: 5px;"></i>チーム体制と責任の明確化</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-user-tie" aria-hidden="true"></i>
-                <span>最新情報の収集と共有を担当する<span class="keyword-tag">責任者</span>の指定</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-user-check" aria-hidden="true"></i>
-                <span>新機能の<span class="keyword-tag">評価担当者</span>の明確化</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-user-gear" aria-hidden="true"></i>
-                <span>実装判断の<span class="keyword-tag">承認フロー</span>の確立</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-graduation-cap" style="margin-right: 5px;"></i>継続的な学習の奨励</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-certificate" aria-hidden="true"></i>
-                <span><span class="keyword-tag">AWS認定</span>の取得支援</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-laptop-code" aria-hidden="true"></i>
-                <span><span class="keyword-tag">AWS Skill Builder</span>などの学習リソースの活用</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-people-group" aria-hidden="true"></i>
-                <span>社内での<span class="keyword-tag">知識共有文化</span>の醸成</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-5);"></i>
-            組織全体で情報を共有して
-            <br>
-            セキュリティの意識を高めよう！
-            <br>
-            チーム全体の力が大切
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション12: まとめ -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-check-circle fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
-          <h2>まとめと効果</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-satellite-dish" aria-hidden="true"></i>
-              <span><span class="keyword-tag">情報収集</span>: 信頼できる公式情報源からの最新セキュリティ情報の入手</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>
-              <span><span class="keyword-tag">評価</span>: 新機能が環境に与える影響と価値の分析</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-gears" aria-hidden="true"></i>
-              <span><span class="keyword-tag">実装</span>: 検証を経た有用な新機能の導入</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
-              <span><span class="keyword-tag">共有</span>: 組織内での知識と情報の普及</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-              <span><span class="keyword-tag">進化</span>: セキュリティ体制の継続的な向上</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
-              <span><span class="keyword-tag">学習</span>: チーム全体のスキルと知識の向上</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-2);"></i>
-            最新情報を常にキャッチし
-            <br>
-            セキュリティ対策を進化させ続けよう！
-            <br>
-            継続的な改善が大切だよ
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
+    </main>
 </body>
 </html>

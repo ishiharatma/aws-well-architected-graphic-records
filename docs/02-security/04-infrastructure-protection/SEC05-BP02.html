@@ -1,900 +1,272 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ネットワークレイヤー内のトラフィックフローを制御する</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
-    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
-    
-    :root {
-      --ui-color-1: #1B6C8C;
-      --ui-color-2: #BF8136;
-      --ui-color-3: #F2E8E4;
-      --ui-color-4: #260101;
-      --ui-color-5: #BF5656;
-    }
-    
-    body {
-      font-family: 'Zen Kurenaido', sans-serif;
-      background-color: #FFF8F5;
-      color: #333333;
-      line-height: 1.6;
-      margin: 0;
-      padding: 20px;
-    }
-    
-    .container {
-      max-width: 2000px;
-      margin: 0 auto;
-    }
-    
-    /* ヘッダースタイル */
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-      position: relative;
-      padding: 20px;
-      background-color: white;
-      border-radius: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    
-    .title {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-    
-    .title h1 {
-      font-size: 36px;
-      color: var(--ui-color-1);
-      margin: 15px 0;
-      line-height: 1.2;
-    }
-    
-    .date {
-      font-size: 14px;
-      color: #777777;
-    }
-    
-    /* セクションレイアウト */
-    .section-layout {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-bottom: 20px;
-      justify-content: center;
-    }
-    
-    /* カードスタイル */
-    .section-card {
-      flex: 1;
-      min-width: 220px;
-      max-width: 450px;
-      background-color: white;
-      border-radius: 20px;
-      padding: 15px;
-      box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
-      position: relative;
-      overflow: hidden;
-      animation: fadeInScale 0.5s ease-out;
-    }
-    
-    @keyframes fadeInScale {
-      0% {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-    
-    /* カード内アイコンコンテナ */
-    .mega-icon-container {
-      text-align: center;
-      margin: 15px 0;
-    }
-    
-    /* カードコンテンツ */
-    .card-content {
-      padding: 0 10px 15px;
-    }
-    
-    /* キーワードリスト */
-    .keyword-list {
-      margin: 15px 0;
-      padding: 0;
-      list-style-type: none;
-    }
-    
-    .keyword-list li {
-      margin-bottom: 12px;
-      display: flex;
-      align-items: flex-start;
-    }
-    
-    .keyword-list li i {
-      margin-right: 8px;
-      color: var(--ui-color-2);
-      min-width: 16px;
-      margin-top: 4px;
-    }
-    
-    /* キーワードタグ */
-    .keyword-tag {
-      background-color: var(--ui-color-3);
-      color: var(--ui-color-4);
-      padding: 3px 8px;
-      border-radius: 5px;
-      margin-right: 5px;
-      display: inline-block;
-      font-weight: bold;
-    }
-    
-    .risk-tag {
-      background-color: var(--ui-color-5);
-      color: white;
-      padding: 3px 10px;
-      border-radius: 5px;
-      display: inline-block;
-      font-weight: bold;
-    }
-    
-    /* 手書き風吹き出し */
-    .speech-bubble {
-      position: relative;
-      background: #fff;
-      border: 3px solid var(--ui-color-1);
-      border-radius: 20px;
-      padding: 10px 15px;
-      margin: 15px 5px;
-      font-family: 'Yomogi', cursive;
-      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
-      transform: rotate(-1deg);
-    }
-    
-    .speech-bubble::after {
-      content: '';
-      position: absolute;
-      bottom: -13px;
-      left: 20px;
-      border-width: 12px 8px 0;
-      border-style: solid;
-      border-color: var(--ui-color-1) transparent;
-      display: block;
-      width: 0;
-    }
-    
-    /* 吹き出しバリエーション */
-    .speech-bubble.right::after {
-      left: auto;
-      right: 20px;
-      transform: rotate(15deg);
-    }
-    
-    .speech-bubble.top::after {
-      bottom: auto;
-      top: -13px;
-      border-width: 0 8px 12px;
-      transform: rotate(-5deg);
-    }
-    
-    .speech-bubble.variant-1 {
-      background: #FFF9E3;
-      border-color: var(--ui-color-2);
-      transform: rotate(1deg);
-    }
-    
-    .speech-bubble.variant-1::after {
-      border-color: var(--ui-color-2) transparent;
-    }
-    
-    .speech-bubble.variant-2 {
-      background: #FFE9E9;
-      border-color: var(--ui-color-5);
-      transform: rotate(-2deg);
-    }
-    
-    .speech-bubble.variant-2::after {
-      border-color: var(--ui-color-5) transparent;
-    }
-    
-    /* 手書き文字 */
-    .handwritten {
-      font-family: 'Yomogi', cursive;
-      font-size: 15px;
-      line-height: 1.5;
-      color: #333;
-    }
-    
-    /* コードプレビュー */
-    pre {
-      background: #f5f5f5;
-      padding: 8px;
-      border-radius: 5px;
-      font-size: 12px;
-      margin-top: 10px;
-      overflow-x: auto;
-    }
-    
-    /* 実装ステップボックス */
-    .step-box {
-      border-left: 4px solid var(--ui-color-1);
-      padding-left: 12px;
-      margin: 10px 0;
-    }
-    
-    /* 比較表 */
-    .comparison-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 15px 0;
-    }
-    
-    .comparison-table th,
-    .comparison-table td {
-      padding: 8px;
-      text-align: left;
-      border-bottom: 1px solid #eee;
-    }
-    
-    .comparison-table th {
-      background-color: var(--ui-color-3);
-      font-weight: bold;
-    }
-    
-    .comparison-table tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    
-    /* トラフィックフロー図 */
-    .traffic-flow {
-      background-color: #f9f9f9;
-      border-radius: 10px;
-      padding: 15px;
-      margin: 15px 0;
-      text-align: center;
-    }
-    
-    .traffic-flow-title {
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: var(--ui-color-1);
-    }
-    
-    .traffic-diagram {
-      width: 100%;
-      max-width: 380px;
-      margin: 0 auto;
-      position: relative;
-    }
-    
-    .aws-service-box {
-      background-color: #f0f9ff;
-      border: 1px solid #d0e3f2;
-      border-radius: 8px;
-      padding: 10px;
-      margin: 10px 0;
-      display: flex;
-      align-items: center;
-    }
-    
-    .aws-service-icon {
-      margin-right: 10px;
-      color: var(--ui-color-1);
-      font-size: 24px;
-    }
-    
-    .aws-service-content {
-      flex-grow: 1;
-    }
-    
-    .aws-service-name {
-      font-weight: bold;
-      color: var(--ui-color-1);
-      margin-bottom: 5px;
-    }
-    
-    /* レスポンシブ対応 */
-    @media (max-width: 1600px) {
-      .section-card {
-        min-width: 280px;
-      }
-    }
-    
-    @media (max-width: 1200px) {
-      .section-card {
-        min-width: 320px;
-      }
-    }
-    
-    @media (max-width: 900px) {
-      .section-card {
-        min-width: 380px;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .section-layout {
-        flex-direction: column;
-      }
-      
-      .section-card {
-        width: 100%;
-        min-width: auto;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC04-BP02 セキュリティベストプラクティス</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
 </head>
 <body>
-  <div class="container">
-    <!-- ヘッダー -->
-    <div class="header">
-      <div class="title">
-        <i class="fa-solid fa-route fa-7x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
-        <h1>SEC05-BP02 ネットワークレイヤー内のトラフィックフローを制御する</h1>
-      </div>
-      <div class="date">2025年3月29日</div>
-    </div>
-    
-    <!-- セクション1: 概要 -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-sitemap fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>概要</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
-              <span>ネットワークのレイヤー内でさらに<span class="keyword-tag">セグメンテーション</span>を行う</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-filter" aria-hidden="true"></i>
-              <span>各ワークロードに<span class="keyword-tag">必要なフローのみ</span>にトラフィックを制限</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
-              <span>まず<span class="keyword-tag">North-South</span>トラフィック（外部からの通信）の制御に着目</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-arrows-left-right" aria-hidden="true"></i>
-              <span>次に<span class="keyword-tag">East-West</span>トラフィック（内部コンポーネント間の通信）を確認</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble">
-          <span class="handwritten">
-            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
-            境界だけでなく内部も守る！
-            <br>
-            必要な通信だけを許可することが
-            <br>
-            セキュリティの基本だね
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション2: 期待される成果 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-check-double fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
-          <h2>期待される成果</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-handshake" aria-hidden="true"></i>
-              <span>ワークロードのコンポーネントが相互通信や依存先との通信に<span class="keyword-tag">必要なネットワークフロー</span>のみを許可</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-list-check" aria-hidden="true"></i>
-              <span>設計では以下を考慮：
-                <ul style="margin-top: 5px; margin-left: 20px; list-style-type: disc;">
-                  <li><span class="keyword-tag">パブリック</span>と<span class="keyword-tag">プライベート</span>の送受信</li>
-                  <li><span class="keyword-tag">データ分類</span></li>
-                  <li><span class="keyword-tag">地域の規制</span></li>
-                  <li><span class="keyword-tag">プロトコル要件</span></li>
-                </ul>
-              </span>
-            </li>
-            <li>
-              <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
-              <span><span class="keyword-tag">最小特権の原則</span>に基づく設計</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-link" aria-hidden="true"></i>
-              <span>ネットワークピアリングよりも<span class="keyword-tag">ポイントツーポイントフロー</span>を優先</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-1 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-shield-halved fa-lg" style="color: var(--ui-color-2);"></i>
-            最小特権の原則を適用！
-            <br>
-            必要なアクセスだけを許可して
-            <br>
-            リスクを最小限に抑えよう
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション3: アンチパターン -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 3s;" aria-hidden="true"></i>
-          <h2>一般的なアンチパターン</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span><span class="keyword-tag">境界ベース</span>のアプローチを採用し、ネットワークレイヤーの境界でのみトラフィックフローを制御</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>ネットワークレイヤー内のすべてのトラフィックが<span class="keyword-tag">認証済み</span>、<span class="keyword-tag">承認済み</span>だと仮定</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span><span class="keyword-tag">受信トラフィック</span>と<span class="keyword-tag">送信トラフィック</span>のいずれかに制御を適用し、両方には適用していない</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>トラフィックの認証と認可を、<span class="keyword-tag">ワークロードコンポーネント</span>と<span class="keyword-tag">ネットワーク制御</span>にのみ依存</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-triangle-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
-            「境界さえ守れば中は安全」は危険！
-            <br>
-            内部でも不正な通信が
-            <br>
-            発生する可能性があるよ
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション4: メリット -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-2); animation: fa-spin 6s linear infinite;" aria-hidden="true"></i>
-          <h2>このベストプラクティスを活用するメリット</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-              <span>ネットワーク内の<span class="keyword-tag">不正な移動</span>のリスクを軽減</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-lock" aria-hidden="true"></i>
-              <span>ワークロードに<span class="keyword-tag">承認のレイヤー</span>を追加</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-compress-alt" aria-hidden="true"></i>
-              <span>セキュリティインシデントによる<span class="keyword-tag">影響の範囲を制限</span></span>
-            </li>
-            <li>
-              <i class="fa-solid fa-stopwatch" aria-hidden="true"></i>
-              <span>検出と対応を<span class="keyword-tag">スピードアップ</span></span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-thumbs-up fa-lg" style="color: var(--ui-color-2);"></i>
-            万が一の侵害時でも
-            <br>
-            影響範囲を最小限に抑えられる！
-            <br>
-            これがセグメンテーションの力だよ
-          </span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- セクション5: リスクレベル -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s infinite;" aria-hidden="true"></i>
-          <h2>リスクレベル</h2>
-        </div>
-        
-        <div class="card-content" style="text-align: center;">
-          <p style="font-size: 24px; margin: 20px 0;">
-            <span class="risk-tag">高</span>
-          </p>
-          <p>このベストプラクティスを活用しない場合のリスクレベル</p>
-        </div>
-        
-        <div class="speech-bubble right">
-          <span class="handwritten">
-            <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-1);"></i>
-            高リスク警告！
-            <br>
-            トラフィック制御を怠ると
-            <br>
-            深刻な被害に繋がる可能性大
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション6: トラフィックフローの種類 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-arrows-up-down-left-right fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite linear;" aria-hidden="true"></i>
-          <h2>トラフィックフローの種類</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="traffic-flow">
-            <div class="traffic-flow-title">North-South トラフィック</div>
-            <div class="traffic-diagram">
-              <img src="/api/placeholder/400/150" alt="North-South トラフィックの図" />
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-server fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>SEC04-BP02 セキュリティベストプラクティス</h1>
+            <p class="header-description">
+                インフラストラクチャ保護における重要なベストプラクティスです。適切な実装により、セキュリティ態勢を大幅に向上させることができます。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
             </div>
-            <p><i class="fa-solid fa-arrow-down-up" style="color: var(--ui-color-2);"></i> 外部システムとワークロード間の通信</p>
-            <ul class="keyword-list" style="text-align: left; margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-                <span>インターネットやオンプレミス環境からの<span class="keyword-tag">アクセス制御</span></span>
-              </li>
-              <li>
-                <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
-                <span>一般的に<span class="keyword-tag">より厳格な制御</span>が必要</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="traffic-flow">
-            <div class="traffic-flow-title">East-West トラフィック</div>
-            <div class="traffic-diagram">
-              <img src="/api/placeholder/400/150" alt="East-West トラフィックの図" />
+        </div>
+    </header>
+
+    <main>
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                        <span>高リスク</span>
+                    </div>
+                    <p>このベストプラクティスを確立しない場合、セキュリティ態勢に重大な影響を与える可能性があります。</p>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation" style="color: var(--ui-color-5);"></i>
+                        適切な実装で<br>
+                        <span class="keyword-tag">リスク軽減</span>！
+                    </span>
+                </div>
             </div>
-            <p><i class="fa-solid fa-arrow-right-arrow-left" style="color: var(--ui-color-2);"></i> ワークロード内のコンポーネント間の通信</p>
-            <ul class="keyword-list" style="text-align: left; margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
-                <span>サービス間や<span class="keyword-tag">マイクロサービス</span>間の通信</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-lock" aria-hidden="true"></i>
-                <span>従来は見落とされがちだが<span class="keyword-tag">不正横断移動</span>のリスクあり</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-compass fa-lg" style="color: var(--ui-color-2);"></i>
-            両方のトラフィックを
-            <br>
-            適切に制御することが重要！
-            <br>
-            方向によって対策を使い分けよう
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション7: 実装のガイダンス (1) -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-compass fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>実装のガイダンス (1)</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-folder-tree" aria-hidden="true"></i>
-              <span>ネットワークレイヤーの定義
-                <ul style="margin-top: 5px; margin-left: 20px; list-style-type: disc;">
-                  <li><span class="keyword-tag">Amazon VPC</span>内のサブネットを使用</li>
-                  <li>複数のVPCでビジネスドメインごとにグループ化</li>
-                  <li>複数VPC間のルーティングには<span class="keyword-tag">AWS Transit Gateway</span>を使用</li>
-                </ul>
-              </span>
-            </li>
-            <li>
-              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-              <span>トラフィック制御の方法
-                <ul style="margin-top: 5px; margin-left: 20px; list-style-type: disc;">
-                  <li><span class="keyword-tag">セキュリティグループ</span>と<span class="keyword-tag">ルートテーブル</span>でレイヤー4レベルの制御</li>
-                  <li><span class="keyword-tag">AWS PrivateLink</span>で特定のサービス間のみの接続</li>
-                  <li><span class="keyword-tag">Route 53 Resolver DNS Firewall</span>でドメイン制御</li>
-                  <li><span class="keyword-tag">AWS Network Firewall</span>と<span class="keyword-tag">AWS WAF</span>で強化</li>
-                </ul>
-              </span>
-            </li>
-            <li>
-              <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
-              <span>ワークロードの<span class="keyword-tag">データフローと通信の要件</span>を把握
-                <ul style="margin-top: 5px; margin-left: 20px; list-style-type: disc;">
-                  <li>接続の開始側、ポート、プロトコル、ネットワークレイヤー</li>
-                  <li>使用するプロトコルの評価と適切な選択（HTTPSなど）</li>
-                </ul>
-              </span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-2 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-wand-magic-sparkles fa-lg" style="color: var(--ui-color-5);"></i>
-            AWSのサービスを組み合わせて
-            <br>
-            多層防御を実現しよう！
-            <br>
-            一つの対策だけでは不十分だよ
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション8: 実装のガイダンス (2) -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-gears fa-5x" style="color: var(--ui-color-1); animation: fa-spin 10s linear infinite;" aria-hidden="true"></i>
-          <h2>実装のガイダンス (2)</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-users-gear" aria-hidden="true"></i>
-              <span><span class="keyword-tag">セキュリティグループ</span>の効果的な活用
-                <ul style="margin-top: 5px; margin-left: 20px; list-style-type: disc;">
-                  <li>インバウンドとアウトバウンドの両方のルールを設定</li>
-                  <li>別のセキュリティグループをソースやターゲットとして指定可能</li>
-                  <li>リソース変更時も更新を最小限に抑えられる</li>
-                </ul>
-              </span>
-            </li>
-            <li>
-              <i class="fa-solid fa-link" aria-hidden="true"></i>
-              <span>VPC間通信の選択肢
-                <ul style="margin-top: 5px; margin-left: 20px; list-style-type: disc;">
-                  <li><span class="keyword-tag">VPCピアリング</span>: シンプルルーティング向け</li>
-                  <li><span class="keyword-tag">AWS Transit Gateway</span>: 複雑なルーティング向け</li>
-                  <li><span class="keyword-tag">AWS PrivateLink</span>: 特定コンポーネント間のポイントツーポイント接続</li>
-                </ul>
-              </span>
-            </li>
-            <li>
-              <i class="fa-solid fa-globe" aria-hidden="true"></i>
-              <span><span class="keyword-tag">DNS通信</span>の制御
-                <ul style="margin-top: 5px; margin-left: 20px; list-style-type: disc;">
-                  <li><span class="keyword-tag">Route 53 Resolver DNS Firewall</span>でドメインフィルタリング</li>
-                  <li><span class="keyword-tag">AWS Network Firewall</span>で詳細な検査とフロー制御</li>
-                </ul>
-              </span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
-            セキュリティグループはとても強力！
-            <br>
-            グループ識別子を使えば
-            <br>
-            メンテナンスが格段に楽になるよ
-          </span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- セクション9: AWS PrivateLink vs VPCピアリング -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-code-compare fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
-          <h2>AWS PrivateLink vs VPCピアリング</h2>
-        </div>
-        
-        <div class="card-content">
-          <table class="comparison-table">
-            <tr>
-              <th></th>
-              <th>AWS PrivateLink</th>
-              <th>VPCピアリング</th>
-            </tr>
-            <tr>
-              <td>接続方法</td>
-              <td><span class="keyword-tag">ポイントツーポイント</span>接続</td>
-              <td><span class="keyword-tag">ネットワーク全体</span>の接続</td>
-            </tr>
-            <tr>
-              <td>アクセススコープ</td>
-              <td>特定の<span class="keyword-tag">サービス/エンドポイント</span>のみ</td>
-              <td>すべての<span class="keyword-tag">IPアドレス範囲</span></td>
-            </tr>
-            <tr>
-              <td>セキュリティ</td>
-              <td><span class="keyword-tag">最小特権</span>の原則に準拠</td>
-              <td>より<span class="keyword-tag">広範なアクセス</span></td>
-            </tr>
-            <tr>
-              <td>設定複雑性</td>
-              <td><span class="keyword-tag">やや高い</span> (サービス定義が必要)</td>
-              <td><span class="keyword-tag">低い</span> (シンプルな設定)</td>
-            </tr>
-            <tr>
-              <td>IPアドレス重複</td>
-              <td><span class="keyword-tag">問題なし</span></td>
-              <td><span class="keyword-tag">回避する必要あり</span></td>
-            </tr>
-            <tr>
-              <td>コスト</td>
-              <td><span class="keyword-tag">データ処理</span>と<span class="keyword-tag">ロードバランシング</span>のコスト</td>
-              <td><span class="keyword-tag">基本的に無料</span> (データ転送料のみ)</td>
-            </tr>
-          </table>
-        </div>
-        
-        <div class="speech-bubble variant-1 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-balance-scale fa-lg" style="color: var(--ui-color-2);"></i>
-            ユースケースによって選択しよう！
-            <br>
-            一部のサービスだけを公開したいなら
-            <br>
-            PrivateLinkがベストだね
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション10: 実装手順 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-list-check fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
-          <h2>実装手順</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="step-box">
-            <p><strong>1. ワークロードのデータフローを特定</strong></p>
-            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
-              <li>コンポーネント間で必要な通信を洗い出し</li>
-              <li>ソース、ターゲット、ポート/プロトコル、方向を文書化</li>
-              <li>認証や暗号化の要件も考慮</li>
-            </ul>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>2. 多層防御のアプローチで統制を適用</strong></p>
-            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
-              <li><span class="keyword-tag">インバウンド</span>トラフィックと<span class="keyword-tag">アウトバウンド</span>トラフィックの両方を制御</li>
-              <li>セキュリティグループでインスタンスレベルの制御</li>
-              <li>ルートテーブルでサブネットレベルのトラフィック経路を制御</li>
-              <li>NACLで追加のネットワークセキュリティ層を追加</li>
-            </ul>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>3. ファイアウォールの活用</strong></p>
-            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
-              <li><span class="keyword-tag">Route 53 Resolver DNS Firewall</span>でドメインフィルタリング</li>
-              <li><span class="keyword-tag">AWS Network Firewall</span>でVPCレベルの保護</li>
-              <li><span class="keyword-tag">AWS WAF</span>でウェブトラフィックの保護</li>
-              <li><span class="keyword-tag">AWS Firewall Manager</span>で組織全体の一元管理</li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-check-double fa-lg" style="color: var(--ui-color-5);"></i>
-            データフローの把握が第一歩！
-            <br>
-            どの通信が本当に必要なのかを
-            <br>
-            理解することがすべての基本
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション11: 主要なAWSサービス -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-brands fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-flip 3s infinite linear;" aria-hidden="true"></i>
-          <h2>主要なAWSサービス</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="aws-service-box">
-            <div class="aws-service-icon">
-              <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                <div class="card-content">
+                    <p>このベストプラクティスの実装により、インフラストラクチャ保護における以下の成果が期待されます：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-check" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">セキュリティ態勢</span>の大幅な向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-minimize" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">攻撃面</span>の効果的な削減</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">可視性</span>と監視能力の向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動化</span>による運用効率化</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star" style="color: var(--ui-color-2);"></i>
+                        明確な<br>
+                        <span class="keyword-tag">目標設定</span>！
+                    </span>
+                </div>
             </div>
-            <div class="aws-service-content">
-              <div class="aws-service-name">セキュリティグループ</div>
-              <p>インスタンスレベルのファイアウォール。ステートフルな検査を提供し、グループ間の参照も可能。</p>
+
+            <!-- 主要概念 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-server fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>主要概念</h2>
+                </div>
+                <div class="card-content">
+                    <p>インフラストラクチャ保護における重要な概念と原則：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">多層防御</span> - 複数のセキュリティレイヤーによる保護</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-minimize" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">最小権限の原則</span> - 必要最小限のアクセス権限</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">デフォルトセキュア</span> - 安全な初期設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sync" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">継続的改善</span> - 定期的な見直しと更新</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb" style="color: var(--ui-color-2);"></i>
+                        基本原則を<br>
+                        <span class="keyword-tag">理解</span>しよう！
+                    </span>
+                </div>
             </div>
-          </div>
-          
-          <div class="aws-service-box">
-            <div class="aws-service-icon">
-              <i class="fa-solid fa-link" aria-hidden="true"></i>
+
+            <!-- 実装アプローチ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-route fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>実装アプローチ</h2>
+                </div>
+                <div class="card-content">
+                    <p>効果的な実装のための段階的アプローチ：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">現状評価</span> - 既存環境の詳細分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-map" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">計画策定</span> - 実装ロードマップの作成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">段階実装</span> - リスクを最小化した展開</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">効果測定</span> - 継続的な監視と改善</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket" style="color: var(--ui-color-1);"></i>
+                        段階的な<br>
+                        <span class="keyword-tag">実装</span>が鍵！
+                    </span>
+                </div>
             </div>
-            <div class="aws-service-content">
-              <div class="aws-service-name">AWS PrivateLink</div>
-              <p>VPC間のプライベート接続。特定のサービスのみにアクセスを制限した安全な接続を実現。</p>
+
+            <!-- AWSサービス活用 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>AWSサービス活用</h2>
+                </div>
+                <div class="card-content">
+                    <p>インフラストラクチャ保護で活用できる主要AWSサービス：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Security Hub</span> - 統合セキュリティ管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon GuardDuty</span> - 脅威検出サービス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Config</span> - 設定管理と監査</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-trail" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS CloudTrail</span> - API呼び出し記録</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic" style="color: var(--ui-color-2);"></i>
+                        AWSサービスで<br>
+                        <span class="keyword-tag">効率化</span>！
+                    </span>
+                </div>
             </div>
-          </div>
-          
-          <div class="aws-service-box">
-            <div class="aws-service-icon">
-              <i class="fa-solid fa-sitemap" aria-hidden="true"></i>
+
+            <!-- ベストプラクティス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>ベストプラクティス</h2>
+                </div>
+                <div class="card-content">
+                    <p>実装時に考慮すべき重要なポイント：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動化優先</span> - 手動作業の最小化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">メトリクス監視</span> - 定量的な効果測定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">チーム教育</span> - 継続的なスキル向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-book" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">文書化</span> - 手順とプロセスの明文化</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-check-circle" style="color: var(--ui-color-2);"></i>
+                        ベストプラクティスで<br>
+                        <span class="keyword-tag">成功確率向上</span>！
+                    </span>
+                </div>
             </div>
-            <div class="aws-service-content">
-              <div class="aws-service-name">AWS Transit Gateway</div>
-              <p>複数のVPCやオンプレミスネットワークを接続するハブ。ルーティングを一元管理。</p>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book" aria-hidden="true"></i> 学習リソース</h3>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                            <span>AWS Well-Architected Labs</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-video" aria-hidden="true"></i>
+                            <span>AWS re:Invent セッション</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span>AWS公式ドキュメント</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span>AWSコミュニティフォーラム</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap" style="color: var(--ui-color-1);"></i>
+                        豊富な<br>
+                        <span class="keyword-tag">学習リソース</span>で<br>
+                        理解を深めよう！
+                    </span>
+                </div>
             </div>
-          </div>
-          
-          <div class="aws-service-box">
-            <div class="aws-service-icon">
-              <i class="fa-solid fa-globe" aria-hidden="true"></i>
-            </div>
-            <div class="aws-service-content">
-              <div class="aws-service-name">Route 53 Resolver DNS Firewall</div>
-              <p>DNS通信を制御し、悪意のあるドメインへのリクエストをブロック。</p>
-            </div>
-          </div>
-          
-          <div class="aws-service-box">
-            <div class="aws-service-icon">
-              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-            </div>
-            <div class="aws-service-content">
-              <div class="aws-service-name">AWS Network Firewall</div>
-              <p>VPCレベルの詳細なパケット検査を提供。ステートフルおよびステートレスの両方のルールをサポート。</p>
-            </div>
-          </div>
-          
-          <div class="aws-service-box">
-            <div class="aws-service-icon">
-              <i class="fa-solid fa-window-maximize" aria-hidden="true"></i>
-            </div>
-            <div class="aws-service-content">
-              <div class="aws-service-name">AWS WAF</div>
-              <p>ウェブアプリケーションを保護するファイアウォール。HTTP(S)トラフィックを詳細に検査。</p>
-            </div>
-          </div>
         </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-2);"></i>
-            AWSのサービスを組み合わせて
-            <br>
-            多層的な防御を構築！
-            <br>
-            すべての方向を保護しよう
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
+    </main>
 </body>
 </html>

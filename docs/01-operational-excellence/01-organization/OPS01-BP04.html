@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS01-BP04: コンプライアンス要件評価 - AWS Well-Architected グラフィックレコーディング</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+</head>
+<body>
+    <div class="container">        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-bullseye fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS01-BP04: コンプライアンス要件評価</h1>
+                <p class="header-description">コンプライアンス要件を理解し、規制要件を満たすために、コンプライアンス要件を評価します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_compliance_reqs.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-warning" aria-hidden="true"></i>
+                            <span>このベストプラクティスを確立しない場合の<span class="keyword-tag">リスクレベル: 高</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        コンプライアンス違反は
+                        <br>
+                        <span class="keyword-tag">高リスク</span>！
+                        <br>
+                        ビジネス継続に直接影響
+                    </span>
+                </div>
+            </div>
+
+            <!-- メインカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-certificate fa-5x" style="color: var(--ui-color-5); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>コンプライアンス要件評価</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">規制・業界・内部</span>コンプライアンス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">PCI DSS・FedRAMP・HIPAA</span>等</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">監査レポート</span>の自動生成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-tools" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Audit Manager</span>活用</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                        コンプライアンス違反は
+                        <br>
+                        <span class="keyword-tag">ビジネスリスク</span>に直結！
+                        <br>
+                        継続的な監視が必須
+                    </span>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-award fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-drafting-compass" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">アーキテクチャ選択</span>への組み込み</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-check-double" aria-hidden="true"></i>
+                            <span>コンプライアンス<span class="keyword-tag">検証</span>と監査レポート生成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">適切な地域・技術</span>の選択</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">監査可能性</span>を考慮した設計</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-shield fa-lg" style="color: var(--ui-color-1);"></i>
+                        コンプライアンス要件の理解で
+                        <br>
+                        <span class="keyword-tag">適切な優先順位</span>と
+                        <br>
+                        ビジネス価値提供を実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>よくあるアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-credit-card" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">PCI-DSS</span>対象なのにクレジットカード情報を非暗号化保存</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user-slash" aria-hidden="true"></i>
+                            <span>開発者・アーキテクトの<span class="keyword-tag">コンプライアンス認識不足</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-times" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">SOC2 Type II</span>監査時の統制証明不能</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-skull fa-lg" style="color: var(--ui-color-5);"></i>
+                        コンプライアンス違反は
+                        <br>
+                        <span class="keyword-tag">致命的な結果</span>を
+                        <br>
+                        もたらす可能性が！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-map-signs fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-users-cog" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">セキュリティ・ガバナンス</span>チームとの協力</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                            <span>チームメンバーの<span class="keyword-tag">コンプライアンス教育</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">監査プロセス</span>の自動化</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-cogs fa-lg" style="color: var(--ui-color-2);"></i>
+                        <span class="keyword-tag">AWS Audit Manager</span>で
+                        <br>
+                        監査プロセスを自動化し
+                        <br>
+                        効率的な準拠を実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 顧客事例 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-store fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>顧客事例</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shopping-cart" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AnyCompany Retail</span>のPCI-DSS対応</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                            <span>クレジットカード情報の<span class="keyword-tag">安全な保存・アクセス</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">年次コンプライアンス</span>検証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">セキュリティチーム</span>との連携</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        実際の企業事例から
+                        <br>
+                        <span class="keyword-tag">実装ベストプラクティス</span>
+                        <br>
+                        を学習しよう！
+                    </span>
+                </div>
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer style="text-align: center; margin-top: 40px; padding: 20px; color: #777;">
+            <p>AWS Well-Architected Framework - Operational Excellence Pillar</p>
+            <p>OPS01-BP04: Evaluate compliance requirements</p>
+        </footer>
+    </div>
+</body>
+</html>

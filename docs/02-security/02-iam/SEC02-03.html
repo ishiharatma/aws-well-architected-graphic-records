@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC02-03 アイデンティティとアクセス管理 - ベストプラクティス一覧</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+        
+        .bp-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .bp-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .bp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .bp-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .bp-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+            color: var(--ui-color-1);
+        }
+        
+        .bp-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--ui-color-4);
+            margin: 0;
+        }
+        
+        .bp-description {
+            color: #666;
+            line-height: 1.5;
+            margin: 10px 0;
+        }
+        
+        .risk-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .risk-high {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        
+        .risk-medium {
+            background-color: #fff3e0;
+            color: #ef6c00;
+            border: 1px solid #ffcc02;
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, var(--ui-color-1), var(--ui-color-2));
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 1.8em;
+            color: var(--ui-color-1);
+            margin: 30px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-users-cog fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>SEC02-03 アイデンティティとアクセス管理</h1>
+            <p class="header-description">
+                適切なアイデンティティ管理とアクセス制御により、正しいユーザーが適切なリソースに適切な条件下でアクセスできることを確保します。
+                認証（SEC02）と権限管理（SEC03）の両方を包含します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/sec-iam.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 統計情報 -->
+        <div class="stats-section">
+            <h2><i class="fa-solid fa-chart-bar"></i> SEC02-03 統計情報</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">15</span>
+                    <span class="stat-label">ベストプラクティス</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">12</span>
+                    <span class="stat-label">高リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">中リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">低リスク</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 個別セクションへのリンク -->
+        <div class="bp-grid" style="margin: 40px 0;">
+            <a href="SEC02.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-user-shield bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC02</h3>
+                </div>
+                <h4>認証</h4>
+                <p class="bp-description">
+                    人とマシンの認証を管理し、適切なアイデンティティ検証を実装します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-list"></i> 6つのベストプラクティス
+                </span>
+            </a>
+            
+            <a href="SEC03.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-user-cog bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC03</h3>
+                </div>
+                <h4>権限管理</h4>
+                <p class="bp-description">
+                    人とマシンの権限を管理し、最小権限の原則を実装します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-list"></i> 9つのベストプラクティス
+                </span>
+            </a>
+        </div>
+        <div class="section-divider"></div>
+
+        <!-- SEC02: 認証 -->
+        <h2 class="section-title">
+            <i class="fa-solid fa-shield-alt"></i> SEC02: 人とマシンの認証管理
+        </h2>
+        
+        <div class="bp-grid">
+            <a href="SEC02-BP01.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-shield-alt bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC02-BP01</h3>
+                </div>
+                <h4>強力なサインイン機構を使用する</h4>
+                <p class="bp-description">
+                    強力な認証機構を実装し、多要素認証（MFA）を使用してアカウントのセキュリティを強化します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="SEC02-BP02.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-clock bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC02-BP02</h3>
+                </div>
+                <h4>一時的な認証情報を使用する</h4>
+                <p class="bp-description">
+                    長期的な認証情報の代わりに一時的な認証情報を使用し、セキュリティリスクを軽減します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="SEC02-BP03.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-vault bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC02-BP03</h3>
+                </div>
+                <h4>シークレットを安全に保存し使用する</h4>
+                <p class="bp-description">
+                    API キー、パスワード、証明書などのシークレットを安全に保存し、適切にアクセス制御します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="SEC02-BP04.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-sitemap bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC02-BP04</h3>
+                </div>
+                <h4>中央集約型アイデンティティプロバイダーに依存する</h4>
+                <p class="bp-description">
+                    中央集約型のアイデンティティプロバイダーを使用して、一貫したアイデンティティ管理を実現します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+
+            <a href="SEC02-BP05.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-sync-alt bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC02-BP05</h3>
+                </div>
+                <h4>認証情報を定期的に監査しローテーションする</h4>
+                <p class="bp-description">
+                    認証情報の使用状況を定期的に監査し、不要な認証情報を削除し、必要に応じてローテーションします。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+
+            <a href="SEC02-BP06.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-users-cog bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC02-BP06</h3>
+                </div>
+                <h4>ユーザーグループと属性を活用する</h4>
+                <p class="bp-description">
+                    ユーザーグループと属性を使用して、効率的で一貫したアクセス管理を実現します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- SEC03: 権限管理 -->
+        <h2 class="section-title">
+            <i class="fa-solid fa-key"></i> SEC03: 人とマシンの権限管理
+        </h2>
+        
+        <div class="bp-grid">
+            <a href="SEC03-BP01.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-clipboard-list bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC03-BP01</h3>
+                </div>
+                <h4>アクセス要件を定義する</h4>
+                <p class="bp-description">
+                    人とマシンのアイデンティティに対するアクセス要件を明確に定義し、適切な権限管理を実現します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="SEC03-BP02.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-minimize bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC03-BP02</h3>
+                </div>
+                <h4>最小権限アクセスを付与する</h4>
+                <p class="bp-description">
+                    必要最小限の権限のみを付与し、セキュリティリスクを最小化します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="SEC03-BP03.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-ambulance bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC03-BP03</h3>
+                </div>
+                <h4>緊急アクセスプロセスを確立する</h4>
+                <p class="bp-description">
+                    緊急時に必要なアクセスを迅速に提供するプロセスを確立します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="SEC03-BP04.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-minus-circle bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC03-BP04</h3>
+                </div>
+                <h4>権限を継続的に削減する</h4>
+                <p class="bp-description">
+                    不要な権限を定期的に見直し、継続的に削減します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="SEC03-BP05.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-shield-check bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC03-BP05</h3>
+                </div>
+                <h4>組織の権限ガードレールを定義する</h4>
+                <p class="bp-description">
+                    組織全体で一貫した権限管理を実現するガードレールを定義します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="SEC03-BP06.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-cycle bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC03-BP06</h3>
+                </div>
+                <h4>ライフサイクルに基づいてアクセスを管理する</h4>
+                <p class="bp-description">
+                    ユーザーのライフサイクルに応じてアクセス権限を適切に管理します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="SEC03-BP07.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-search-plus bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC03-BP07</h3>
+                </div>
+                <h4>パブリックアクセスとクロスアカウントアクセスを分析する</h4>
+                <p class="bp-description">
+                    パブリックアクセスとクロスアカウントアクセスを定期的に分析し、リスクを評価します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="SEC03-BP08.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-share-alt bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC03-BP08</h3>
+                </div>
+                <h4>組織内でリソースを安全に共有する</h4>
+                <p class="bp-description">
+                    組織内でのリソース共有を安全に実行するメカニズムを実装します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="SEC03-BP09.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-handshake bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC03-BP09</h3>
+                </div>
+                <h4>第三者とリソースを安全に共有する</h4>
+                <p class="bp-description">
+                    第三者とのリソース共有を安全に実行するプロセスを確立します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>セキュリティの柱に戻る</h3>
+                    <a href="../02-security.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-shield"></i> セキュリティ一覧
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

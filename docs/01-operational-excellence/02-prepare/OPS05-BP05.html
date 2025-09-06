@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS05-BP05: パッチ管理の実行</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <div class="container">        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-shield-alt fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS05-BP05: パッチ管理の実行</h1>
+                <p class="header-description">パッチ管理を実行してセキュリティの脆弱性に対処し、システムの安定性を維持し、コンプライアンス要件を満たします。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_dev_integ_patch_mgmt.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <main>
+            <div class="section-layout">
+                <!-- リスクレベル -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-info-circle fa-5x" style="color: var(--ui-color-2); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>リスクレベル</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="risk-level medium">
+                            <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+                            <span>Medium（中）</span>
+                        </div>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                パッチ管理の自動化で<br>
+                                セキュリティと<br>
+                                コンプライアンスを確保！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 概要 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-download fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>概要</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-star" aria-hidden="true"></i>
+                                <span>機能獲得・問題対処・ガバナンスコンプライアンス維持</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                                <span>パッチ管理自動化による手動プロセスエラー削減</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
+                                <span>スケール対応・パッチ適用作業負荷削減</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>パッチ・脆弱性管理による利益・リスク管理</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                イミュータブルインフラで<br>
+                                検証済み良好状態での<br>
+                                ワークロードデプロイ！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 期待される成果 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                        <h2>期待される成果</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                                <span>定期的・自動化されたパッチ適用プロセス</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>セキュリティ脆弱性の迅速な修正</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
+                                <span>ガバナンス・コンプライアンス要件の維持</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-bug" aria-hidden="true"></i>
+                                <span>システム安定性・信頼性の向上</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2 right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                                本番前の安全環境での<br>
+                                テスト実施が<br>
+                                必須です！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 実装ガイダンス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                        <h2>実装ガイダンス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-heartbeat" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">AWS Health</span> - ライフサイクルイベント・アクション要求イベント情報</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-image" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">Amazon EC2 Image Builder</span> - マシンイメージ更新パイプライン</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-server" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">AMI</span>・<span class="keyword-tag">コンテナイメージ</span>パイプライン管理</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-code" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">AWS Lambda</span> - カスタムランタイム・追加ライブラリパターン</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble top">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                主要計画ライフサイクル<br>
+                                イベントは最低6ヶ月前に<br>
+                                通知されます！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AWSサービス -->
+            <div class="section-layout">
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-brands fa-aws fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>主要AWSサービス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-heartbeat" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">AWS Health</span> - AWSクラウドリソース健全性情報</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-image" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">Amazon EC2 Image Builder</span> - AMI・コンテナイメージパイプライン</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-database" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">Amazon ECR</span> - ECS・EKSイメージ管理</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-code" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">AWS Lambda</span> - バージョン管理機能</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-cloud fa-lg" style="color: var(--ui-color-1);"></i>
+                                AWSサービス統合で<br>
+                                包括的なパッチ管理を<br>
+                                実現しよう！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ベネフィット -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                        <h2>ベネフィット</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>セキュリティ脆弱性の迅速な修正</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                                <span>自動化による手動エラー削減・スケール対応</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
+                                <span>ガバナンス・コンプライアンス要件維持</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>システム安定性・パフォーマンス向上</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                定期的なパッチ管理は<br>
+                                セキュリティの<br>
+                                基本中の基本！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 重要な考慮事項 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>重要な考慮事項</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-vial" aria-hidden="true"></i>
+                                <span>本番システムでのパッチ適用前の安全環境でのテスト必須</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                                <span>検証・承認済みパッチのみ適用</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-cube" aria-hidden="true"></i>
+                                <span>イミュータブルインフラストラクチャの優先</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-undo" aria-hidden="true"></i>
+                                <span>インプレースパッチングは最後の選択肢</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                                パッチ適用は<br>
+                                慎重な計画と<br>
+                                テストが必要！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AWS Well-Architected Framework グラフィックレコード</p>
+        </footer>
+    </div>
+</body>
+</html>

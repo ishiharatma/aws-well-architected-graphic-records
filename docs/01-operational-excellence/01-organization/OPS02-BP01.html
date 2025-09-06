@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS02-BP01: リソース所有者の特定 - AWS Well-Architected グラフィックレコーディング</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+</head>
+<body>
+    <div class="container">        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-sitemap fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS02-BP01: リソース所有者の特定</h1>
+                <p class="header-description">チームが効果的に協力し、責任を明確にするために、リソースには所有者が存在することを確認します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_resource_owners.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-warning" aria-hidden="true"></i>
+                            <span>このベストプラクティスを確立しない場合の<span class="keyword-tag">リスクレベル: 高</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        リソース所有者不明は
+                        <br>
+                        <span class="keyword-tag">高リスク</span>！
+                        <br>
+                        変更制御・トラブル対応が困難
+                    </span>
+                </div>
+            </div>
+
+            <!-- メインカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-user-tag fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リソース所有者の特定</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">変更制御・トラブルシューティング</span>の責任者</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ワークロード・アカウント・インフラ</span>の所有者</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-tags" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">メタデータ・中央レジスタ</span>による記録</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>コンポーネントの<span class="keyword-tag">ビジネス価値</span>に基づく運用</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        明確な所有者で
+                        <br>
+                        <span class="keyword-tag">変更制御</span>が
+                        <br>
+                        シンプルになる！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">メタデータ・中央レジスタ</span>でリソース所有者特定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>チームメンバーが<span class="keyword-tag">リソース所有者</span>を特定可能</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user-check" aria-hidden="true"></i>
+                            <span>アカウントに<span class="keyword-tag">単一所有者</span>（可能な限り）</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-users fa-lg" style="color: var(--ui-color-2);"></i>
+                        適切な所有者を巻き込んで
+                        <br>
+                        <span class="keyword-tag">効果的な</span>
+                        <br>
+                        トラブルシューティング！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>よくあるアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                            <span>AWSアカウントの<span class="keyword-tag">代替連絡先</span>が未設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-tag" aria-hidden="true"></i>
+                            <span>リソースに<span class="keyword-tag">所有者タグ</span>が不足</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-inbox" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ITSMキュー</span>のメール対応なし</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users-slash" aria-hidden="true"></i>
+                            <span>重要インフラの<span class="keyword-tag">所有権重複</span></span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                        所有者不明は
+                        <br>
+                        <span class="keyword-tag">高リスク</span>！
+                        <br>
+                        必要な対応が遅れる
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-map fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                            <span>環境での<span class="keyword-tag">所有権定義</span>を明確化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-building" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Organizations</span>でアカウント管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-tags" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">タグ</span>でAWSリソース所有者特定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span>その他リソースの<span class="keyword-tag">文書化</span></span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-cogs fa-lg" style="color: var(--ui-color-2);"></i>
+                        <span class="keyword-tag">AWS Config</span>ルールで
+                        <br>
+                        所有者タグの
+                        <br>
+                        強制適用が可能！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 顧客事例 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-store fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>顧客事例</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shopping-cart" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AnyCompany Retail</span>の所有権定義</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-building" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Organizations</span>活用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-inbox" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">グループ受信箱</span>で代替連絡先設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-tags" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">タグ</span>でAWSリソース所有者特定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-wiki-w" aria-hidden="true"></i>
+                            <span>その他プラットフォームは<span class="keyword-tag">Wikiページ</span></span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        実際の企業事例から
+                        <br>
+                        <span class="keyword-tag">実装パターン</span>を
+                        <br>
+                        学習しよう！
+                    </span>
+                </div>
+            </div>
+
+            <!-- AWSツール活用 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>AWSツール活用</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-building" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Organizations</span>で中央管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Config</span>でタグ強制</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon Q Business</span>で情報検索</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-book" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">タグ付けベストプラクティス</span>ホワイトペーパー</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-1 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-aws fa-lg" style="color: var(--ui-color-1);"></i>
+                        AWSの豊富なツールで
+                        <br>
+                        <span class="keyword-tag">効率的な</span>
+                        <br>
+                        所有権管理を実現！
+                    </span>
+                </div>
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer style="text-align: center; margin-top: 40px; padding: 20px; color: #777;">
+            <p>AWS Well-Architected Framework - Operational Excellence Pillar</p>
+            <p>OPS02-BP01: Resources have identified owners</p>
+        </footer>
+    </div>
+</body>
+</html>

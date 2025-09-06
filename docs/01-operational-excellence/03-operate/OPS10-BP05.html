@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS10-BP05: サービス影響イベントの顧客コミュニケーション計画定義 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-bullhorn fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS10-BP05: サービス影響イベントの顧客コミュニケーション計画定義</h1>
+            <p class="header-description">サービス影響イベント中の効果的なコミュニケーションは、顧客との信頼と透明性を維持するために重要です。明確に定義されたコミュニケーション計画により、組織はインシデント中に内外に迅速かつ明確に情報を共有できます。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/2024-06-27/framework/ops_event_response_push_notify.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level medium">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 中リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>不適切または遅延したコミュニケーションによる<span class="keyword-tag">顧客の混乱と不満</span></li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i>過度に技術的または曖昧なメッセージによる<span class="keyword-tag">実際の影響の伝達不足</span></li>
+                        <li><i class="fa-solid fa-question-circle" aria-hidden="true"></i>事前定義されたコミュニケーション戦略がなく<span class="keyword-tag">一貫性のない反応的メッセージ</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-2);"></i>
+                        コミュニケーション計画がないと、
+                        <br>
+                        顧客の不安が増大し
+                        <br>
+                        <span class="keyword-tag">信頼を失います</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i>サービス影響イベント中に顧客とステークホルダーに<span class="keyword-tag">効果的に情報提供</span></li>
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i>信頼構築と顧客不安軽減のための<span class="keyword-tag">透明性のあるコミュニケーション</span></li>
+                        <li><i class="fa-solid fa-user-shield" aria-hidden="true"></i>顧客体験とビジネス運用への<span class="keyword-tag">サービス影響イベントの影響最小化</span></li>
+                        <li><i class="fa-solid fa-headset" aria-hidden="true"></i>顧客の懸念を事前に対処することによる<span class="keyword-tag">サポートチームの負担軽減</span></li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>インシデントからの<span class="keyword-tag">効果的な管理と回復能力</span>向上</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        プロアクティブで明確な
+                        <br>
+                        コミュニケーションにより、
+                        <br>
+                        <span class="keyword-tag">顧客信頼</span>を維持！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-users-cog" aria-hidden="true"></i>メジャーインシデントマネージャーと<span class="keyword-tag">コミュニケーションマネージャー</span>の指定</li>
+                        <li><i class="fa-solid fa-broadcast-tower" aria-hidden="true"></i>チャット、メール、SMS、ソーシャルメディア、アプリ内通知、<span class="keyword-tag">ステータスページ</span>の選択</li>
+                        <li><i class="fa-solid fa-mobile-alt" aria-hidden="true"></i><span class="keyword-tag">Amazon Pinpoint</span>による顧客アラート送信</li>
+                        <li><i class="fa-solid fa-bell" aria-hidden="true"></i><span class="keyword-tag">Amazon SNS</span>によるプログラム的な通知</li>
+                        <li><i class="fa-solid fa-dashboard" aria-hidden="true"></i><span class="keyword-tag">CloudWatchダッシュボード</span>の公開共有</li>
+                        <li><i class="fa-solid fa-comments" aria-hidden="true"></i><span class="keyword-tag">Amazon Q Developer</span>による内部チーム調整</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        Incident Managerのランブックで
+                        <br>
+                        顧客通知を自動化し、
+                        <br>
+                        <span class="keyword-tag">承認ワークフロー</span>も組み込み！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>不適切または遅延したコミュニケーションによる<span class="keyword-tag">顧客の混乱と不満</span></li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i>過度に技術的または曖昧なメッセージで<span class="keyword-tag">ユーザーへの実際の影響が伝わらない</span></li>
+                        <li><i class="fa-solid fa-question" aria-hidden="true"></i>事前定義されたコミュニケーション戦略がなく<span class="keyword-tag">一貫性のない反応的メッセージ</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        技術的すぎる説明は
+                        <br>
+                        顧客には理解できず、
+                        <br>
+                        <span class="keyword-tag">不安</span>を増大させます...
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスの利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-handshake" aria-hidden="true"></i>プロアクティブで明確なコミュニケーションによる<span class="keyword-tag">顧客信頼と満足度の向上</span></li>
+                        <li><i class="fa-solid fa-headset" aria-hidden="true"></i>顧客の懸念を事前に対処することによる<span class="keyword-tag">サポートチームの負担軽減</span></li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>インシデントからの<span class="keyword-tag">効果的な管理と回復能力</span>向上</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        適切なコミュニケーションにより、
+                        <br>
+                        インシデント中でも
+                        <br>
+                        <span class="keyword-tag">顧客満足度</span>を維持！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book"></i> 関連ベストプラクティス</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-book" aria-hidden="true"></i><span class="keyword-tag">OPS07-BP03</span>: 手順実行のためのランブック使用</li>
+                        <li><i class="fa-solid fa-dashboard" aria-hidden="true"></i><span class="keyword-tag">OPS10-BP06</span>: ダッシュボードを通じたステータス伝達</li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i><span class="keyword-tag">OPS11-BP02</span>: インシデント後分析の実行</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-file-text"></i> 関連ドキュメント・例</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-comments" aria-hidden="true"></i><span class="keyword-tag">Atlassian</span>: インシデントコミュニケーションベストプラクティス</li>
+                        <li><i class="fa-solid fa-edit" aria-hidden="true"></i><span class="keyword-tag">良いステータス更新</span>の書き方</li>
+                        <li><i class="fa-solid fa-medkit" aria-hidden="true"></i><span class="keyword-tag">AWS Health Dashboard</span></li>
+                        <li><i class="fa-solid fa-video" aria-hidden="true"></i><span class="keyword-tag">インシデントテンプレート</span>作成動画</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap fa-lg" style="color: var(--ui-color-1);"></i>
+                        これらのリソースを活用して、
+                        <br>
+                        効果的な顧客コミュニケーション
+                        <br>
+                        <span class="keyword-tag">計画</span>を策定しましょう！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS01-BP02: 内部顧客ニーズ評価 - AWS Well-Architected グラフィックレコーディング</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+</head>
+<body>
+    <div class="container">        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-bullseye fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS01-BP02: 内部顧客ニーズ評価</h1>
+                <p class="header-description">内部顧客（チーム、従業員、パートナー）のニーズを理解し、外部顧客のニーズとのバランスを取るために、内部顧客のニーズを評価します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_int_cust_needs.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-warning" aria-hidden="true"></i>
+                            <span>このベストプラクティスを確立しない場合の<span class="keyword-tag">リスクレベル: 高</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        内部顧客ニーズの評価なしは
+                        <br>
+                        <span class="keyword-tag">高リスク</span>！
+                        <br>
+                        ビジネス価値提供の優先順位が不明確
+                    </span>
+                </div>
+            </div>
+
+            <!-- メインカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-user-group fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>内部顧客ニーズ評価</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-people-arrows" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">内部チーム</span>との協議と連携</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+                            <span>改善効果の<span class="keyword-tag">最大化</span>を重視</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-gear" aria-hidden="true"></i>
+                            <span>スキル開発・パフォーマンス向上・<span class="keyword-tag">自動化</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>ニーズ変化に応じた<span class="keyword-tag">優先順位更新</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-users fa-lg" style="color: var(--ui-color-2);"></i>
+                        内部顧客のニーズ理解が
+                        <br>
+                        <span class="keyword-tag">ビジネス価値</span>提供の
+                        <br>
+                        優先順位決定に重要！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">最大影響</span>のある改善に集中</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span>チームスキル・ワークロード性能・<span class="keyword-tag">コスト削減</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ランブック自動化</span>・監視強化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-refresh" aria-hidden="true"></i>
+                            <span>ニーズ変化に応じた<span class="keyword-tag">優先順位更新</span></span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-bullseye fa-lg" style="color: var(--ui-color-1);"></i>
+                        確立された優先順位で
+                        <br>
+                        <span class="keyword-tag">改善努力</span>を
+                        <br>
+                        最大影響領域に集中！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>よくあるアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">IPアドレス変更</span>を製品チーム相談なしで実施</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-tools" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">新開発ツール</span>導入時の内部顧客エンゲージメント不足</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">監視システム</span>実装時の要件確認不足</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        内部顧客への影響を
+                        <br>
+                        <span class="keyword-tag">事前確認</span>せずに
+                        <br>
+                        変更するのは危険！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-route fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ビジネスニーズ</span>の理解</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-comments" aria-hidden="true"></i>
+                            <span>内部顧客の<span class="keyword-tag">目標・ニーズ・優先事項</span>レビュー</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">共通理解</span>の確立</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        内部・外部顧客の
+                        <br>
+                        <span class="keyword-tag">共通理解</span>が
+                        <br>
+                        ビジネス目標達成の鍵！
+                    </span>
+                </div>
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer style="text-align: center; margin-top: 40px; padding: 20px; color: #777;">
+            <p>AWS Well-Architected Framework - Operational Excellence Pillar</p>
+            <p>OPS01-BP02: Evaluate internal customer needs</p>
+        </footer>
+    </div>
+</body>
+</html>

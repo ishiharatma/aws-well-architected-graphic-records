@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS10-BP02: アラートごとのプロセスを持つ - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-bell fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS10-BP02: アラートごとのプロセスを持つ</h1>
+            <p class="header-description">システム内の各アラートに対して明確で定義されたプロセスを確立することは、効果的で効率的なインシデント管理に不可欠です。この実践により、すべてのアラートが特定の実行可能な対応につながり、運用の信頼性と応答性が向上します。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/2024-06-27/framework/ops_event_response_process_per_alert.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 高リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-question-circle" aria-hidden="true"></i>事前定義された対応プロセスがない<span class="keyword-tag">場当たり的な解決</span></li>
+                        <li><i class="fa-solid fa-bell-slash" aria-hidden="true"></i>アラート過多による<span class="keyword-tag">重要アラートの見落とし</span></li>
+                        <li><i class="fa-solid fa-users-slash" aria-hidden="true"></i>明確な所有権不足による<span class="keyword-tag">一貫性のない処理</span></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>対応の遅延と<span class="keyword-tag">解決時間の延長</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        プロセスがないと、
+                        <br>
+                        毎回違う対応になって
+                        <br>
+                        <span class="keyword-tag">混乱</span>の元です！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-play-circle" aria-hidden="true"></i>すべてのアラートが<span class="keyword-tag">特定の対応計画</span>を開始</li>
+                        <li><i class="fa-solid fa-robot" aria-hidden="true"></i>可能な限りの<span class="keyword-tag">自動化された対応</span></li>
+                        <li><i class="fa-solid fa-user-check" aria-hidden="true"></i>明確な所有権と<span class="keyword-tag">定義されたエスカレーションパス</span></li>
+                        <li><i class="fa-solid fa-book" aria-hidden="true"></i>最新のナレッジベースとの<span class="keyword-tag">アラート連携</span></li>
+                        <li><i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i>迅速で統一された<span class="keyword-tag">全体的な対応</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        明確なプロセスにより、
+                        <br>
+                        誰でも一貫して効果的に
+                        <br>
+                        <span class="keyword-tag">対応</span>できます！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-question" aria-hidden="true"></i>事前定義された対応プロセスがなく<span class="keyword-tag">場当たり的で遅延した解決</span></li>
+                        <li><i class="fa-solid fa-bell" aria-hidden="true"></i>アラート過多により<span class="keyword-tag">重要なアラートが見落とされる</span></li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>明確な所有権と責任の欠如による<span class="keyword-tag">一貫性のない処理</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        アラートが多すぎると、
+                        <br>
+                        本当に重要なものを
+                        <br>
+                        <span class="keyword-tag">見逃してしまいます</span>...
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスの利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-battery-half" aria-hidden="true"></i>実行可能なアラートのみを発生させることによる<span class="keyword-tag">アラート疲れの軽減</span></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>運用問題の<span class="keyword-tag">平均解決時間（MTTR）の短縮</span></li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i><span class="keyword-tag">平均調査時間（MTTI）の短縮</span>によるMTTR改善</li>
+                        <li><i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>運用対応の<span class="keyword-tag">スケーラビリティ向上</span></li>
+                        <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i>運用イベント処理の<span class="keyword-tag">一貫性と信頼性の向上</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        プロセスの標準化により、
+                        <br>
+                        運用効率が大幅に
+                        <br>
+                        <span class="keyword-tag">向上</span>します！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-layer-group" aria-hidden="true"></i>CloudWatchで<span class="keyword-tag">複合アラーム</span>を作成してノイズ削減</li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i>CloudWatchアラームと<span class="keyword-tag">Incident Manager</span>の統合</li>
+                        <li><i class="fa-solid fa-route" aria-hidden="true"></i>EventBridgeルールによる<span class="keyword-tag">イベント対応の自動化</span></li>
+                        <li><i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>アラートタイプごとの<span class="keyword-tag">詳細な対応計画</span>確立</li>
+                        <li><i class="fa-solid fa-comments" aria-hidden="true"></i><span class="keyword-tag">Amazon Q Developer</span>チャットチャネルの設定</li>
+                        <li><i class="fa-solid fa-book" aria-hidden="true"></i><span class="keyword-tag">Systems Manager Automation</span>ランブックの組み込み</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        Incident Managerを使うことで、
+                        <br>
+                        インシデント対応が
+                        <br>
+                        <span class="keyword-tag">大幅に効率化</span>されます！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book"></i> 関連ベストプラクティス</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i><span class="keyword-tag">OPS04-BP01</span>: 主要業績評価指標の特定</li>
+                        <li><i class="fa-solid fa-bell" aria-hidden="true"></i><span class="keyword-tag">OPS08-BP04</span>: 実行可能なアラートの作成</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-file-text"></i> 関連ドキュメント</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-cloud" aria-hidden="true"></i><span class="keyword-tag">AWS CAF</span>: インシデントと問題管理</li>
+                        <li><i class="fa-solid fa-bell" aria-hidden="true"></i><span class="keyword-tag">CloudWatchアラーム</span>の使用</li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i><span class="keyword-tag">Incident Manager</span>のセットアップ</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-video"></i> 関連動画・例</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-play" aria-hidden="true"></i><span class="keyword-tag">AWSからのインシデント対応のヒント</span></li>
+                        <li><i class="fa-solid fa-laptop-code" aria-hidden="true"></i><span class="keyword-tag">セキュリティイベント</span>への自動インシデント対応</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap fa-lg" style="color: var(--ui-color-1);"></i>
+                        これらのリソースを活用して、
+                        <br>
+                        効果的なアラート管理を
+                        <br>
+                        <span class="keyword-tag">実現</span>しましょう！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

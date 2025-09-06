@@ -1,1115 +1,173 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEC04-BP01 サービスとアプリケーションのログ記録を設定する</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
-    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
-    
-    :root {
-      --ui-color-1: #1B6C8C;
-      --ui-color-2: #BF8136;
-      --ui-color-3: #F2E8E4;
-      --ui-color-4: #260101;
-      --ui-color-5: #BF5656;
-    }
-    
-    body {
-      font-family: 'Zen Kurenaido', sans-serif;
-      background-color: #FFF8F5;
-      color: #333333;
-      line-height: 1.6;
-      margin: 0;
-      padding: 20px;
-    }
-    
-    .container {
-      max-width: 2000px;
-      margin: 0 auto;
-    }
-    
-    /* ヘッダースタイル */
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-      position: relative;
-      padding: 20px;
-      background-color: white;
-      border-radius: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    
-    .title {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-    
-    .title h1 {
-      font-size: 36px;
-      color: var(--ui-color-1);
-      margin: 15px 0;
-      line-height: 1.2;
-    }
-    
-    .date {
-      font-size: 14px;
-      color: #777777;
-    }
-    
-    /* セクションレイアウト */
-    .section-layout {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-bottom: 20px;
-      justify-content: center;
-    }
-    
-    /* カードスタイル */
-    .section-card {
-      flex: 1;
-      min-width: 220px;
-      max-width: 450px;
-      background-color: white;
-      border-radius: 20px;
-      padding: 15px;
-      box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
-      position: relative;
-      overflow: hidden;
-      animation: fadeInScale 0.5s ease-out;
-    }
-    
-    @keyframes fadeInScale {
-      0% {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-    
-    /* カード内アイコンコンテナ */
-    .mega-icon-container {
-      text-align: center;
-      margin: 15px 0;
-    }
-    
-    /* カードコンテンツ */
-    .card-content {
-      padding: 0 10px 15px;
-    }
-    
-    /* キーワードリスト */
-    .keyword-list {
-      margin: 15px 0;
-      padding: 0;
-      list-style-type: none;
-    }
-    
-    .keyword-list li {
-      margin-bottom: 12px;
-      display: flex;
-      align-items: flex-start;
-    }
-    
-    .keyword-list li i {
-      margin-right: 8px;
-      color: var(--ui-color-2);
-      min-width: 16px;
-      margin-top: 4px;
-    }
-    
-    /* キーワードタグ */
-    .keyword-tag {
-      background-color: var(--ui-color-3);
-      color: var(--ui-color-4);
-      padding: 3px 8px;
-      border-radius: 5px;
-      margin-right: 5px;
-      display: inline-block;
-      font-weight: bold;
-    }
-    
-    .risk-tag {
-      background-color: #FF5252;
-      color: white;
-      padding: 3px 10px;
-      border-radius: 5px;
-      display: inline-block;
-      font-weight: bold;
-    }
-    
-    /* 手書き風吹き出し */
-    .speech-bubble {
-      position: relative;
-      background: #fff;
-      border: 3px solid var(--ui-color-1);
-      border-radius: 20px;
-      padding: 10px 15px;
-      margin: 15px 5px;
-      font-family: 'Yomogi', cursive;
-      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
-      transform: rotate(-1deg);
-    }
-    
-    .speech-bubble::after {
-      content: '';
-      position: absolute;
-      bottom: -13px;
-      left: 20px;
-      border-width: 12px 8px 0;
-      border-style: solid;
-      border-color: var(--ui-color-1) transparent;
-      display: block;
-      width: 0;
-    }
-    
-    /* 吹き出しバリエーション */
-    .speech-bubble.right::after {
-      left: auto;
-      right: 20px;
-      transform: rotate(15deg);
-    }
-    
-    .speech-bubble.top::after {
-      bottom: auto;
-      top: -13px;
-      border-width: 0 8px 12px;
-      transform: rotate(-5deg);
-    }
-    
-    .speech-bubble.variant-1 {
-      background: #FFF9E3;
-      border-color: var(--ui-color-2);
-      transform: rotate(1deg);
-    }
-    
-    .speech-bubble.variant-1::after {
-      border-color: var(--ui-color-2) transparent;
-    }
-    
-    .speech-bubble.variant-2 {
-      background: #FFE9E9;
-      border-color: var(--ui-color-5);
-      transform: rotate(-2deg);
-    }
-    
-    .speech-bubble.variant-2::after {
-      border-color: var(--ui-color-5) transparent;
-    }
-    
-    /* 手書き文字 */
-    .handwritten {
-      font-family: 'Yomogi', cursive;
-      font-size: 15px;
-      line-height: 1.5;
-      color: #333;
-    }
-    
-    /* コードプレビュー */
-    pre {
-      background: #f5f5f5;
-      padding: 8px;
-      border-radius: 5px;
-      font-size: 12px;
-      margin-top: 10px;
-      overflow-x: auto;
-    }
-    
-    /* 実装ステップボックス */
-    .step-box {
-      border-left: 4px solid var(--ui-color-1);
-      padding-left: 12px;
-      margin: 15px 0;
-    }
-    
-    .step-box h3 {
-      margin-top: 0;
-      color: var(--ui-color-1);
-    }
-    
-    /* 比較表 */
-    .comparison-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 15px 0;
-    }
-    
-    .comparison-table th,
-    .comparison-table td {
-      padding: 8px;
-      text-align: left;
-      border-bottom: 1px solid #eee;
-    }
-    
-    .comparison-table th {
-      background-color: var(--ui-color-3);
-      font-weight: bold;
-    }
-    
-    .comparison-table tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    
-    /* ボックススタイル */
-    .info-box {
-      background-color: #f0f9ff;
-      border-left: 4px solid var(--ui-color-1);
-      padding: 12px;
-      margin: 15px 0;
-      border-radius: 0 5px 5px 0;
-    }
-    
-    .warning-box {
-      background-color: #fff3e0;
-      border-left: 4px solid var(--ui-color-2);
-      padding: 12px;
-      margin: 15px 0;
-      border-radius: 0 5px 5px 0;
-    }
-    
-    .danger-box {
-      background-color: #ffebee;
-      border-left: 4px solid var(--ui-color-5);
-      padding: 12px;
-      margin: 15px 0;
-      border-radius: 0 5px 5px 0;
-    }
-    
-    /* サービスカード */
-    .service-card {
-      background-color: #f0f9ff;
-      border: 1px solid #d0e3f2;
-      border-radius: 8px;
-      padding: 12px;
-      margin: 10px 0;
-      display: flex;
-      align-items: flex-start;
-    }
-    
-    .service-icon {
-      margin-right: 10px;
-      color: var(--ui-color-1);
-      font-size: 24px;
-      min-width: 30px;
-      text-align: center;
-    }
-    
-    .service-content {
-      flex-grow: 1;
-    }
-    
-    .service-title {
-      font-weight: bold;
-      color: var(--ui-color-1);
-      margin-bottom: 5px;
-    }
-    
-    /* 比較カード */
-    .compare-container {
-      display: flex;
-      gap: 15px;
-      margin: 15px 0;
-    }
-    
-    .compare-card {
-      flex: 1;
-      padding: 12px;
-      border-radius: 8px;
-    }
-    
-    .compare-card h3 {
-      margin-top: 0;
-      text-align: center;
-    }
-    
-    .compare-card.good {
-      background-color: #e8f5e9;
-      border: 1px solid #a5d6a7;
-    }
-    
-    .compare-card.bad {
-      background-color: #ffebee;
-      border: 1px solid #ef9a9a;
-    }
-    
-    /* フロー図 */
-    .flow-diagram {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin: 15px 0;
-    }
-    
-    .flow-step {
-      background-color: #f0f9ff;
-      border: 1px solid #d0e3f2;
-      border-radius: 8px;
-      padding: 12px;
-      position: relative;
-    }
-    
-    .flow-step::after {
-      content: "\f063"; /* Font Awesome down arrow */
-      font-family: "Font Awesome 6 Free";
-      font-weight: 900;
-      position: absolute;
-      bottom: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 18px;
-      color: var(--ui-color-1);
-    }
-    
-    .flow-step:last-child::after {
-      content: none;
-    }
-    
-    .flow-title {
-      font-weight: bold;
-      color: var(--ui-color-1);
-      margin-bottom: 5px;
-      display: flex;
-      align-items: center;
-    }
-    
-    .flow-title i {
-      margin-right: 8px;
-    }
-    
-    /* レスポンシブ対応 */
-    @media (max-width: 1600px) {
-      .section-card {
-        min-width: 280px;
-      }
-    }
-    
-    @media (max-width: 1200px) {
-      .section-card {
-        min-width: 320px;
-      }
-    }
-    
-    @media (max-width: 900px) {
-      .section-card {
-        min-width: 380px;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .section-layout {
-        flex-direction: column;
-      }
-      
-      .section-card {
-        width: 100%;
-        min-width: auto;
-      }
-      
-      .compare-container {
-        flex-direction: column;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC04-BP01 サービスとアプリケーションのログ記録を設定する</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
 </head>
 <body>
-  <div class="container">
-    <!-- ヘッダー -->
-    <div class="header">
-      <div class="title">
-        <i class="fa-solid fa-file-lines fa-7x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
-        <h1>SEC04-BP01 サービスとアプリケーションのログ記録を設定する</h1>
-      </div>
-      <div class="date">2025年3月29日</div>
-    </div>
-    
-    <!-- セクション1: 概要 -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-scroll fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>概要</h2>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-file-alt fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>SEC04-BP01 サービスとアプリケーションのログ記録を設定する</h1>
+            <p class="header-description">
+                セキュリティイベントの検出と調査を可能にするため、AWSサービスとアプリケーションからの包括的なログ記録を設定します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/sec_detect_investigate_events_app_service_logging.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
         </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-              <span>サービスとアプリケーションから<span class="keyword-tag">セキュリティイベントログを保持</span></span>
-            </li>
-            <li>
-              <i class="fa-solid fa-gavel" aria-hidden="true"></i>
-              <span>これは<span class="keyword-tag">監査</span>、<span class="keyword-tag">調査</span>、<span class="keyword-tag">運用</span>のユースケースにおけるセキュリティの基本原則</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
-              <span><span class="keyword-tag">ガバナンス</span>、<span class="keyword-tag">リスク</span>、<span class="keyword-tag">コンプライアンス (GRC)</span>の標準、ポリシー、手順によって推進される共通のセキュリティ要件</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>
-              <span>セキュリティインシデントの<span class="keyword-tag">根本原因分析 (RCA)</span>のメカニズムを導入</span>
-            </li>
-          </ul>
-          
-          <div style="text-align: center; margin-top: 20px;">
-            <span class="risk-tag" style="font-size: 18px;">リスクレベル: 高</span>
-          </div>
+    </header>
+
+    <main>
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                        <span>高リスク</span>
+                    </div>
+                    <p>このベストプラクティスを確立しない場合のリスクレベルです。</p>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation" style="color: var(--ui-color-5);"></i>
+                        適切な実装で<br>
+                        <span class="keyword-tag">リスク軽減</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                <div class="card-content">
+                    <p>セキュリティイベントの検出、調査、対応を可能にする包括的なログ記録戦略を確立します。</p>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star" style="color: var(--ui-color-2);"></i>
+                        明確な<br>
+                        <span class="keyword-tag">目標設定</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <p>以下のパターンは避けるべき設計です：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-times" aria-hidden="true"></i>
+                            <span>重要なAWSサービスのログ記録を有効にしない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>ログの保持期間が不適切</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-virus" aria-hidden="true"></i>
+                            <span>セキュリティ関連イベントのログ記録不足</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-warning" style="color: var(--ui-color-5);"></i>
+                        これらの落とし穴を<br>
+                        <span class="keyword-tag">回避</span>しよう！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 主要ログソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-alt fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>主要ログソース</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-trail" aria-hidden="true"></i>
+                            <span>AWS CloudTrail - API呼び出しの記録</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span>Amazon VPC Flow Logs - ネットワークトラフィック</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                            <span>AWS Config - 設定変更の追跡</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span>Amazon GuardDuty - 脅威検出ログ</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star" style="color: var(--ui-color-2);"></i>
+                        包括的な<br><span class="keyword-tag">ログ収集</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-list" aria-hidden="true"></i>
+                            <span>ログ記録要件の特定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span>AWSサービスログの有効化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span>ログ集約と保存の設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>ログ分析と監視の実装</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star" style="color: var(--ui-color-2);"></i>
+                        段階的な<br><span class="keyword-tag">実装</span>！
+                    </span>
+                </div>
+            </div>
         </div>
-        
-        <div class="speech-bubble">
-          <span class="handwritten">
-            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
-            ログは「何が起きたか」を知るための
-            <br>
-            重要な証拠！セキュリティの基本中の基本だよ。
-            <br>
-            ちゃんと記録しないと問題が起きても原因がわからない
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション2: 期待される成果 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-check-double fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
-          <h2>期待される成果</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-clock" aria-hidden="true"></i>
-              <span>組織は、セキュリティインシデント対応など内部のプロセス遂行時に、<span class="keyword-tag">確実</span>かつ<span class="keyword-tag">一貫性</span>をもって、<span class="keyword-tag">タイムリー</span>にログを取得できる</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-database" aria-hidden="true"></i>
-              <span>運用側の成果を改善するためにログの<span class="keyword-tag">一元化</span>を実現</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-              <span>セキュリティインシデントの<span class="keyword-tag">全容とタイムライン</span>を記録して理解するために関連ログをレビュー可能</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-bell" aria-hidden="true"></i>
-              <span>関心のある特定のアクションが発生したことを示す<span class="keyword-tag">アラート生成</span>に活用</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-file-search" aria-hidden="true"></i>
-              <span><span class="keyword-tag">クエリと取得</span>のメカニズムでアラートを発するために不可欠</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-1 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-thumbs-up fa-lg" style="color: var(--ui-color-2);"></i>
-            ログは単に保存するだけじゃなく
-            <br>
-            「いつでも検索できる」
-            <br>
-            「異常を自動検知できる」ことが大事！
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション3: 一般的なアンチパターン -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 3s;" aria-hidden="true"></i>
-          <h2>一般的なアンチパターン</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>ログが<span class="keyword-tag">永久に保存</span>される、または<span class="keyword-tag">すぐに削除</span>される</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span><span class="keyword-tag">誰でもログにアクセス</span>できる</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>ログガバナンスと使用について、<span class="keyword-tag">手動プロセスのみ</span>に依存する</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>必要な場合に備えて、<span class="keyword-tag">あらゆるタイプのログを保存</span>する</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>必要な場合にのみ<span class="keyword-tag">ログ整合性をチェック</span>する</span>
-            </li>
-          </ul>
-          
-          <div class="compare-container">
-            <div class="compare-card good">
-              <h3><i class="fa-solid fa-thumbs-up" style="color: #4CAF50;"></i> ベストプラクティス</h3>
-              <ul>
-                <li>適切な保持期間の設定</li>
-                <li>アクセス制御の適用</li>
-                <li>自動化されたプロセス</li>
-                <li>必要なログのみを選択</li>
-                <li>定期的な整合性チェック</li>
-              </ul>
-            </div>
-            
-            <div class="compare-card bad">
-              <h3><i class="fa-solid fa-thumbs-down" style="color: #F44336;"></i> アンチパターン</h3>
-              <ul>
-                <li>無期限または即時削除</li>
-                <li>アクセス制御なし</li>
-                <li>手動プロセスのみ</li>
-                <li>すべてのログを保存</li>
-                <li>必要時のみ整合性チェック</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-exclamation-circle fa-lg" style="color: var(--ui-color-5);"></i>
-            「とりあえず全部取っておこう」は
-            <br>
-            コスト増大と管理の複雑化を招くよ！
-            <br>
-            必要なログを見極めることが大切
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション4: 基本的なログソース -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-database fa-5x" style="color: var(--ui-color-1); animation: fa-spin 6s linear infinite;" aria-hidden="true"></i>
-          <h2>基本的なログソース</h2>
-        </div>
-        
-        <div class="card-content">
-          <p>セキュリティ調査の前に、関連するログを取得し、過去にさかのぼってAWSアカウントでアクティビティを再構築する必要があります。以下は基本的なログソースです：</p>
-          
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="fa-solid fa-route" aria-hidden="true"></i>
-            </div>
-            <div class="service-content">
-              <div class="service-title">AWS CloudTrail</div>
-              <p>AWSのサービスアクティビティをキャプチャする<span class="keyword-tag">APIコールのトラッキング</span>ログサービス。デフォルトで有効になっており、管理イベントは90日間保持され、CloudTrail証跡を作成することでより長期間の保存が可能。</p>
-            </div>
-          </div>
-          
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
-            </div>
-            <div class="service-content">
-              <div class="service-title">VPC フローログ</div>
-              <p>VPC内の<span class="keyword-tag">ネットワークトラフィック</span>を記録。VPC、サブネット、またはネットワークインターフェイス向けに作成でき、Amazon S3バケットまたはCloudWatchロググループにストリーミング可能。</p>
-            </div>
-          </div>
-          
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="fa-solid fa-globe" aria-hidden="true"></i>
-            </div>
-            <div class="service-content">
-              <div class="service-title">Amazon Route 53 Resolverのクエリログ</div>
-              <p>VPC内の<span class="keyword-tag">DNSリクエスト</span>を記録。リソースがどのドメイン名を解決しようとしているかを把握でき、マルウェアのコマンド＆コントロール通信の検出などに役立つ。</p>
-            </div>
-          </div>
-          
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="fa-solid fa-water" aria-hidden="true"></i>
-            </div>
-            <div class="service-content">
-              <div class="service-title">Amazon Security Lake</div>
-              <p>上記のログデータを<span class="keyword-tag">収集・正規化</span>し、Apache ParquetフォーマットとOpen Cybersecurity Schema Framework (OCSF)で保存。他のAWSログやサードパーティーソースからのログもサポート。</p>
-            </div>
-          </div>
-          
-          <div class="info-box">
-            <h3 style="margin-top: 0;"><i class="fa-solid fa-lightbulb" style="margin-right: 5px;"></i>追加のログソース</h3>
-            <ul style="margin-bottom: 0;">
-              <li>Elastic Load Balancingログ</li>
-              <li>AWS WAFログ</li>
-              <li>AWS Configレコーダーログ</li>
-              <li>Amazon GuardDutyの検出結果</li>
-              <li>Amazon EKS監査ログ</li>
-              <li>Amazon EC2インスタンスのオペレーティングシステムとアプリケーションログ</li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-1 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-wrench fa-lg" style="color: var(--ui-color-2);"></i>
-            CloudTrail・フローログ・DNSログは
-            <br>
-            セキュリティの「三種の神器」！
-            <br>
-            これだけでも多くの調査ができるよ
-          </span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- セクション5: ログストレージの選択 -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-hard-drive fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
-          <h2>ログストレージの選択</h2>
-        </div>
-        
-        <div class="card-content">
-          <p>どのログストレージを選ぶかは、使用しているクエリツール、保持機能、使いやすさ、コストなどが関わってきます。</p>
-          
-          <div class="compare-container">
-            <div class="compare-card good">
-              <h3><i class="fa-solid fa-cube" style="color: #4CAF50;"></i> Amazon S3バケット</h3>
-              <ul>
-                <li><span class="keyword-tag">費用対効果</span>に優れ、耐久性の高いストレージを提供</li>
-                <li><span class="keyword-tag">ライフサイクルポリシー</span>がオプションで備わっている</li>
-                <li>Amazon Athenaなどのサービスを使って<span class="keyword-tag">クエリ</span>することができる</li>
-                <li>長期保存に<span class="keyword-tag">最適</span></li>
-                <li>保存コストを最小限に抑えるための<span class="keyword-tag">ストレージクラス</span>を選択可能</li>
-              </ul>
-            </div>
-            
-            <div class="compare-card good">
-              <h3><i class="fa-solid fa-chart-line" style="color: #4CAF50;"></i> CloudWatch ロググループ</h3>
-              <ul>
-                <li>CloudWatch Logs Insightsにより、<span class="keyword-tag">耐久性の高いストレージ</span>と<span class="keyword-tag">ビルトインクエリ施設</span>を提供</li>
-                <li>検索や分析が<span class="keyword-tag">シンプル</span></li>
-                <li>他のCloudWatchの機能と<span class="keyword-tag">統合</span>しやすい</li>
-                <li><span class="keyword-tag">アラート</span>やダッシュボードを簡単に作成可能</li>
-                <li>費用が高いため、長期保存には不向き</li>
-              </ul>
-            </div>
-          </div>
-          
-          <div class="info-box">
-            <h3 style="margin-top: 0;"><i class="fa-solid fa-hourglass-half" style="margin-right: 5px;"></i>適切なログ保持の設定</h3>
-            <p style="margin-bottom: 0;">Amazon S3バケットまたはCloudWatchロググループを使ってログを保存するときは、各ログソースに対して適切なライフサイクルを選び、ストレージと取得コストを最適化する必要があります。顧客のログは通常<span class="keyword-tag">3か月～1年間</span>ですぐにクエリでき、最長<span class="keyword-tag">7年間保持</span>されます。可用性と保持の選択は、セキュリティ要件と、法令、規制、およびビジネス上の義務の組み合わせに合わせるべきです。</p>
-          </div>
-          
-          <div class="flow-diagram">
-            <div class="flow-step">
-              <div class="flow-title"><i class="fa-solid fa-1" aria-hidden="true"></i>必要な保持期間を特定</div>
-              <p>セキュリティ要件、法令、規制、ビジネス上の要件に基づいて、各ログタイプの必要な保持期間を決定します。</p>
-            </div>
-            <div class="flow-step">
-              <div class="flow-title"><i class="fa-solid fa-2" aria-hidden="true"></i>ストレージ戦略を設計</div>
-              <p>頻繁にアクセスするログと長期アーカイブのためのログに分けて戦略を立てます。</p>
-            </div>
-            <div class="flow-step">
-              <div class="flow-title"><i class="fa-solid fa-3" aria-hidden="true"></i>コスト最適化を検討</div>
-              <p>S3のライフサイクルポリシーやストレージクラスを活用して、長期保存のコストを最適化します。</p>
-            </div>
-            <div class="flow-step">
-              <div class="flow-title"><i class="fa-solid fa-4" aria-hidden="true"></i>アクセス制御を設定</div>
-              <p>ログデータへのアクセスを制限し、不正アクセスや意図しない削除を防ぎます。</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-piggy-bank fa-lg" style="color: var(--ui-color-5);"></i>
-            短期と長期で使い分けるのがコツ！
-            <br>
-            最近のログはCloudWatch、
-            <br>
-            長期保存はS3が費用対効果が高いよ
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション6: ログクエリメカニズムの選択 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-magnifying-glass-chart fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite;" aria-hidden="true"></i>
-          <h2>ログクエリメカニズムの選択</h2>
-        </div>
-        
-        <div class="card-content">
-          <p>ログを保存するだけでなく、効率的に検索・分析できることが重要です。AWSでは複数のクエリツールが提供されています。</p>
-          
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
-            </div>
-            <div class="service-content">
-              <div class="service-title">CloudWatch Logs Insights</div>
-              <p>CloudWatchロググループに保存されたデータに対して<span class="keyword-tag">クエリを実行</span>し、視覚化できる強力なツール。シンプルなクエリ言語を使用して、ログデータをすばやく分析可能。</p>
-            </div>
-          </div>
-          
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="fa-solid fa-table" aria-hidden="true"></i>
-            </div>
-            <div class="service-content">
-              <div class="service-title">Amazon Athena</div>
-              <p>Amazon S3に保存されたデータに対して<span class="keyword-tag">SQLクエリ</span>を実行できるサーバーレスのインタラクティブクエリサービス。大量のログデータを効率的に分析できる。</p>
-            </div>
-          </div>
-          
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="fa-solid fa-search" aria-hidden="true"></i>
-            </div>
-            <div class="service-content">
-              <div class="service-title">Amazon OpenSearch Service</div>
-              <p>ElasticsearchとKibanaに基づいた<span class="keyword-tag">フルテキスト検索</span>と分析サービス。複雑なクエリや視覚化が可能でリアルタイム監視に適している。</p>
-            </div>
-          </div>
-          
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="fa-solid fa-lake" aria-hidden="true"></i>
-            </div>
-            <div class="service-content">
-              <div class="service-title">Amazon Security Lake</div>
-              <p>セキュリティデータを<span class="keyword-tag">統合的に管理</span>・分析するためのサービス。標準化されたフォーマットでデータを保存し、複数のログソースを一元的に検索可能。</p>
-            </div>
-          </div>
-          
-          <div class="warning-box">
-            <h3 style="margin-top: 0; color: var(--ui-color-2);"><i class="fa-solid fa-lightbulb" style="margin-right: 5px;"></i>選択のポイント</h3>
-            <p>ログクエリツールを選択する際は、以下の点を考慮しましょう：</p>
-            <ul style="margin-bottom: 0;">
-              <li><span class="keyword-tag">セキュリティオペレーションのリソース</span>（人材、プロセス、テクノロジー）</li>
-              <li>オペレーション、ビジネス、セキュリティの<span class="keyword-tag">要件</span></li>
-              <li>長期的な<span class="keyword-tag">アクセスとメンテナンスの容易さ</span></li>
-              <li>スキャンするログの<span class="keyword-tag">量と範囲</span></li>
-              <li><span class="keyword-tag">コスト</span>と技術的な制約</li>
-            </ul>
-          </div>
-          
-          <div class="info-box">
-            <h3 style="margin-top: 0;"><i class="fa-solid fa-info-circle" style="margin-right: 5px;"></i>複数ツールの併用</h3>
-            <p style="margin-bottom: 0;">コストや技術的な制約から、複数のクエリツールを所有することも珍しくありません。例えば、<span class="keyword-tag">過去90日間のデータにはSIEMツール</span>を使用しながらも、SIEMのログインジェストコストが原因で<span class="keyword-tag">90日以前のデータをクエリする際はAthena</span>を使用するケースがあります。ただし、必要なツールの数を最小限に抑えることで、特にセキュリティイベントの調査時に運用効率が最大となります。</p>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-1 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-search fa-lg" style="color: var(--ui-color-2);"></i>
-            目的に合ったクエリツールを選ぼう！
-            <br>
-            「たくさんのログをさっと見るなら」Athena
-            <br>
-            「リアルタイム分析なら」OpenSearch
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション7: アラートへのログの活用 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-bell fa-5x" style="color: var(--ui-color-1); animation: fa-shake 3s infinite;" aria-hidden="true"></i>
-          <h2>アラートへのログの活用</h2>
-        </div>
-        
-        <div class="card-content">
-          <p>ログを単に保存するだけでなく、異常検知やセキュリティの脅威を検出するためのアラートに活用することが重要です。</p>
-          
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
-            </div>
-            <div class="service-content">
-              <div class="service-title">AWS Config</div>
-              <p>AWSリソース構成のモニタリングと記録を行い、<span class="keyword-tag">目標の構成に対する評価と修復</span>を自動化します。リソースの設定変更を継続的に評価し、非準拠の場合にアラートを発します。</p>
-            </div>
-          </div>
-          
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-            </div>
-            <div class="service-content">
-              <div class="service-title">Amazon GuardDuty</div>
-              <p><span class="keyword-tag">悪意のあるアクティビティや不正な動作</span>を継続的にモニタリングして保護する脅威検知サービス。CloudTrail管理データ、VPCフローログ、DNSログなどから情報を収集・分析し、脅威を検出します。</p>
-            </div>
-          </div>
-          
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="fa-solid fa-tasks" aria-hidden="true"></i>
-            </div>
-            <div class="service-content">
-              <div class="service-title">AWS Security Hub</div>
-              <p>複数のAWSサービスや任意のサードパーティー製品からの<span class="keyword-tag">セキュリティアラートや検出結果</span>を集約、整理、優先順位付けする中央プラットフォーム。セキュリティ状況を包括的に把握できます。</p>
-            </div>
-          </div>
-          
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
-            </div>
-            <div class="service-content">
-              <div class="service-title">Amazon CloudWatch</div>
-              <p>CloudWatchアラームを設定して、<span class="keyword-tag">カスタムメトリクス</span>やログパターンに基づいてアラートを発することができます。異常な動作やセキュリティイベントをリアルタイムで検出可能です。</p>
-            </div>
-          </div>
-          
-          <div class="warning-box">
-            <h3 style="margin-top: 0; color: var(--ui-color-2);"><i class="fa-solid fa-lightbulb" style="margin-right: 5px;"></i>カスタムアラートの作成</h3>
-            <p style="margin-bottom: 0;">上記のサービスの対象外となるセキュリティアラートや、環境に関連する特定なアラートについては、<span class="keyword-tag">カスタムアラート生成エンジン</span>を使用することも検討しましょう。CloudWatch LogsのメトリクスフィルターやLambda関数を組み合わせることで、特定のパターンやイベントに対応するカスタムアラートを構築できます。</p>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-bell fa-lg" style="color: var(--ui-color-5);"></i>
-            ログを見るのは大変だから
-            <br>
-            「異常があれば知らせてくれる」
-            <br>
-            仕組みを作っておくことが重要！
-          </span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- セクション8: 実装手順 -->
-    <div class="section-layout">
-      <div class="section-card" style="max-width: 920px;">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-list-check fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
-          <h2>実装手順</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="step-box">
-            <h3>Step 1: ログのソースを選択して使用する</h3>
-            <ul class="keyword-list" style="margin-left: 10px;">
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>各AWSアカウントに<span class="keyword-tag">AWS CloudTrail</span>証跡を作成し、S3バケットを設定</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>VPCを使用している場合は<span class="keyword-tag">VPCフローログ</span>と<span class="keyword-tag">Route 53 Resolverのクエリログ</span>を有効化</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>必要に応じて追加のログソース（ELBログ、WAFログ、Configレコーダーログなど）を設定</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>オプションとして<span class="keyword-tag">Amazon Security Lake</span>を使用してログデータを収集・正規化</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="step-box">
-            <h3>Step 2: 各AWSサービスの調査ログ機能を設定</h3>
-            <ul class="keyword-list" style="margin-left: 10px;">
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>各サービスの<span class="keyword-tag">ログストレージのオプション</span>を確認</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>サービス固有の<span class="keyword-tag">保持機能とライフサイクル機能</span>を理解</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>長期保存が必要な場合は、<span class="keyword-tag">Amazon S3</span>をログストレージとして使用</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="step-box">
-            <h3>Step 3: ログストレージを選択する</h3>
-            <ul class="keyword-list" style="margin-left: 10px;">
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>使用するクエリツール、保持機能、使いやすさ、コストなどを考慮</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span><span class="keyword-tag">Amazon S3バケット</span>か<span class="keyword-tag">CloudWatch ロググループ</span>を選択</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>ログタイプに応じて適切なストレージ戦略を設計</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="step-box">
-            <h3>Step 4: 適切なログ保持を設定する</h3>
-            <ul class="keyword-list" style="margin-left: 10px;">
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>各ログソースに対して<span class="keyword-tag">適切なライフサイクル</span>を選択</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span><span class="keyword-tag">ストレージと取得コスト</span>を最適化</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>セキュリティ要件、法令、規制、ビジネス上の義務に合わせた保持期間を設定</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="step-box">
-            <h3>Step 5: 各AWSサービスとアプリケーションのログを設定する</h3>
-            <ul class="keyword-list" style="margin-left: 10px;">
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>各サービスの<span class="keyword-tag">特定のログ記録の設定ガイダンス</span>を確認</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>適切な保持とライフサイクルポリシーを実装</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>必要に応じてログデータの暗号化を設定</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="step-box">
-            <h3>Step 6: ログのクエリメカニズムを選択して実装する</h3>
-            <ul class="keyword-list" style="margin-left: 10px;">
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>CloudWatch Logs InsightsをCloudWatchロググループに保存されたデータに使用</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>Amazon AthenaとAmazon OpenSearch ServiceをS3に保存されたデータに使用</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>必要に応じて<span class="keyword-tag">SIEM</span>などのサードパーティーのクエリツールを使用</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>セキュリティオペレーションのリソースを考慮してツールを選択</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="step-box">
-            <h3>Step 7: アラートにログを使用する</h3>
-            <ul class="keyword-list" style="margin-left: 10px;">
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span><span class="keyword-tag">AWS Config</span>でリソース構成のモニタリングと評価を設定</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span><span class="keyword-tag">Amazon GuardDuty</span>で悪意のあるアクティビティを検出</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span><span class="keyword-tag">AWS Security Hub</span>でセキュリティアラートを集約・管理</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                <span>必要に応じて<span class="keyword-tag">カスタムアラート生成エンジン</span>を実装</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-check-double fa-lg" style="color: var(--ui-color-2);"></i>
-            ステップバイステップで
-            <br>
-            ログ基盤を整えていこう！
-            <br>
-            これで何かあっても調査できるようになるよ
-          </span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- セクション9: まとめ -->
-    <div class="section-layout">
-      <div class="section-card" style="max-width: 920px;">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-check-circle fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
-          <h2>まとめ</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-              <span><span class="keyword-tag">セキュリティの基盤</span>: ログ記録はセキュリティ運用の基本であり、インシデント対応や監査の土台となる</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
-              <span><span class="keyword-tag">目的に合わせた選択</span>: 必要なログソースを選び、適切なストレージと保持期間を設定することが重要</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-search" aria-hidden="true"></i>
-              <span><span class="keyword-tag">効率的な検索と分析</span>: ログを素早く検索・分析できるクエリツールの選択が不可欠</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-bell" aria-hidden="true"></i>
-              <span><span class="keyword-tag">プロアクティブな検知</span>: ログをベースにしたアラートにより、異常や脅威をリアルタイムで検出</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
-              <span><span class="keyword-tag">コンプライアンス対応</span>: 適切なログ記録により、規制要件への対応が容易に</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-hand-holding-dollar" aria-hidden="true"></i>
-              <span><span class="keyword-tag">コスト最適化</span>: 必要なログのみを保存し、適切なストレージ戦略を採用することでコストを抑制</span>
-            </li>
-          </ul>
-          
-          <div class="info-box">
-            <h3 style="margin-top: 0;"><i class="fa-solid fa-key" style="margin-right: 5px;"></i>ログ記録戦略の要点</h3>
-            <ol style="margin-bottom: 0;">
-              <li><span class="keyword-tag">基本的なログソース</span>（CloudTrail、VPCフローログ、DNSログ）を必ず有効化</li>
-              <li>ユースケースに合わせて<span class="keyword-tag">追加のログソース</span>を選択</li>
-              <li>短期と長期で<span class="keyword-tag">適切なストレージ</span>を使い分け</li>
-              <li><span class="keyword-tag">定期的な監査</span>でログが正しく記録されていることを確認</li>
-              <li><span class="keyword-tag">効率的なクエリ</span>と<span class="keyword-tag">自動的なアラート</span>の仕組みを構築</li>
-            </ol>
-          </div>
-          
-          <div style="margin-top: 20px; padding: 15px; background-color: #e8f5e9; border-radius: 10px; border-left: 4px solid #4CAF50;">
-            <p style="margin: 0; font-weight: bold; color: #4CAF50;"><i class="fa-solid fa-lightbulb" style="margin-right: 5px;"></i>最終アドバイス</p>
-            <p style="margin-top: 10px; margin-bottom: 0;">ログ記録は「必要になってから」では遅すぎます。セキュリティイベントが発生する<span class="keyword-tag">前に</span>適切なログ記録体制を整え、定期的にその有効性を確認しましょう。また、ログデータは「単なる記録」ではなく、<span class="keyword-tag">積極的に活用</span>することで、セキュリティ態勢の強化やインシデント対応の迅速化につながります。</p>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-shield-halved fa-lg" style="color: var(--ui-color-5);"></i>
-            「備えあれば憂いなし」の精神で
-            <br>
-            ログ記録をしっかり設定しておこう！
-            <br>
-            いざという時の強い味方になるよ
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
+    </main>
 </body>
 </html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS01-BP03: ガバナンス要件評価 - AWS Well-Architected グラフィックレコーディング</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+</head>
+<body>
+    <div class="container">        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-bullseye fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS01-BP03: ガバナンス要件評価</h1>
+                <p class="header-description">ガバナンス要件を理解し、コンプライアンスを確保するために、ガバナンス要件を評価します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_governance_reqs.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-warning" aria-hidden="true"></i>
+                            <span>このベストプラクティスを確立しない場合の<span class="keyword-tag">リスクレベル: 高</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        ガバナンス要件の無視は
+                        <br>
+                        <span class="keyword-tag">高リスク</span>！
+                        <br>
+                        組織ポリシーとの不整合
+                    </span>
+                </div>
+            </div>
+
+            <!-- メインカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-shield-halved fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>ガバナンス要件評価</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-book" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ポリシー・ルール・フレームワーク</span>の適用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                            <span>ガバナンス要件の<span class="keyword-tag">実装証明</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Config</span>でガバナンス自動化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-refresh" aria-hidden="true"></i>
+                            <span>要件の<span class="keyword-tag">定期レビュー</span>と更新</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        ガバナンス要件を無視すると
+                        <br>
+                        <span class="keyword-tag">高リスク</span>！
+                        <br>
+                        組織ポリシーとの整合性が重要
+                    </span>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-clipboard-check fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-building" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">アーキテクチャ設計</span>と運用への組み込み</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-certificate" aria-hidden="true"></i>
+                            <span>ガバナンス要件<span class="keyword-tag">遵守証明</span>の提供</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                            <span>ガバナンス要件の<span class="keyword-tag">定期レビュー</span>と更新</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-shield fa-lg" style="color: var(--ui-color-1);"></i>
+                        ガバナンス要件の遵守で
+                        <br>
+                        <span class="keyword-tag">組織ポリシー</span>との
+                        <br>
+                        整合性を確保！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-skull-crossbones fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>よくあるアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-key" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ルートアカウントMFA</span>未実装による侵害</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">未承認インスタンス</span>選択による起動失敗</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-life-ring" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">災害復旧計画</span>未作成による長期停止</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>ガバナンス要件の<span class="keyword-tag">更新遅延</span></span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                        ガバナンス要件の軽視は
+                        <br>
+                        <span class="keyword-tag">重大なリスク</span>を
+                        <br>
+                        組織にもたらす！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-2); animation: fa-spin 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ステークホルダー</span>との要件特定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+                            <span>ガバナンス要件の<span class="keyword-tag">優先順位付け</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Config</span>による自動化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span>実装<span class="keyword-tag">文書化</span>と検証</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-gear fa-lg" style="color: var(--ui-color-2);"></i>
+                        <span class="keyword-tag">ガバナンス as Code</span>で
+                        <br>
+                        自動化された要件遵守を
+                        <br>
+                        実現しよう！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 顧客事例 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-building fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>顧客事例</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-store" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AnyCompany Retail</span>の事例</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">SSH接続禁止</span>ポリシー</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-terminal" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Session Manager</span>必須化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sync" aria-hidden="true"></i>
+                            <span>新サービス対応の<span class="keyword-tag">定期更新</span></span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        実際の企業事例から
+                        <br>
+                        <span class="keyword-tag">実装パターン</span>を
+                        <br>
+                        学ぼう！
+                    </span>
+                </div>
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer style="text-align: center; margin-top: 40px; padding: 20px; color: #777;">
+            <p>AWS Well-Architected Framework - Operational Excellence Pillar</p>
+            <p>OPS01-BP03: Evaluate governance requirements</p>
+        </footer>
+    </div>
+</body>
+</html>

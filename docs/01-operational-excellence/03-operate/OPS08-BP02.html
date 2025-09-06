@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS08-BP02: ワークロードログの分析 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-file-alt fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS08-BP02: ワークロードログの分析</h1>
+            <p class="header-description">ワークロードログを定期的に分析することは、アプリケーションの運用面をより深く理解するために不可欠です。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_workload_observability_analyze_workload_logs.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level medium">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 中リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-fire" aria-hidden="true"></i>重大な問題が発生するまで<span class="keyword-tag">ログ分析を怠る</span></li>
+                        <li><i class="fa-solid fa-tools" aria-hidden="true"></i>利用可能なツールを<span class="keyword-tag">十分活用しない</span></li>
+                        <li><i class="fa-solid fa-hand-paper" aria-hidden="true"></i>自動化を活用せず<span class="keyword-tag">手動レビューのみ</span>に依存</li>
+                        <li><i class="fa-solid fa-eye-slash" aria-hidden="true"></i>重要な洞察の<span class="keyword-tag">見逃し</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        ログ分析を怠ると、
+                        <br>
+                        運用上のボトルネックやセキュリティ脅威を
+                        <br>
+                        <span class="keyword-tag">見逃してしまいます</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i>徹底的なログ分析による<span class="keyword-tag">アプリケーション動作の豊富な洞察</span></li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i><span class="keyword-tag">プロアクティブな問題検出</span>と軽減</li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>継続的なアプリケーション最適化のための<span class="keyword-tag">ログデータ活用</span></li>
+                        <li><i class="fa-solid fa-bug" aria-hidden="true"></i>デバッグとトラブルシューティングの<span class="keyword-tag">理解向上</span></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>運用活動の<span class="keyword-tag">リアルタイム可視性</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        効率的なログデータ活用により、
+                        <br>
+                        継続的な最適化を実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- CloudWatch Logs機能 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>CloudWatch Logs機能</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-search-plus" aria-hidden="true"></i><span class="keyword-tag">CloudWatch Logs Insights</span>：インタラクティブな検索と分析</li>
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i><span class="keyword-tag">Live Tail</span>：リアルタイムログ監視</li>
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i><span class="keyword-tag">パターン分析</span>：頻繁なログパターンの可視化</li>
+                        <li><i class="fa-solid fa-balance-scale" aria-hidden="true"></i><span class="keyword-tag">Compare (diff)</span>：時期間・ロググループ間の差分分析</li>
+                        <li><i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i><span class="keyword-tag">異常検出</span>：異常なログパターンの自動識別</li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i><span class="keyword-tag">Contributor Insights</span>：高カーディナリティ次元の上位要因特定</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-1);"></i>
+                        CloudWatch Logsの統合機能により、
+                        <br>
+                        <span class="keyword-tag">直感的で効率的</span>な分析を実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-1" aria-hidden="true"></i><span class="keyword-tag">CloudWatch Logs設定</span>：アプリケーションとサービスのログ送信</li>
+                        <li><i class="fa-solid fa-2" aria-hidden="true"></i><span class="keyword-tag">異常検出活用</span>：異常なログパターンの自動識別とアラート</li>
+                        <li><i class="fa-solid fa-3" aria-hidden="true"></i><span class="keyword-tag">Logs Insights設定</span>：クエリ作成とパターン抽出</li>
+                        <li><i class="fa-solid fa-4" aria-hidden="true"></i><span class="keyword-tag">Live Tail監視</span>：リアルタイムログデータ表示</li>
+                        <li><i class="fa-solid fa-5" aria-hidden="true"></i><span class="keyword-tag">メトリクスフィルター</span>：ログデータのアクション可能なメトリクス変換</li>
+                        <li><i class="fa-solid fa-6" aria-hidden="true"></i><span class="keyword-tag">クロスアカウント観測</span>：複数アカウントにまたがる監視</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-2);"></i>
+                        段階的な実装により、
+                        <br>
+                        包括的なログ分析体制を構築！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- AWSサービス -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-brands fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>主要AWSサービス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-file-alt" aria-hidden="true"></i><span class="keyword-tag">Amazon CloudWatch Logs</span>：ログ収集と分析</li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i><span class="keyword-tag">CloudWatch Logs Insights</span>：インタラクティブ分析</li>
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i><span class="keyword-tag">CloudWatch Logs Live Tail</span>：リアルタイム監視</li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i><span class="keyword-tag">CloudWatch Contributor Insights</span>：上位要因分析</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-book fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連ドキュメント</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>CloudWatch Logs ユーザーガイド</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>CloudWatch Logs Insights クエリ構文</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>CloudWatch Logs 異常検出</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>CloudWatch Logs メトリクスフィルター</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

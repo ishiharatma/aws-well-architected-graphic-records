@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS09-BP02: 運用への可視性を確保するためのステータスとトレンドの伝達 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-broadcast-tower fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS09-BP02: 運用への可視性を確保するためのステータスとトレンドの伝達</h1>
+            <p class="header-description">運用の状態とトレンド方向を知ることで、成果がリスクにさらされる時期を特定し、適切なアクションを取ります。運用イベント時のステータスページにより、コミュニケーション負荷を軽減し、情報を積極的に発信します。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_operations_health_communicate_status_trends.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level medium">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 中リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-eye-slash" aria-hidden="true"></i>運用状態の<span class="keyword-tag">可視性不足</span></li>
+                        <li><i class="fa-solid fa-question-circle" aria-hidden="true"></i>追加作業のサポート可否の<span class="keyword-tag">判断困難</span></li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>変更がチームに与えた<span class="keyword-tag">影響の把握不足</span></li>
+                        <li><i class="fa-solid fa-phone" aria-hidden="true"></i>運用イベント時の<span class="keyword-tag">コミュニケーション負荷増大</span></li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>複数チームによる<span class="keyword-tag">重複した調査作業</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        運用状態が見えないと、
+                        <br>
+                        成果がリスクにさらされても
+                        <br>
+                        <span class="keyword-tag">気づけません</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i>運用リーダーが<span class="keyword-tag">コール量とデプロイ状況</span>を一目で把握</li>
+                        <li><i class="fa-solid fa-bell" aria-hidden="true"></i>通常運用への影響発生時の<span class="keyword-tag">ステークホルダーへのアラート</span></li>
+                        <li><i class="fa-solid fa-info-circle" aria-hidden="true"></i>ステータスページによる<span class="keyword-tag">運用イベント情報の提供</span></li>
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i>リーダーシップへの<span class="keyword-tag">運用統計レポート</span>提供</li>
+                        <li><i class="fa-solid fa-handshake" aria-hidden="true"></i>担当者情報、チケット情報、<span class="keyword-tag">復旧予定時間</span>の共有</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        ステータスページにより、
+                        <br>
+                        チームは問題解決に集中でき、
+                        <br>
+                        <span class="keyword-tag">効率的な対応</span>が可能！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-server" aria-hidden="true"></i>ワークロード停止時の<span class="keyword-tag">情報不足によるコール急増</span></li>
+                        <li><i class="fa-solid fa-users-cog" aria-hidden="true"></i>マネージャーからの<span class="keyword-tag">重複した状況確認要求</span></li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i>複数の運用チームによる<span class="keyword-tag">重複調査作業</span></li>
+                        <li><i class="fa-solid fa-user-minus" aria-hidden="true"></i>人員再配置時の<span class="keyword-tag">バックフィル不足</span></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>問題解決時間の増加を<span class="keyword-tag">数週間後に発覚</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        情報共有の仕組みがないと、
+                        <br>
+                        同じ質問に何度も答える羽目に...
+                        <br>
+                        <span class="keyword-tag">時間の無駄</span>です！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-dashboard" aria-hidden="true"></i><span class="keyword-tag">運用チーム向けダッシュボード</span>の構築と共有</li>
+                        <li><i class="fa-solid fa-globe" aria-hidden="true"></i>迅速更新可能な<span class="keyword-tag">ステータスページ</span>の構築</li>
+                        <li><i class="fa-solid fa-user-tie" aria-hidden="true"></i><span class="keyword-tag">担当者と対応手順</span>の明確化</li>
+                        <li><i class="fa-solid fa-file-alt" aria-hidden="true"></i>運用健全性を示す<span class="keyword-tag">定期レポート</span>の作成</li>
+                        <li><i class="fa-solid fa-share-alt" aria-hidden="true"></i>チーム間での<span class="keyword-tag">メトリクスとレポート</span>の共有</li>
+                        <li><i class="fa-solid fa-medkit" aria-hidden="true"></i><span class="keyword-tag">AWS Health</span>との統合による相関分析</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        AWS Healthと統合することで、
+                        <br>
+                        アプリケーション問題とAWSサービス
+                        <br>
+                        ステータスの<span class="keyword-tag">相関分析</span>が可能！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスの利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>運用イベント時の<span class="keyword-tag">時間とエネルギーの節約</span></li>
+                        <li><i class="fa-solid fa-info" aria-hidden="true"></i>ステークホルダーへの<span class="keyword-tag">迅速な情報提供</span></li>
+                        <li><i class="fa-solid fa-focus" aria-hidden="true"></i>チームメンバーの<span class="keyword-tag">問題解決への集中</span></li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>意思決定者への<span class="keyword-tag">運用チーム能力の可視化</span></li>
+                        <li><i class="fa-solid fa-balance-scale" aria-hidden="true"></i>リソース配分の<span class="keyword-tag">適切な判断材料</span>提供</li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>内外顧客満足度への<span class="keyword-tag">運用チームの貢献度</span>明示</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        適切な情報共有により、
+                        <br>
+                        運用チームの価値が
+                        <br>
+                        <span class="keyword-tag">組織全体</span>に伝わります！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book"></i> 関連ベストプラクティス</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i><span class="keyword-tag">OPS09-BP01</span>: 運用目標とKPIをメトリクスで測定</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-file-text"></i> 関連ドキュメント</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span class="keyword-tag">Measure Progress</span>: 進捗測定ガイド</li>
+                        <li><i class="fa-solid fa-dashboard" aria-hidden="true"></i><span class="keyword-tag">Building dashboards for operation visibility</span></li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-code"></i> 関連例</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-database" aria-hidden="true"></i><span class="keyword-tag">Data Operations</span>ソリューション</li>
+                        <li><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i><span class="keyword-tag">KPI Dashboard</span>でのコスト最適化KPI追跡</li>
+                        <li><i class="fa-solid fa-cloud" aria-hidden="true"></i>大規模クラウド移行における<span class="keyword-tag">KPIの重要性</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap fa-lg" style="color: var(--ui-color-1);"></i>
+                        これらのリソースを活用して、
+                        <br>
+                        効果的な運用可視性を
+                        <br>
+                        <span class="keyword-tag">実現</span>しましょう！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

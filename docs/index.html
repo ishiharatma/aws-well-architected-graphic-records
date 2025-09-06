@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Well-Architected Framework - グラフィックレコーディング</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>
+                <i class="fa-solid fa-building-columns fa-6x" style="color: #1B6C8C;" aria-hidden="true"></i>
+                AWS Well-Architected Framework
+            </h1>
+            <p class="header-subtitle">グラフィックレコーディング風インフォグラフィック</p>
+            <p class="header-date">最終更新: 2025年9月6日</p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="author-speech-row">
+            <img src="https://ishiharatma.github.io/images/top.jpg" alt="Author" class="author-image" />
+            <div class="speech-bubble left">
+                <span class="handwritten">
+                    <i class="fa-solid fa-lightbulb fa-lg" style="color: #BF8136;"></i>
+                    AWS Well-Architected Frameworkの
+                    <br>
+                    6つの柱をグラフィックレコーディング風に
+                    <br>
+                    わかりやすく解説します！
+                    <br>
+                    <span class="keyword-tag">視覚的理解</span>
+                    <span class="keyword-tag">ベストプラクティス</span>
+                    <br>使用ツール:
+                    <ul style="margin-top: 0.5em; margin-bottom: 0.5em;">
+                        <li>Amazon Q CLIのバージョン 1.14.0</li>
+                        <li>claude-sonnet-4</li>
+                    </ul>
+                </span>
+            </div>
+        </div>
+        <div class="section-layout">
+            <!-- 運用上の優秀性 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-gears fa-5x" style="color: #1B6C8C;" aria-hidden="true"></i>
+                    <h2>運用上の優秀性</h2>
+                    <p class="pillar-subtitle">Operational Excellence</p>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                            <span>運用プロセスの継続的改善</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>パフォーマンス監視と最適化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users-gear" aria-hidden="true"></i>
+                            <span>チーム運用の効率化</span>
+                        </li>
+                    </ul>
+                    
+                    <a href="01-operational-excellence/01-operational-excellence.html" class="pillar-link">
+                        <i class="fa-solid fa-arrow-right"></i> 詳細を見る
+                    </a>
+                </div>
+            </div>
+
+            <!-- セキュリティ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-shield-halved fa-5x" style="color: #1B6C8C;" aria-hidden="true"></i>
+                    <h2>セキュリティ</h2>
+                    <p class="pillar-subtitle">Security</p>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                            <span>データとシステムの保護</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+                            <span>アクセス制御とアイデンティティ管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span>脅威の検出と対応</span>
+                        </li>
+                    </ul>
+                    
+                    <a href="02-security/02-security.html" class="pillar-link">
+                        <i class="fa-solid fa-arrow-right"></i> 詳細を見る
+                    </a>
+                </div>
+            </div>
+
+            <!-- 信頼性 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-shield-halved fa-5x" style="color: #BF8136;" aria-hidden="true"></i>
+                    <h2>信頼性</h2>
+                    <p class="pillar-subtitle">Reliability</p>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-hammer" aria-hidden="true"></i>
+                            <span>準備中</span>
+                        </li>
+                    </ul>
+                    
+                    <a href="03-reliability/03-reliability.html" class="pillar-link">
+                        <i class="fa-solid fa-arrow-right"></i> 詳細を見る
+                    </a>
+                </div>
+            </div>
+
+            <!-- パフォーマンス効率性 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-gauge-high fa-5x" style="color: #BF8136;" aria-hidden="true"></i>
+                    <h2>パフォーマンス効率性</h2>
+                    <p class="pillar-subtitle">Performance Efficiency</p>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-hammer" aria-hidden="true"></i>
+                            <span>準備中</span>
+                        </li>
+                    </ul>
+                    
+                    <a href="04-performance-efficiency/04-performance-efficiency.html" class="pillar-link">
+                        <i class="fa-solid fa-arrow-right"></i> 詳細を見る
+                    </a>
+                </div>
+            </div>
+
+            <!-- コスト最適化 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-dollar-sign fa-5x" style="color: #BF8136;" aria-hidden="true"></i>
+                    <h2>コスト最適化</h2>
+                    <p class="pillar-subtitle">Cost Optimization</p>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-hammer" aria-hidden="true"></i>
+                            <span>準備中</span>
+                        </li>
+                    </ul>
+                    
+                    <a href="05-cost-optimization/05-cost-optimization.html" class="pillar-link">
+                        <i class="fa-solid fa-arrow-right"></i> 詳細を見る
+                    </a>
+                </div>
+            </div>
+
+            <!-- 持続可能性 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-leaf fa-5x" style="color: #BF8136;" aria-hidden="true"></i>
+                    <h2>持続可能性</h2>
+                    <p class="pillar-subtitle">Sustainability</p>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-hammer" aria-hidden="true"></i>
+                            <span>準備中</span>
+                        </li>
+                    </ul>
+                    
+                    <a href="06-sustainability/06-sustainability.html" class="pillar-link">
+                        <i class="fa-solid fa-arrow-right"></i> 詳細を見る
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <style>
+        .pillar-subtitle {
+            font-size: 14px;
+            color: #777;
+            margin: 5px 0 15px 0;
+            font-style: italic;
+        }
+
+        .pillar-link {
+            display: inline-block;
+            background-color: var(--ui-color-1);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .pillar-link:hover {
+            background-color: var(--ui-color-2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .pillar-link i {
+            margin-left: 5px;
+        }
+
+        .section-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* 吹き出し内のulのインデント調整 */
+        .speech-bubble ul {
+            margin-left: 2em;   /* デフォルトより少し右にずらす */
+            padding-left: 1.2em; /* 必要に応じて調整 */
+        }
+
+        @media (max-width: 768px) {
+            .section-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 15px;
+            }
+        }
+    </style>
+    <footer class="footer">
+        <p>© 2025 AWS Well-Architected Framework - グラフィックレコーディング</p>
+        <p>作成者: <a href="https://ishiharatma.github.io/" target="_blank">issy</a></p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS10-BP03: ビジネスへの影響に基づく運用イベントの優先順位付け - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-sort-amount-down fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS10-BP03: ビジネスへの影響に基づく運用イベントの優先順位付け</h1>
+            <p class="header-description">運用イベントへの迅速な対応は重要ですが、すべてのイベントが同等ではありません。ビジネスへの影響に基づいて優先順位を付けることで、安全性、財務損失、規制違反、評判への損害など、重大な結果をもたらす可能性のあるイベントへの対処を優先します。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/2024-06-27/framework/ops_event_response_prioritize_events.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 高リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-equals" aria-hidden="true"></i>すべてのイベントを同じ緊急度で扱う<span class="keyword-tag">混乱と遅延</span></li>
+                        <li><i class="fa-solid fa-balance-scale" aria-hidden="true"></i>高影響と低影響イベントの区別不足による<span class="keyword-tag">リソース誤配分</span></li>
+                        <li><i class="fa-solid fa-question-circle" aria-hidden="true"></i>明確な優先順位フレームワーク不足による<span class="keyword-tag">一貫性のない対応</span></li>
+                        <li><i class="fa-solid fa-list-ol" aria-hidden="true"></i>ビジネス成果への影響ではなく<span class="keyword-tag">報告順での優先順位付け</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        優先順位がないと、
+                        <br>
+                        重要な問題への対応が
+                        <br>
+                        <span class="keyword-tag">遅れてしまいます</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>ビジネス運用と目標への<span class="keyword-tag">潜在的影響に基づく優先順位付け</span></li>
+                        <li><i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i><span class="keyword-tag">効率的で効果的</span>な対応の実現</li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i>重要なビジネス機能への<span class="keyword-tag">優先的な注意</span></li>
+                        <li><i class="fa-solid fa-users-cog" aria-hidden="true"></i>複数の同時イベント発生時の<span class="keyword-tag">改善されたリソース配分</span></li>
+                        <li><i class="fa-solid fa-handshake" aria-hidden="true"></i>信頼維持と<span class="keyword-tag">規制要件遵守</span>能力の向上</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        適切な優先順位付けにより、
+                        <br>
+                        最も重要な問題に
+                        <br>
+                        <span class="keyword-tag">集中</span>できます！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-equals" aria-hidden="true"></i>すべてのイベントを同じ緊急度で扱い<span class="keyword-tag">重要な問題への対処が遅延</span></li>
+                        <li><i class="fa-solid fa-balance-scale" aria-hidden="true"></i>高影響と低影響イベントの区別ができず<span class="keyword-tag">リソースが誤配分</span></li>
+                        <li><i class="fa-solid fa-question" aria-hidden="true"></i>明確な優先順位フレームワークがなく<span class="keyword-tag">一貫性のない対応</span></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>ビジネス成果への影響ではなく<span class="keyword-tag">報告順で優先順位を決定</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        「先着順」で対応していると、
+                        <br>
+                        本当に重要な問題が
+                        <br>
+                        <span class="keyword-tag">後回し</span>になってしまいます...
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i>ビジネス運用への<span class="keyword-tag">影響評価システム</span>の開発</li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>安全性、財務、SLAを考慮した<span class="keyword-tag">緊急度レベル</span>の定義</li>
+                        <li><i class="fa-solid fa-th" aria-hidden="true"></i>影響と緊急度を組み合わせた<span class="keyword-tag">優先順位マトリックス</span>の作成</li>
+                        <li><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>対応チームへの<span class="keyword-tag">トレーニングと周知</span></li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i>インシデント対応計画とツールへの<span class="keyword-tag">統合</span></li>
+                        <li><i class="fa-solid fa-sync" aria-hidden="true"></i>プロセス効果の<span class="keyword-tag">定期レビューと適応</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        Enterprise Supportをご利用の場合、
+                        <br>
+                        AWS Incident Detection and Response
+                        <br>
+                        で<span class="keyword-tag">24x7監視</span>が可能！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 優先順位マトリックス例 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-table fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>優先順位マトリックス例</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-exclamation-triangle"></i> 影響レベル</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-arrow-up" style="color: var(--ui-color-5);" aria-hidden="true"></i><span class="keyword-tag">高</span>: 多数のスタッフ・顧客、高い財務・評判影響、負傷</li>
+                        <li><i class="fa-solid fa-minus" style="color: var(--ui-color-2);" aria-hidden="true"></i><span class="keyword-tag">中</span>: グループのスタッフ・顧客、中程度の財務・評判影響</li>
+                        <li><i class="fa-solid fa-arrow-down" style="color: var(--ui-color-1);" aria-hidden="true"></i><span class="keyword-tag">低</span>: 個人のスタッフ・顧客、低い財務・評判影響</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-clock"></i> 緊急度レベル</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-arrow-up" style="color: var(--ui-color-5);" aria-hidden="true"></i><span class="keyword-tag">高</span>: 指数的損害増加、時間依存作業、VIPユーザー影響</li>
+                        <li><i class="fa-solid fa-minus" style="color: var(--ui-color-2);" aria-hidden="true"></i><span class="keyword-tag">中</span>: 時間経過による損害増加、単一VIPユーザー影響</li>
+                        <li><i class="fa-solid fa-arrow-down" style="color: var(--ui-color-1);" aria-hidden="true"></i><span class="keyword-tag">低</span>: 軽微な損害増加、非時間依存作業</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        このマトリックスを使って、
+                        <br>
+                        クリティカル → 緊急 → 高 → 通常 → 低
+                        <br>
+                        の順で<span class="keyword-tag">優先順位</span>を決定！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book"></i> 関連ベストプラクティス</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-arrow-up" aria-hidden="true"></i><span class="keyword-tag">OPS03-BP03</span>: エスカレーションの奨励</li>
+                        <li><i class="fa-solid fa-bell" aria-hidden="true"></i><span class="keyword-tag">OPS08-BP04</span>: 実行可能なアラートの作成</li>
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i><span class="keyword-tag">OPS09-BP01</span>: 運用目標とKPIをメトリクスで測定</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-file-text"></i> 関連ドキュメント</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span class="keyword-tag">Atlassian</span>: インシデント重要度レベルの理解</li>
+                        <li><i class="fa-solid fa-clipboard-check" aria-hidden="true"></i><span class="keyword-tag">IT Process Map</span>: インシデント優先度チェックリスト</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap fa-lg" style="color: var(--ui-color-1);"></i>
+                        これらのリソースを参考に、
+                        <br>
+                        組織に適した優先順位付けを
+                        <br>
+                        <span class="keyword-tag">確立</span>しましょう！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

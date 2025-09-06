@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC10 インシデント対応 - ベストプラクティス一覧</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+        
+        .bp-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .bp-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .bp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .bp-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .bp-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+            color: var(--ui-color-1);
+        }
+        
+        .bp-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--ui-color-4);
+            margin: 0;
+        }
+        
+        .bp-description {
+            color: #666;
+            line-height: 1.5;
+            margin: 10px 0;
+        }
+        
+        .risk-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .risk-high {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        
+        .risk-medium {
+            background-color: #fff3e0;
+            color: #ef6c00;
+            border: 1px solid #ffcc02;
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, var(--ui-color-1), var(--ui-color-2));
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-ambulance fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>SEC10 インシデント対応</h1>
+            <p class="header-description">
+                セキュリティインシデントの予測、対応、復旧のためのメカニズムを実装し、影響を軽減し復旧時間を最小化します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 統計情報 -->
+        <div class="stats-section">
+            <h2><i class="fa-solid fa-chart-bar"></i> SEC10 統計情報</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">5</span>
+                    <span class="stat-label">ベストプラクティス</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">高リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">2</span>
+                    <span class="stat-label">中リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">低リスク</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ベストプラクティス一覧 -->
+        <div class="bp-grid">
+            <a href="SEC10-BP01.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-users bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC10-BP01</h3>
+                </div>
+                <h4>インシデント対応の主要担当者と外部リソースを特定する</h4>
+                <p class="bp-description">
+                    インシデント対応における重要なベストプラクティスです。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+            <a href="SEC10-BP02.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-clipboard-list bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC10-BP02</h3>
+                </div>
+                <h4>インシデント対応計画を作成する</h4>
+                <p class="bp-description">
+                    インシデント対応における重要なベストプラクティスです。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+            <a href="SEC10-BP03.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-key bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC10-BP03</h3>
+                </div>
+                <h4>アクセスを事前にプロビジョニングする</h4>
+                <p class="bp-description">
+                    インシデント対応における重要なベストプラクティスです。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 中リスク
+                </span>
+            </a>
+            <a href="SEC10-BP04.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-search-plus bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC10-BP04</h3>
+                </div>
+                <h4>フォレンジック機能を事前にプロビジョニングする</h4>
+                <p class="bp-description">
+                    インシデント対応における重要なベストプラクティスです。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 中リスク
+                </span>
+            </a>
+            <a href="SEC10-BP05.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-cogs bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">SEC10-BP05</h3>
+                </div>
+                <h4>ツールとワークフローを自動化する</h4>
+                <p class="bp-description">
+                    インシデント対応における重要なベストプラクティスです。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>セキュリティの柱に戻る</h3>
+                    <a href="../02-security.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-shield"></i> セキュリティ一覧
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

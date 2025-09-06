@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS06-BP02: デプロイメントのテスト - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-vial fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS06-BP02: デプロイメントのテスト</h1>
+            <p class="header-description">本番環境と同じデプロイメント構成、セキュリティ制御、手順を使用して、プリプロダクション環境でリリース手順をテストします。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_test_val_chg.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 高リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-bug" aria-hidden="true"></i>本番環境での<span class="keyword-tag">デプロイメント問題</span></li>
+                        <li><i class="fa-solid fa-users-slash" aria-hidden="true"></i>ユーザーによる<span class="keyword-tag">問題報告</span>まで検出不可</li>
+                        <li><i class="fa-solid fa-certificate" aria-hidden="true"></i>証明書の<span class="keyword-tag">誤インストール</span></li>
+                        <li><i class="fa-solid fa-exclamation-circle" aria-hidden="true"></i>頻繁なトラブルシューティングとエスカレーション</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        テストされていないデプロイメントは、
+                        <br>
+                        本番環境で頻繁に問題を引き起こし、
+                        <br>
+                        <span class="keyword-tag">ユーザー影響</span>が発生します！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-flask" aria-hidden="true"></i><span class="keyword-tag">テスト駆動開発</span>文化の採用</li>
+                        <li><i class="fa-solid fa-business-time" aria-hidden="true"></i>リリース管理よりも<span class="keyword-tag">ビジネス価値</span>に集中</li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i>デプロイメントリスクの<span class="keyword-tag">早期特定</span></li>
+                        <li><i class="fa-solid fa-tools" aria-hidden="true"></i>適切な<span class="keyword-tag">緩和策</span>の決定</li>
+                        <li><i class="fa-solid fa-rocket" aria-hidden="true"></i>本番リリースへの<span class="keyword-tag">信頼性向上</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        プリプロダクションでの徹底的なテストにより、
+                        <br>
+                        本番環境への影響を最小化！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-copy" aria-hidden="true"></i><span class="keyword-tag">本番環境ミラーリング</span>：可能な限り本番に近い環境</li>
+                        <li><i class="fa-solid fa-check-double" aria-hidden="true"></i><span class="keyword-tag">デプロイメント検証</span>：ファイル、設定、サービス確認</li>
+                        <li><i class="fa-solid fa-vial" aria-hidden="true"></i><span class="keyword-tag">包括的テスト</span>：機能、統合、負荷テスト</li>
+                        <li><i class="fa-solid fa-heartbeat" aria-hidden="true"></i><span class="keyword-tag">ヘルスチェック</span>：監視とヘルスチェック</li>
+                        <li><i class="fa-solid fa-code" aria-hidden="true"></i><span class="keyword-tag">IaC活用</span>：Infrastructure as Codeによる自動化</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-1);"></i>
+                        デプロイメントプロセスのテストは、
+                        <br>
+                        変更のテストと同じくらい重要！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-1" aria-hidden="true"></i><span class="keyword-tag">プリインストールチェック</span>：ドリフト検出と変更セット</li>
+                        <li><i class="fa-solid fa-2" aria-hidden="true"></i><span class="keyword-tag">手動承認ステップ</span>：AWS CodePipelineでの承認</li>
+                        <li><i class="fa-solid fa-3" aria-hidden="true"></i><span class="keyword-tag">デプロイメント設定</span>：AWS CodeDeploy AppSpecファイル</li>
+                        <li><i class="fa-solid fa-4" aria-hidden="true"></i><span class="keyword-tag">サービス統合</span>：他のAWSサービスとの統合</li>
+                        <li><i class="fa-solid fa-5" aria-hidden="true"></i><span class="keyword-tag">自動テスト実行</span>：機能、セキュリティ、回帰テスト</li>
+                        <li><i class="fa-solid fa-6" aria-hidden="true"></i><span class="keyword-tag">監視とアラート</span>：CloudWatchによる監視</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-2);"></i>
+                        CI/CDパイプラインに組み込まれた
+                        <br>
+                        <span class="keyword-tag">自動テスト</span>で品質保証！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- AWSサービス -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-brands fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>主要AWSサービス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-code-branch" aria-hidden="true"></i><span class="keyword-tag">AWS CodePipeline</span>：CI/CDパイプライン</li>
+                        <li><i class="fa-solid fa-rocket" aria-hidden="true"></i><span class="keyword-tag">AWS CodeDeploy</span>：自動デプロイメント</li>
+                        <li><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span class="keyword-tag">AWS CloudFormation</span>：Infrastructure as Code</li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span class="keyword-tag">Amazon CloudWatch</span>：監視とアラート</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-book fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連ドキュメント</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS CodeDeploy ユーザーガイド</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS CodePipeline ユーザーガイド</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS CloudFormation ドリフト検出</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS CloudFormation 変更セット</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

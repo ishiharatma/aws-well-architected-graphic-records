@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS05-BP03: 構成管理システムの使用</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <div class="container">        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-cogs fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS05-BP03: 構成管理システムの使用</h1>
+                <p class="header-description">構成管理システムを使用してワークロードの設定を追跡・実装し、設定の変更を管理・検証して、ワークロードの要件を満たすことを確保します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_dev_integ_conf_mgmt_sys.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <main>
+            <div class="section-layout">
+                <!-- リスクレベル -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-info-circle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>リスクレベル</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="risk-level medium">
+                            <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+                            <span>Medium（中）</span>
+                        </div>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                手動プロセスによる<br>
+                                構成変更エラーと<br>
+                                作業負荷を削減！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 概要 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-sliders-h fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>概要</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>構成変更の作成・追跡</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>手動プロセスによるエラー削減</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-toggle-on" aria-hidden="true"></i>
+                                <span>静的・動的構成管理</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                                <span>CI/CDパイプラインでの構成・検証・デプロイ</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                構成管理で<br>
+                                一貫性と追跡可能性を<br>
+                                確保しよう！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 期待される成果 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                        <h2>期待される成果</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                                <span>CI/CDパイプラインでの構成・検証・デプロイ</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                                <span>構成正確性検証のための監視</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                                <span>エンドユーザー・顧客への影響最小化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
+                                <span>ガバナンス・コンプライアンス・規制要件保証</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2 right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                                自動化された構成管理で<br>
+                                運用効率を<br>
+                                大幅向上！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ベネフィット -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                        <h2>ベネフィット</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i>
+                                <span>変更作成・追跡の作業負荷削減</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>手動手順によるエラー頻度削減</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
+                                <span>ガバナンス・コンプライアンス・規制要件保証</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                                <span>環境間での一貫した構成デプロイ</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble top">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                構成管理システムは<br>
+                                現代運用の<br>
+                                必須基盤！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-layout">
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>よくあるアンチパターン</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-server" aria-hidden="true"></i>
+                                <span>Webサーバー構成の手動更新：更新エラーによる複数サーバー応答不能</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                                <span>数時間にわたるアプリケーションサーバーフリート手動更新</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>セキュリティグループ更新によるWebサーバーアクセス不可</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                                <span>検証なしの本番前構成の本番プッシュ：不正データ・サービス露出</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                                手動構成変更は<br>
+                                予期しない障害の<br>
+                                主要原因！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 構成管理の種類 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-list-check fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>構成管理の種類</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">静的構成管理</span> - リソース初期化時の一貫値設定</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">動的構成管理</span> - リソース生存期間中の変更可能値</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-toggle-on" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">機能トグル</span> - 構成変更によるコード機能活性化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">ログレベル変更</span> - インシデント時の詳細レベル調整</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-cogs fa-lg" style="color: var(--ui-color-1);"></i>
+                                用途に応じた<br>
+                                構成管理手法を<br>
+                                選択しよう！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 実装ガイダンス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                        <h2>実装ガイダンス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                                <span>既知で一貫した状態での構成デプロイ</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-search" aria-hidden="true"></i>
+                                <span>環境・リージョン間でのリソース構成継続監視</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-code" aria-hidden="true"></i>
+                                <span>コードとして定義された制御・自動化管理</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                                <span>合意された変更制御手順による構成更新</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-1);"></i>
+                                自動化された<br>
+                                構成管理で<br>
+                                運用を革新！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AWS Well-Architected Framework グラフィックレコード</p>
+        </footer>
+    </div>
+</body>
+</html>

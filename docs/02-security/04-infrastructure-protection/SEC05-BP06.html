@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC04-BP06 セキュリティベストプラクティス</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-server fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>SEC04-BP06 セキュリティベストプラクティス</h1>
+            <p class="header-description">
+                インフラストラクチャ保護における重要なベストプラクティスです。適切な実装により、セキュリティ態勢を大幅に向上させることができます。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                        <span>高リスク</span>
+                    </div>
+                    <p>このベストプラクティスを確立しない場合、セキュリティ態勢に重大な影響を与える可能性があります。</p>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation" style="color: var(--ui-color-5);"></i>
+                        適切な実装で<br>
+                        <span class="keyword-tag">リスク軽減</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                <div class="card-content">
+                    <p>このベストプラクティスの実装により、インフラストラクチャ保護における以下の成果が期待されます：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-check" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">セキュリティ態勢</span>の大幅な向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-minimize" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">攻撃面</span>の効果的な削減</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">可視性</span>と監視能力の向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動化</span>による運用効率化</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star" style="color: var(--ui-color-2);"></i>
+                        明確な<br>
+                        <span class="keyword-tag">目標設定</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 主要概念 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-server fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>主要概念</h2>
+                </div>
+                <div class="card-content">
+                    <p>インフラストラクチャ保護における重要な概念と原則：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">多層防御</span> - 複数のセキュリティレイヤーによる保護</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-minimize" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">最小権限の原則</span> - 必要最小限のアクセス権限</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">デフォルトセキュア</span> - 安全な初期設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sync" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">継続的改善</span> - 定期的な見直しと更新</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb" style="color: var(--ui-color-2);"></i>
+                        基本原則を<br>
+                        <span class="keyword-tag">理解</span>しよう！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装アプローチ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-route fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>実装アプローチ</h2>
+                </div>
+                <div class="card-content">
+                    <p>効果的な実装のための段階的アプローチ：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">現状評価</span> - 既存環境の詳細分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-map" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">計画策定</span> - 実装ロードマップの作成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">段階実装</span> - リスクを最小化した展開</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">効果測定</span> - 継続的な監視と改善</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket" style="color: var(--ui-color-1);"></i>
+                        段階的な<br>
+                        <span class="keyword-tag">実装</span>が鍵！
+                    </span>
+                </div>
+            </div>
+
+            <!-- AWSサービス活用 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>AWSサービス活用</h2>
+                </div>
+                <div class="card-content">
+                    <p>インフラストラクチャ保護で活用できる主要AWSサービス：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Security Hub</span> - 統合セキュリティ管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon GuardDuty</span> - 脅威検出サービス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Config</span> - 設定管理と監査</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-trail" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS CloudTrail</span> - API呼び出し記録</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic" style="color: var(--ui-color-2);"></i>
+                        AWSサービスで<br>
+                        <span class="keyword-tag">効率化</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- ベストプラクティス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>ベストプラクティス</h2>
+                </div>
+                <div class="card-content">
+                    <p>実装時に考慮すべき重要なポイント：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動化優先</span> - 手動作業の最小化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">メトリクス監視</span> - 定量的な効果測定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">チーム教育</span> - 継続的なスキル向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-book" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">文書化</span> - 手順とプロセスの明文化</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-check-circle" style="color: var(--ui-color-2);"></i>
+                        ベストプラクティスで<br>
+                        <span class="keyword-tag">成功確率向上</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book" aria-hidden="true"></i> 学習リソース</h3>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                            <span>AWS Well-Architected Labs</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-video" aria-hidden="true"></i>
+                            <span>AWS re:Invent セッション</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span>AWS公式ドキュメント</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span>AWSコミュニティフォーラム</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap" style="color: var(--ui-color-1);"></i>
+                        豊富な<br>
+                        <span class="keyword-tag">学習リソース</span>で<br>
+                        理解を深めよう！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

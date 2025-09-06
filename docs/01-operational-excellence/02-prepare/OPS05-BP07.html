@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS05-BP07: コード品質向上プラクティスの実装</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <div class="container">        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-code fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS05-BP07: コード品質向上プラクティスの実装</h1>
+                <p class="header-description">コード品質の向上とベストプラクティスの実装を確保するために、コード品質メトリクスを実装します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_dev_integ_code_quality.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <main>
+            <div class="section-layout">
+                <!-- リスクレベル -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-info-circle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>リスクレベル</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="risk-level medium">
+                            <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+                            <span>Medium（中）</span>
+                        </div>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                コード品質向上で<br>
+                                本番問題を<br>
+                                事前に防止！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 概要 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>概要</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-bug" aria-hidden="true"></i>
+                                <span>コード品質向上・欠陥最小化プラクティス実装</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-vial" aria-hidden="true"></i>
+                                <span>テスト駆動開発・コードレビュー・標準採用</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                                <span>ペアプログラミング・継続的統合配信プロセス組み込み</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                                <span>生成AI・Amazon Q Developerによる生産性向上</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                継続的な品質向上で<br>
+                                保守性の高い<br>
+                                コードを実現！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 期待される成果 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                        <h2>期待される成果</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                                <span>コードレビュー・ペアプログラミングによる品質向上</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                                <span>ソフトウェア開発ライフサイクルでのベストプラクティス採用</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>本番環境への問題導入最小化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>開発品質・効率性の継続的改善</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2 right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                                品質プラクティスは<br>
+                                開発チーム全体の<br>
+                                スキル向上に貢献！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 実装ガイダンス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                        <h2>実装ガイダンス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-vial" aria-hidden="true"></i>
+                                <span>テスト駆動開発・コードレビュー・ペアプログラミング採用</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">Amazon Q Developer</span>による生成AI活用</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+                                <span>コード提案生成・ユニットテスト作成・セキュリティ強化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                                <span>継続的統合配信プロセスへの品質プラクティス組み込み</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble top">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                全プルリクエストに<br>
+                                シニア開発者による<br>
+                                コードレビュー実施！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-layout">
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>よくあるアンチパターン</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-code-branch" aria-hidden="true"></i>
+                                <span>コードレビューなしのメインブランチコミット：自動本番デプロイで停止</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-vial" aria-hidden="true"></i>
+                                <span>ユニット・エンドツーエンド・統合テストなし新アプリケーション開発</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-tools" aria-hidden="true"></i>
+                                <span>欠陥対処のための本番手動変更：テスト・レビュー・CI/CD未経由</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                                <span>デプロイ前アプリケーションテスト方法不在</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                                品質プラクティス省略は<br>
+                                本番障害の<br>
+                                直接的原因！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ベネフィット -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                        <h2>ベネフィット</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>本番環境への問題導入最小化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                                <span>ペアプログラミング・コードレビューによる知識共有</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                                <span>AI生産性ツールによる開発効率向上</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>継続的な品質改善・技術債務削減</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                品質プラクティスは<br>
+                                長期的な開発効率を<br>
+                                大幅に向上させます！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 主要プラクティス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-list-check fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>主要プラクティス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-vial" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">テスト駆動開発</span> - テスト先行による品質確保</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-search" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">コードレビュー</span> - ピアレビューによる品質向上</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">ペアプログラミング</span> - 協働による知識共有</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">標準採用</span> - 一貫したコーディング規約</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-code fa-lg" style="color: var(--ui-color-1);"></i>
+                                これらのプラクティスを<br>
+                                CI/CDプロセスに<br>
+                                組み込もう！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AWS Well-Architected Framework グラフィックレコード</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS04-BP02: アプリケーションテレメトリの実装</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-satellite-dish fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS04-BP02: アプリケーションテレメトリの実装</h1>
+                <p class="header-description">ワークロードの状態と技術的・ビジネス的成果の達成に関する実用的な洞察を提供するテレメトリを発信し、アプリケーションの観測可能性の基盤を構築します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_application_telemetry.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <main>
+            <div class="section-layout">
+                <!-- リスクレベル -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>リスクレベル</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="risk-level high">
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>High（高）</span>
+                        </div>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                不完全な可観測性は<br>
+                                重要なシステム洞察を<br>
+                                見逃すブラインドスポットに！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 概要 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-chart-area fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>概要</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-foundation" aria-hidden="true"></i>
+                                <span>ワークロード可観測性の基盤となるテレメトリ</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+                                <span>技術・ビジネス成果への実用的洞察提供</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-cubes" aria-hidden="true"></i>
+                                <span>メトリクス・ログ・トレースの3つの柱</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                                <span>リアルユーザー監視（RUM）と合成トランザクション</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                包括的なテレメトリで<br>
+                                ワークロードの状態を<br>
+                                完全に把握！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 期待される成果 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                        <h2>期待される成果</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>ワークロードパフォーマンスへの実用的洞察獲得</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                                <span>パフォーマンス最適化のプロアクティブ意思決定</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>ワークロード安定性の向上</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                                <span>CI/CDプロセスの合理化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-dollar-sign" aria-hidden="true"></i>
+                                <span>リソースの効果的活用</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2 right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                                データ駆動型の<br>
+                                意思決定で<br>
+                                運用効率を最大化！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 実装ガイダンス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                        <h2>実装ガイダンス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-search" aria-hidden="true"></i>
+                                <span>収集すべきデータの特定（メトリクス・ログ・トレース）</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">CloudWatchエージェント</span>のデプロイ</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                                <span>ログ・メトリクスの異常検知実装</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>機密ログデータの保護</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+                                <span>ビジネスKPIの定義・監視</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble top">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                CloudWatchとX-Rayで<br>
+                                包括的な監視を<br>
+                                実現しよう！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-layout">
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>よくあるアンチパターン</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
+                                <span>不完全な可観測性：ワークロード全層への可観測性未組み込み</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+                                <span>断片化されたデータビュー：複数ツール・システムへのデータ分散</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-user-times" aria-hidden="true"></i>
+                                <span>ユーザー報告問題：プロアクティブ問題検知の欠如</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>ワークロード健全性・パフォーマンスの全体的視点維持困難</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                                包括的なテレメトリなしでは<br>
+                                重要な問題を<br>
+                                見逃してしまいます！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ベネフィット -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                        <h2>ベネフィット</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-brain" aria-hidden="true"></i>
+                                <span>情報に基づく意思決定：テレメトリ・ビジネスKPIからの洞察</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i>
+                                <span>運用効率向上：データ駆動型リソース活用によるコスト効率性</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>ワークロード安定性強化：問題の迅速検知・解決によるアップタイム向上</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                                <span>CI/CDプロセス合理化：テレメトリデータからの洞察によるプロセス改善</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                適切なテレメトリは<br>
+                                運用の質を<br>
+                                根本的に変革します！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AWSサービス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-brands fa-aws fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>主要AWSサービス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">Amazon CloudWatch</span> - 包括的監視ツールスイート</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-route" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">AWS X-Ray</span> - アプリケーショントレース・分析・デバッグ</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">CloudWatch異常検知</span> - 機械学習による自動異常検知</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">CloudWatch Logsデータ保護</span> - 機密情報マスキング</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-cloud fa-lg" style="color: var(--ui-color-1);"></i>
+                                AWSの強力な<br>
+                                監視サービスで<br>
+                                完璧な可観測性を！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AWS Well-Architected Framework グラフィックレコード</p>
+        </footer>
+    </div>
+</body>
+</html>

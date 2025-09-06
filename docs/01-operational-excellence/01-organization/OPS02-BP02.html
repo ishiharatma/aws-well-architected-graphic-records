@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS02-BP02: プロセス・手順の所有者特定 - AWS Well-Architected グラフィックレコーディング</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+</head>
+<body>
+    <div class="container">        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-sitemap fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS02-BP02: プロセス・手順の所有者特定</h1>
+                <p class="header-description">プロセスと手順には所有者が存在し、継続的な改善が行われることを確認します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_proc_owners.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-warning" aria-hidden="true"></i>
+                            <span>このベストプラクティスを確立しない場合の<span class="keyword-tag">リスクレベル: 高</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        プロセス所有者不明は
+                        <br>
+                        <span class="keyword-tag">高リスク</span>！
+                        <br>
+                        インシデント対応・改善が困難
+                    </span>
+                </div>
+            </div>
+
+            <!-- メインカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-clipboard-user fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>プロセス・手順の所有者特定</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-user-cog" aria-hidden="true"></i>
+                            <span>個別プロセス・手順の<span class="keyword-tag">定義所有権</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-question-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">なぜその手順</span>が使われるかの理解</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">改善機会</span>の特定支援</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span>可能な限り<span class="keyword-tag">コードとして実装</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-2);"></i>
+                        新チームメンバーが
+                        <br>
+                        <span class="keyword-tag">迅速に効果的</span>に
+                        <br>
+                        なれる！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-book" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">明確に定義・維持</span>されたプロセス・手順</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">中央保存</span>でチームメンバーがアクセス可能</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sync" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">頻繁な更新</span>・明確な所有権割り当て</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span>スクリプト・テンプレート・自動化文書を<span class="keyword-tag">コード実装</span></span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-users fa-lg" style="color: var(--ui-color-2);"></i>
+                        標準化されたプロセスで
+                        <br>
+                        <span class="keyword-tag">一貫した運用</span>と
+                        <br>
+                        チーム間の責任移譲が円滑！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>よくあるアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-file-slash" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">プロセス未文書化</span>・断片的スクリプト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user-secret" aria-hidden="true"></i>
+                            <span>スクリプト使用法の<span class="keyword-tag">個人・非公式知識</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user-times" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">レガシープロセス</span>の所有権不明・原作者退職</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search-minus" aria-hidden="true"></i>
+                            <span>プロセス・スクリプトが<span class="keyword-tag">発見不可能</span></span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                        プロセス未文書化は
+                        <br>
+                        <span class="keyword-tag">高リスク</span>！
+                        <br>
+                        インシデント対応が遅延
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-route fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">運用活動</span>の特定・文書化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user-check" aria-hidden="true"></i>
+                            <span>活動仕様の<span class="keyword-tag">責任者特定</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-tags" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">メタデータ</span>での所有権記録</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span>手順の<span class="keyword-tag">コード化進化</span></span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-robot fa-lg" style="color: var(--ui-color-2);"></i>
+                        <span class="keyword-tag">AWS Systems Manager</span>や
+                        <br>
+                        <span class="keyword-tag">Lambda</span>で
+                        <br>
+                        手順をコード化！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 顧客事例 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-store fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>顧客事例</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shopping-cart" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AnyCompany Retail</span>のプロセス管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span>初期：<span class="keyword-tag">ステップバイステップガイド</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span>進化：<span class="keyword-tag">Infrastructure as Code</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動化文書・Lambda関数</span>化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">スケジュール・イベント</span>駆動実行</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-chart-line fa-lg" style="color: var(--ui-color-2);"></i>
+                        段階的な進化で
+                        <br>
+                        <span class="keyword-tag">手動→自動化</span>を
+                        <br>
+                        実現しよう！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-file-text" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">既存プロセス</span>の文書化・バージョン管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-comments" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">フィードバック・改善</span>メカニズム確立</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>プロセス・手順の<span class="keyword-tag">アクセス・発見可能性</span>確保</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon Q Business</span>活用</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-1 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-check-circle fa-lg" style="color: var(--ui-color-1);"></i>
+                        体系的な実装で
+                        <br>
+                        <span class="keyword-tag">効果的な</span>
+                        <br>
+                        プロセス管理を実現！
+                    </span>
+                </div>
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer style="text-align: center; margin-top: 40px; padding: 20px; color: #777;">
+            <p>AWS Well-Architected Framework - Operational Excellence Pillar</p>
+            <p>OPS02-BP02: Processes and procedures have identified owners</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS11-BP07: 運用メトリクスレビューの実行 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-chart-line fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS11-BP07: 運用メトリクスレビューの実行</h1>
+            <p class="header-description">ビジネスの異なる領域からのクロスチーム参加者と運用メトリクスのレトロスペクティブ分析を定期的に実行します。これらのレビューを使用して改善機会を特定し、潜在的な行動方針を検討し、学んだ教訓を共有します。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_metrics_review.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level medium">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 中リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-calendar-times" aria-hidden="true"></i>重要な小売プロモーション中の<span class="keyword-tag">メンテナンス窓口による中断</span></li>
+                        <li><i class="fa-solid fa-book" aria-hidden="true"></i>古いライブラリ使用による長期停止後も<span class="keyword-tag">他チームがリスクを認識しない</span></li>
+                        <li><i class="fa-solid fa-handshake" aria-hidden="true"></i>顧客SLA達成の定期レビュー不足による<span class="keyword-tag">財務ペナルティリスク</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-2);"></i>
+                        定期レビューがないと、
+                        <br>
+                        重要な問題を見逃し
+                        <br>
+                        <span class="keyword-tag">ビジネス影響</span>が拡大！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i><span class="keyword-tag">ビジネス影響メトリクス</span>の頻繁なレビュー</li>
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i>可観測性機能による<span class="keyword-tag">異常の検出とレビュー</span></li>
+                        <li><i class="fa-solid fa-target" aria-hidden="true"></i>ビジネス成果と目標をサポートする<span class="keyword-tag">データ活用</span></li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>チーム間での<span class="keyword-tag">共通理解維持</span></li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i>リスクへの行動と<span class="keyword-tag">顧客SLA認識</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        定期的なレビューにより、
+                        <br>
+                        チーム全体で一貫した
+                        <br>
+                        <span class="keyword-tag">理解</span>を維持！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-calendar-times" aria-hidden="true"></i>重要な小売プロモーション中にメンテナンス窓口が中断し<span class="keyword-tag">ビジネスが標準メンテナンス窓口を認識していない</span></li>
+                        <li><i class="fa-solid fa-book" aria-hidden="true"></i>古いライブラリ使用による長期停止を経験し移行したが<span class="keyword-tag">他チームがリスクを知らない</span></li>
+                        <li><i class="fa-solid fa-handshake" aria-hidden="true"></i>顧客SLA達成を定期レビューせず達成困難な傾向にあり<span class="keyword-tag">財務ペナルティが関連</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        情報共有不足により、
+                        <br>
+                        同じ問題が組織全体で
+                        <br>
+                        <span class="keyword-tag">繰り返し</span>発生します...
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>ビジネスの異なる領域からの<span class="keyword-tag">クロスチーム参加者</span>との定期レトロスペクティブ</li>
+                        <li><i class="fa-solid fa-handshake" aria-hidden="true"></i>ビジネス、開発、運用チームを含む<span class="keyword-tag">ステークホルダーの関与</span></li>
+                        <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i>即座のフィードバックとレトロスペクティブ分析からの<span class="keyword-tag">発見の検証</span></li>
+                        <li><i class="fa-solid fa-share-alt" aria-hidden="true"></i><span class="keyword-tag">学んだ教訓の共有</span></li>
+                        <li><i class="fa-solid fa-lightbulb" aria-hidden="true"></i>洞察を使用した<span class="keyword-tag">改善機会と潜在的行動方針</span>の特定</li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i>すべての環境（開発、テスト、本番）での<span class="keyword-tag">改善機会</span>探求</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        CloudWatchダッシュボードを活用して
+                        <br>
+                        視覚的で効果的な
+                        <br>
+                        <span class="keyword-tag">メトリクスレビュー</span>を実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスの利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>運用メトリクス、イベント、インシデントの定期レビューによる<span class="keyword-tag">チーム間共通理解維持</span></li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i>メトリクスとインシデントの定期レビューによる<span class="keyword-tag">リスクへの行動と顧客SLA認識</span></li>
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i>学んだ教訓の共有による<span class="keyword-tag">優先順位付けとビジネス成果への標的改善</span>のためのデータ提供</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        定期的なレビューにより、
+                        <br>
+                        組織全体の学習能力と
+                        <br>
+                        <span class="keyword-tag">対応力</span>が向上！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book"></i> 関連ベストプラクティス</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i><span class="keyword-tag">OPS08-BP05</span>: ダッシュボードの作成</li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i><span class="keyword-tag">OPS09-BP03</span>: 運用メトリクスレビューと改善優先順位付け</li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i><span class="keyword-tag">OPS10-BP01</span>: イベント、インシデント、問題管理プロセス使用</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-file-text"></i> 関連ドキュメント</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span class="keyword-tag">Amazon CloudWatch</span></li>
+                        <li><i class="fa-solid fa-database" aria-hidden="true"></i><span class="keyword-tag">CloudWatch</span>メトリクスとディメンション参照</li>
+                        <li><i class="fa-solid fa-upload" aria-hidden="true"></i><span class="keyword-tag">カスタムメトリクス</span>の公開</li>
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i><span class="keyword-tag">CloudWatch</span>メトリクスの使用</li>
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i><span class="keyword-tag">CloudWatch</span>でのダッシュボードと可視化</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap fa-lg" style="color: var(--ui-color-1);"></i>
+                        これらのリソースを活用して、
+                        <br>
+                        効果的な運用メトリクスレビューを
+                        <br>
+                        <span class="keyword-tag">実現</span>しましょう！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS05-BP02: 変更のテスト・検証</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-vial fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS05-BP02: 変更のテスト・検証</h1>
+                <p class="header-description">本番環境でのエラーを回避するために、デプロイされるすべての変更をテストし、アプリケーションコード、インフラストラクチャ、設定、セキュリティ制御、運用手順を含む包括的なテスト標準を確立します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_dev_integ_test_val_chg.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <main>
+            <div class="section-layout">
+                <!-- リスクレベル -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>リスクレベル</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="risk-level high">
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>High（高）</span>
+                        </div>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                テスト未実施の変更は<br>
+                                本番環境での障害・<br>
+                                停止を引き起こす！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 概要 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-check-double fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>概要</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>本番エラー回避のための全変更テスト必須</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-code" aria-hidden="true"></i>
+                                <span>アプリケーションコード・インフラ・設定・セキュリティ制御のテスト</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                                <span>運用手順・ユニットテスト・ソフトウェアコンポーネント分析</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                                <span>ソフトウェア統合・配信プロセスでのテスト左シフト</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                包括的なテストで<br>
+                                高品質なソフトウェア<br>
+                                配信を実現！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 期待される成果 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                        <h2>期待される成果</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                                <span>配信前のソフトウェア変更テスト実施</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                                <span>開発者のテスト結果・検証へのアクセス</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                                <span>全ソフトウェア変更適用のテスト標準</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                                <span>ソフトウェア品質向上のフィードバックループ</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2 right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                                自動テストで<br>
+                                手作業エラーを排除し<br>
+                                効率性を向上！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 実装ガイダンス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                        <h2>実装ガイダンス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
+                                <span>組織のソフトウェアアーティファクトテスト標準開発</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-code" aria-hidden="true"></i>
+                                <span>テスト標準に基づくアプリケーション計装</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">Amazon Q Developer</span>による生成AI活用</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                                <span>10分以内完了のテストセット設計</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>統合パイプライン内でのテスト実行</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble top">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                テスト駆動開発で<br>
+                                品質を最初から<br>
+                                組み込もう！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-layout">
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>よくあるアンチパターン</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+                                <span>テスト未実施の新ソフトウェア変更デプロイ：本番実行失敗・停止</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>CloudFormation新セキュリティグループの本番前環境未テスト</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-code" aria-hidden="true"></i>
+                                <span>ユニットテスト未実施のメソッド変更：本番デプロイ時ソフトウェア障害</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                                <span>顧客アクセス不可によるアプリケーション到達不能</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                                テスト省略は<br>
+                                本番障害の<br>
+                                直接的原因！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ベネフィット -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                        <h2>ベネフィット</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>ソフトウェアデプロイメント変更失敗率の削減</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-star" aria-hidden="true"></i>
+                                <span>ソフトウェア品質の向上</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-brain" aria-hidden="true"></i>
+                                <span>開発者のコード実行可能性認識向上</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>組織コンプライアンス支援のセキュリティポリシー確信展開</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
+                                <span>トラフィック需要対応の自動スケーリングポリシー事前テスト</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                包括的テストは<br>
+                                高品質ソフトウェアの<br>
+                                基盤です！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- テスト種類 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-list-check fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>主要テスト種類</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-cube" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">ユニットテスト</span> - 個別コンポーネント検証</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-link" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">エンドツーエンドテスト</span> - 全体フロー検証</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">静的セキュリティスキャン</span> - 脆弱性検知</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-search" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">ソフトウェアコンポーネント分析</span> - 依存関係検証</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-vial fa-lg" style="color: var(--ui-color-1);"></i>
+                                多層テスト戦略で<br>
+                                あらゆる問題を<br>
+                                事前に検出！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AWS Well-Architected Framework グラフィックレコード</p>
+        </footer>
+    </div>
+</body>
+</html>

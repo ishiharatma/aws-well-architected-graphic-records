@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS05-BP08: 複数環境の使用</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <div class="container">        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-layer-group fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS05-BP08: 複数環境の使用</h1>
+                <p class="header-description">複数の環境を使用して本番環境への変更の影響を最小限に抑え、段階的なテストとデプロイメントを可能にします。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_dev_integ_multi_env.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <main>
+            <div class="section-layout">
+                <!-- リスクレベル -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-check-circle fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>リスクレベル</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="risk-level low">
+                            <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                            <span>Low（低）</span>
+                        </div>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                環境分離で<br>
+                                リスクを最小化し<br>
+                                品質を確保！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 概要 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-sitemap fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>概要</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-flask" aria-hidden="true"></i>
+                                <span>ワークロードの実験・開発・テスト用複数環境使用</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>本番環境に近づくにつれて制御レベル向上</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                                <span>デプロイ時の意図通り動作への信頼性獲得</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-building" aria-hidden="true"></i>
+                                <span>ランディングゾーンによるガバナンス・制御・自動化</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                段階的な環境昇格で<br>
+                                本番品質を<br>
+                                確実に保証！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 期待される成果 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                        <h2>期待される成果</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
+                                <span>コンプライアンス・ガバナンスニーズを反映した複数環境</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+                                <span>本番への道筋での環境間コードテスト・昇格</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-building" aria-hidden="true"></i>
+                                <span>ランディングゾーンによる安定・安全な環境提供</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                                <span>アプリケーション・ワークロードチームへの基盤提供</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2 right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                                ランディングゾーンの<br>
+                                変更も同じ原則で<br>
+                                段階的にテスト！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 実装ガイダンス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                        <h2>実装ガイダンス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-building" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">AWS Control Tower</span>ベースランディングゾーン確立</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">AWS IAM Identity Center</span>・<span class="keyword-tag">SCP</span>によるアクセス制御</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-sandbox" aria-hidden="true"></i>
+                                <span>ランディングゾーン変更開発・テスト用サンドボックス組織</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">CfCT</span>・<span class="keyword-tag">AFT</span>によるランディングゾーン機能拡張</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble top">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                ランディングゾーンへの<br>
+                                影響は大きいため<br>
+                                慎重なテストが必要！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-layout">
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>よくあるアンチパターン</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                                <span>共有開発環境での開発：他開発者によるコード変更上書き</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                                <span>本番環境の制限的セキュリティポリシー：開発・テスト阻害</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                                <span>環境間の設定差異による予期しない動作</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                                <span>テスト未実施の本番直接デプロイ</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                                環境分離なしでは<br>
+                                開発効率と<br>
+                                品質が低下！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ベネフィット -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                        <h2>ベネフィット</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>本番環境リスク最小化・品質保証</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-flask" aria-hidden="true"></i>
+                                <span>安全な実験・開発環境提供</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                                <span>段階的テスト・検証による信頼性向上</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                                <span>開発者間の作業分離・競合回避</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                適切な環境分離は<br>
+                                現代開発の<br>
+                                基本原則です！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 環境構成 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>典型的な環境構成</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-laptop-code" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">開発環境</span> - 機能開発・初期テスト</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-vial" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">テスト環境</span> - 統合・パフォーマンステスト</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">ステージング環境</span> - 本番前検証</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">本番環境</span> - 実運用・最高レベル制御</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-arrow-up fa-lg" style="color: var(--ui-color-1);"></i>
+                                環境が本番に近づくほど<br>
+                                制御レベルを<br>
+                                段階的に向上！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AWS Well-Architected Framework グラフィックレコード</p>
+        </footer>
+    </div>
+</body>
+</html>

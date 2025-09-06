@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>セキュリティの柱 - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+        
+        .category-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--ui-color-1), var(--ui-color-2));
+        }
+        
+        .category-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .category-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .category-icon {
+            font-size: 3em;
+            margin-right: 20px;
+            color: var(--ui-color-1);
+        }
+        
+        .category-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--ui-color-4);
+            margin: 0;
+        }
+        
+        .category-subtitle {
+            font-size: 1.1em;
+            color: var(--ui-color-2);
+            margin: 5px 0 0 0;
+        }
+        
+        .category-description {
+            color: #666;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        
+        .category-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--ui-color-1);
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .pillar-intro {
+            background: linear-gradient(135deg, var(--ui-color-1), var(--ui-color-2));
+            color: white;
+            padding: 40px;
+            border-radius: 25px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .pillar-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .pillar-stat {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .pillar-stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .pillar-stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-shield fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>セキュリティの柱</h1>
+            <p class="header-description">
+                データ、システム、資産を保護し、クラウドテクノロジーを活用してセキュリティを向上させる能力を包含します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- セキュリティの柱概要 -->
+        <div class="pillar-intro">
+            <h2><i class="fa-solid fa-shield-alt"></i> セキュリティの柱とは</h2>
+            <p style="font-size: 1.1em; line-height: 1.6; margin: 20px 0;">
+                セキュリティの柱は、データ、システム、資産を保護し、クラウドテクノロジーを活用してセキュリティを向上させる能力を包含します。
+                7つの主要領域にわたって、包括的なセキュリティ戦略を提供します。
+            </p>
+            
+            <div class="pillar-stats">
+                <div class="pillar-stat">
+                    <span class="pillar-stat-number">7</span>
+                    <span class="pillar-stat-label">セキュリティ領域</span>
+                </div>
+                <div class="pillar-stat">
+                    <span class="pillar-stat-number">55</span>
+                    <span class="pillar-stat-label">ベストプラクティス</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- セキュリティカテゴリ一覧 -->
+        <div class="category-grid">
+            <!-- SEC01: セキュリティ基盤 -->
+            <a href="01-security/SEC01.html" class="category-card">
+                <div class="category-header">
+                    <i class="fa-solid fa-shield-halved category-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="category-title">SEC01</h3>
+                        <p class="category-subtitle">セキュリティ基盤</p>
+                    </div>
+                </div>
+                <p class="category-description">
+                    ワークロードを安全に運用するための包括的なベストプラクティス。
+                    すべてのセキュリティ領域に適用する基盤的な実践方法を提供します。
+                </p>
+                <div class="category-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">8</span>
+                        <span class="stat-label">ベストプラクティス</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">6</span>
+                        <span class="stat-label">高リスク</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">2</span>
+                        <span class="stat-label">中リスク</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- SEC02-03: アイデンティティとアクセス管理 -->
+            <a href="02-iam/SEC02-03.html" class="category-card">
+                <div class="category-header">
+                    <i class="fa-solid fa-users-cog category-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="category-title">SEC02-03</h3>
+                        <p class="category-subtitle">アイデンティティとアクセス管理</p>
+                    </div>
+                </div>
+                <p class="category-description">
+                    適切なアイデンティティ管理とアクセス制御により、
+                    正しいユーザーが適切なリソースに適切な条件下でアクセスできることを確保します。
+                </p>
+                <div class="category-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">15</span>
+                        <span class="stat-label">ベストプラクティス</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">12</span>
+                        <span class="stat-label">高リスク</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">中リスク</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- SEC04: 検出 -->
+            <a href="03-detection/SEC04.html" class="category-card">
+                <div class="category-header">
+                    <i class="fa-solid fa-search category-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="category-title">SEC04</h3>
+                        <p class="category-subtitle">検出</p>
+                    </div>
+                </div>
+                <p class="category-description">
+                    セキュリティイベントを検出し、潜在的なセキュリティの弱点や
+                    インシデントを特定するための包括的なログ記録と監視を実装します。
+                </p>
+                <div class="category-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">4</span>
+                        <span class="stat-label">ベストプラクティス</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">高リスク</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">1</span>
+                        <span class="stat-label">中リスク</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- SEC05-06: インフラストラクチャ保護 -->
+            <a href="04-infrastructure-protection/SEC05-06.html" class="category-card">
+                <div class="category-header">
+                    <i class="fa-solid fa-server category-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="category-title">SEC05-06</h3>
+                        <p class="category-subtitle">インフラストラクチャ保護</p>
+                    </div>
+                </div>
+                <p class="category-description">
+                    ネットワークとコンピュートリソースを多層防御で保護し、
+                    外部および内部の脅威から守ります。
+                </p>
+                <div class="category-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">11</span>
+                        <span class="stat-label">ベストプラクティス</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">8</span>
+                        <span class="stat-label">高リスク</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">中リスク</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- SEC07-09: データ保護 -->
+            <a href="05-data-protection/SEC07-09.html" class="category-card">
+                <div class="category-header">
+                    <i class="fa-solid fa-lock category-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="category-title">SEC07-09</h3>
+                        <p class="category-subtitle">データ保護</p>
+                    </div>
+                </div>
+                <p class="category-description">
+                    データの分類、保存時および転送中のデータ保護を実装し、
+                    機密性と整合性を維持します。
+                </p>
+                <div class="category-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">11</span>
+                        <span class="stat-label">ベストプラクティス</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">8</span>
+                        <span class="stat-label">高リスク</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">中リスク</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- SEC10: インシデント対応 -->
+            <a href="06-incident-response/SEC10.html" class="category-card">
+                <div class="category-header">
+                    <i class="fa-solid fa-ambulance category-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="category-title">SEC10</h3>
+                        <p class="category-subtitle">インシデント対応</p>
+                    </div>
+                </div>
+                <p class="category-description">
+                    セキュリティインシデントの予測、対応、復旧のためのメカニズムを実装し、
+                    影響を軽減し復旧時間を最小化します。
+                </p>
+                <div class="category-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">6</span>
+                        <span class="stat-label">ベストプラクティス</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">高リスク</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">2</span>
+                        <span class="stat-label">中リスク</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- SEC11: アプリケーションセキュリティ -->
+            <a href="07-application-security/SEC11.html" class="category-card">
+                <div class="category-header">
+                    <i class="fa-solid fa-code category-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="category-title">SEC11</h3>
+                        <p class="category-subtitle">アプリケーションセキュリティ</p>
+                    </div>
+                </div>
+                <p class="category-description">
+                    アプリケーションの設計、開発、展開ライフサイクル全体を通じて
+                    セキュリティプロパティを組み込み、検証します。
+                </p>
+                <div class="category-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">8</span>
+                        <span class="stat-label">ベストプラクティス</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">6</span>
+                        <span class="stat-label">高リスク</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">2</span>
+                        <span class="stat-label">中リスク</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-home fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>メインページに戻る</h3>
+                    <a href="../index.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-arrow-left"></i> Well-Architected Framework
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

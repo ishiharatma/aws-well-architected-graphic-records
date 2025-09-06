@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS08-BP01: ワークロードメトリクスの分析 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-chart-line fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS08-BP01: ワークロードメトリクスの分析</h1>
+            <p class="header-description">アプリケーションテレメトリを実装した後、収集されたメトリクスを定期的に分析します。ビジネス成果メトリクスのレビューを優先し、ビジネス目標に沿った意思決定を行います。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_workload_observability_analyze_workload_metrics.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level medium">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 中リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-disconnect" aria-hidden="true"></i>ビジネス成果を考慮しない<span class="keyword-tag">孤立したメトリクス分析</span></li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i>ビジネスメトリクスを軽視した<span class="keyword-tag">技術メトリクス偏重</span></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>メトリクスの<span class="keyword-tag">レビュー頻度不足</span></li>
+                        <li><i class="fa-solid fa-eye-slash" aria-hidden="true"></i>リアルタイム意思決定機会の<span class="keyword-tag">見逃し</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        技術メトリクスだけに頼ると、
+                        <br>
+                        ビジネス成果との関連性を見失い、
+                        <br>
+                        <span class="keyword-tag">的確な判断</span>ができません！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i>ワークロードパフォーマンスの<span class="keyword-tag">正確な洞察</span></li>
+                        <li><i class="fa-solid fa-brain" aria-hidden="true"></i><span class="keyword-tag">データに基づいた意思決定</span>の推進</li>
+                        <li><i class="fa-solid fa-bullseye" aria-hidden="true"></i>ビジネス目標との<span class="keyword-tag">整合性確保</span></li>
+                        <li><i class="fa-solid fa-link" aria-hidden="true"></i>技術パフォーマンスとビジネス成果の<span class="keyword-tag">相関理解</span></li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i>ビジネス成果に影響する前の<span class="keyword-tag">問題の予防的特定</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        ビジネス成果メトリクスを優先することで、
+                        <br>
+                        真に価値のある洞察を獲得！
+                    </span>
+                </div>
+            </div>
+
+            <!-- メトリクス分析の重要性 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-microscope fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>メトリクス分析の重要性</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-business-time" aria-hidden="true"></i><span class="keyword-tag">ビジネス成果メトリクス</span>：技術メトリクスより優先</li>
+                        <li><i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i><span class="keyword-tag">システムパフォーマンス</span>：レイテンシ、リクエスト、エラー、容量</li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span class="keyword-tag">パターン理解</span>：スパイク、ドロップ、トレンドの意味</li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i><span class="keyword-tag">リアルタイム分析</span>：迅速な意思決定支援</li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i><span class="keyword-tag">異常検出</span>：静的閾値に依存しない監視</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-1);"></i>
+                        メトリクスは単なる数値ではなく、
+                        <br>
+                        <span class="keyword-tag">ビジネス価値</span>を示す指標！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-1" aria-hidden="true"></i><span class="keyword-tag">定期レビュー</span>：ワークロードメトリクスの解釈と分析</li>
+                        <li><i class="fa-solid fa-2" aria-hidden="true"></i><span class="keyword-tag">CloudWatchダッシュボード</span>：メトリクス可視化と時系列比較</li>
+                        <li><i class="fa-solid fa-3" aria-hidden="true"></i><span class="keyword-tag">パーセンタイル活用</span>：SLA定義と外れ値理解</li>
+                        <li><i class="fa-solid fa-4" aria-hidden="true"></i><span class="keyword-tag">異常検出設定</span>：静的閾値に依存しないパターン検出</li>
+                        <li><i class="fa-solid fa-5" aria-hidden="true"></i><span class="keyword-tag">DevOps Guru活用</span>：機械学習による早期問題検出</li>
+                        <li><i class="fa-solid fa-6" aria-hidden="true"></i><span class="keyword-tag">洞察に基づく最適化</span>：分析結果によるワークロード改善</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-2);"></i>
+                        CloudWatchの高度な機能を活用して、
+                        <br>
+                        深い洞察を獲得！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- AWSサービス -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-brands fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>主要AWSサービス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span class="keyword-tag">Amazon CloudWatch</span>：メトリクス監視と分析</li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i><span class="keyword-tag">CloudWatch Anomaly Detection</span>：異常パターン検出</li>
+                        <li><i class="fa-solid fa-robot" aria-hidden="true"></i><span class="keyword-tag">Amazon DevOps Guru</span>：機械学習による運用問題検出</li>
+                        <li><i class="fa-solid fa-calculator" aria-hidden="true"></i><span class="keyword-tag">CloudWatch Metric Math</span>：メトリクス計算と変換</li>
+                        <li><i class="fa-solid fa-search-plus" aria-hidden="true"></i><span class="keyword-tag">CloudWatch Metric Insights</span>：クロスアカウント分析</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-book fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連ドキュメント</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>OPS04-BP01: 主要パフォーマンス指標の特定</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>OPS04-BP02: アプリケーションテレメトリの実装</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>CloudWatch パーセンタイルの重要性</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS Observability ベストプラクティス</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

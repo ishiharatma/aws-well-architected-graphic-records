@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS01-BP06: トレードオフ評価 - AWS Well-Architected グラフィックレコーディング</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+</head>
+<body>
+    <div class="container">        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-bullseye fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS01-BP06: トレードオフ評価</h1>
+                <p class="header-description">トレードオフを理解し、情報に基づいた意思決定を行うために、トレードオフを評価します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_eval_tradeoffs.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-info-circle fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-info" aria-hidden="true"></i>
+                            <span>このベストプラクティスを確立しない場合の<span class="keyword-tag">リスクレベル: 中</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-info fa-lg" style="color: var(--ui-color-2);"></i>
+                        トレードオフ評価の不備は
+                        <br>
+                        <span class="keyword-tag">中リスク</span>
+                        <br>
+                        意思決定の質に影響
+                    </span>
+                </div>
+            </div>
+
+            <!-- メインカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-scale-balanced fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>トレードオフ評価</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-arrows-left-right" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">競合する利害</span>の調整</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">データ駆動</span>の意思決定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sitemap" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">意思決定フレームワーク</span>の確立</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                            <span>利益とリスクの<span class="keyword-tag">バランス管理</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-brain fa-lg" style="color: var(--ui-color-2);"></i>
+                        明確な意思決定フレームワークで
+                        <br>
+                        <span class="keyword-tag">迅速な合意</span>と
+                        <br>
+                        改善されたビジネス成果を実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">明確な意思決定</span>ガバナンスフレームワーク</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">リスクレジストリ</span>・定義された役割</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span>利益とリスクの<span class="keyword-tag">標準化レビュー</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-gavel" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">紛争解決</span>・データ提示・優先順位付け</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-1);"></i>
+                        体系的なフレームワークで
+                        <br>
+                        <span class="keyword-tag">迅速な意思決定</span>と
+                        <br>
+                        コミットメントを実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-fire fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>よくあるアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-credit-card" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">PCI DSS</span>準拠要求を無視した開発継続</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">未知ソース</span>ライブラリの無評価採用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">モダナイゼーション</span>計画変更による利益減少</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        トレードオフ分析なしの
+                        <br>
+                        <span class="keyword-tag">重要決定</span>は
+                        <br>
+                        致命的な結果を招く！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-chess fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-building" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">統合クラウドガバナンス</span>フレームワーク</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">中央集権・分散</span>権限のバランス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-gavel" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">合意された意思決定</span>プロセス確立</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-cogs fa-lg" style="color: var(--ui-color-2);"></i>
+                        体系的な実装で
+                        <br>
+                        <span class="keyword-tag">効果的な</span>
+                        <br>
+                        トレードオフ管理を実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利益とリスクの管理 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-chart-line fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>利益とリスクの管理</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ボードレベル</span>ビジネス優先事項との整合</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">データ駆動</span>意思決定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                            <span>リーダー間の<span class="keyword-tag">迅速な合意</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+                            <span>選択肢の<span class="keyword-tag">利益・リスク</span>認識</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-target fa-lg" style="color: var(--ui-color-1);"></i>
+                        利益とリスクの
+                        <br>
+                        <span class="keyword-tag">明確な理解</span>で
+                        <br>
+                        最適な選択を実現！
+                    </span>
+                </div>
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer style="text-align: center; margin-top: 40px; padding: 20px; color: #777;">
+            <p>AWS Well-Architected Framework - Operational Excellence Pillar</p>
+            <p>OPS01-BP06: Evaluate tradeoffs while managing benefits and risks</p>
+        </footer>
+    </div>
+</body>
+</html>

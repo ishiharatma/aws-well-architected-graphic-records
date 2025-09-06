@@ -1,930 +1,146 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEC01-BP03 管理目標を特定および検証する</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
-    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
-    
-    :root {
-      --ui-color-1: #1B6C8C;
-      --ui-color-2: #BF8136;
-      --ui-color-3: #F2E8E4;
-      --ui-color-4: #260101;
-      --ui-color-5: #BF5656;
-    }
-    
-    body {
-      font-family: 'Zen Kurenaido', sans-serif;
-      background-color: #FFF8F5;
-      color: #333333;
-      line-height: 1.6;
-      margin: 0;
-      padding: 20px;
-    }
-    
-    .container {
-      max-width: 2000px;
-      margin: 0 auto;
-    }
-    
-    /* ヘッダースタイル */
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-      position: relative;
-      padding: 20px;
-      background-color: white;
-      border-radius: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    
-    .title {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-    
-    .title h1 {
-      font-size: 36px;
-      color: var(--ui-color-1);
-      margin: 15px 0;
-      line-height: 1.2;
-    }
-    
-    .date {
-      font-size: 14px;
-      color: #777777;
-    }
-    
-    /* セクションレイアウト */
-    .section-layout {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-bottom: 20px;
-      justify-content: center;
-    }
-    
-    /* カードスタイル */
-    .section-card {
-      flex: 1;
-      min-width: 220px;
-      max-width: 450px;
-      background-color: white;
-      border-radius: 20px;
-      padding: 15px;
-      box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
-      position: relative;
-      overflow: hidden;
-      animation: fadeInScale 0.5s ease-out;
-    }
-    
-    @keyframes fadeInScale {
-      0% {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-    
-    /* カード内アイコンコンテナ */
-    .mega-icon-container {
-      text-align: center;
-      margin: 15px 0;
-    }
-    
-    /* カードコンテンツ */
-    .card-content {
-      padding: 0 10px 15px;
-    }
-    
-    /* キーワードリスト */
-    .keyword-list {
-      margin: 15px 0;
-      padding: 0;
-      list-style-type: none;
-    }
-    
-    .keyword-list li {
-      margin-bottom: 12px;
-      display: flex;
-      align-items: flex-start;
-    }
-    
-    .keyword-list li i {
-      margin-right: 8px;
-      color: var(--ui-color-2);
-      min-width: 16px;
-      margin-top: 4px;
-    }
-    
-    /* キーワードタグ */
-    .keyword-tag {
-      background-color: var(--ui-color-3);
-      color: var(--ui-color-4);
-      padding: 3px 8px;
-      border-radius: 5px;
-      margin-right: 5px;
-      display: inline-block;
-      font-weight: bold;
-    }
-    
-    .risk-tag {
-      background-color: #FF5555;
-      color: white;
-      padding: 3px 10px;
-      border-radius: 5px;
-      display: inline-block;
-      font-weight: bold;
-    }
-    
-    /* 手書き風吹き出し */
-    .speech-bubble {
-      position: relative;
-      background: #fff;
-      border: 3px solid var(--ui-color-1);
-      border-radius: 20px;
-      padding: 10px 15px;
-      margin: 15px 5px;
-      font-family: 'Yomogi', cursive;
-      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
-      transform: rotate(-1deg);
-    }
-    
-    .speech-bubble::after {
-      content: '';
-      position: absolute;
-      bottom: -13px;
-      left: 20px;
-      border-width: 12px 8px 0;
-      border-style: solid;
-      border-color: var(--ui-color-1) transparent;
-      display: block;
-      width: 0;
-    }
-    
-    /* 吹き出しバリエーション */
-    .speech-bubble.right::after {
-      left: auto;
-      right: 20px;
-      transform: rotate(15deg);
-    }
-    
-    .speech-bubble.top::after {
-      bottom: auto;
-      top: -13px;
-      border-width: 0 8px 12px;
-      transform: rotate(-5deg);
-    }
-    
-    .speech-bubble.variant-1 {
-      background: #FFF9E3;
-      border-color: var(--ui-color-2);
-      transform: rotate(1deg);
-    }
-    
-    .speech-bubble.variant-1::after {
-      border-color: var(--ui-color-2) transparent;
-    }
-    
-    .speech-bubble.variant-2 {
-      background: #FFE9E9;
-      border-color: var(--ui-color-5);
-      transform: rotate(-2deg);
-    }
-    
-    .speech-bubble.variant-2::after {
-      border-color: var(--ui-color-5) transparent;
-    }
-    
-    /* 手書き文字 */
-    .handwritten {
-      font-family: 'Yomogi', cursive;
-      font-size: 15px;
-      line-height: 1.5;
-      color: #333;
-    }
-    
-    /* フレームワークボックス */
-    .framework-box {
-      background-color: #f9f9f9;
-      border-radius: 8px;
-      padding: 12px;
-      margin: 10px 0;
-      display: flex;
-      align-items: center;
-      border-left: 4px solid var(--ui-color-1);
-    }
-    
-    .framework-icon {
-      margin-right: 12px;
-      color: var(--ui-color-1);
-      font-size: 24px;
-      min-width: 30px;
-      text-align: center;
-    }
-    
-    .framework-name {
-      font-weight: bold;
-      font-size: 16px;
-    }
-    
-    /* 実装ステップボックス */
-    .step-box {
-      border-left: 4px solid var(--ui-color-1);
-      padding-left: 12px;
-      margin: 10px 0;
-    }
-    
-    /* カテゴリボックス */
-    .category-box {
-      margin: 15px 0;
-      padding: 15px;
-      background-color: #f9f9f9;
-      border-radius: 10px;
-      border-left: 4px solid var(--ui-color-1);
-    }
-    
-    .category-title {
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: var(--ui-color-1);
-    }
-    
-    /* AWSサービスボックス */
-    .service-box {
-      background-color: #f0f8ff;
-      border: 1px solid #d0e5ff;
-      border-radius: 8px;
-      padding: 10px;
-      margin: 10px 0;
-      display: flex;
-      align-items: flex-start;
-    }
-    
-    .service-icon {
-      margin-right: 10px;
-      color: var(--ui-color-1);
-      font-size: 24px;
-      min-width: 30px;
-      text-align: center;
-    }
-    
-    .service-content {
-      flex-grow: 1;
-    }
-    
-    .service-name {
-      font-weight: bold;
-      color: var(--ui-color-1);
-      margin-bottom: 5px;
-    }
-    
-    /* レスポンシブ対応 */
-    @media (max-width: 1600px) {
-      .section-card {
-        min-width: 280px;
-      }
-    }
-    
-    @media (max-width: 1200px) {
-      .section-card {
-        min-width: 320px;
-      }
-    }
-    
-    @media (max-width: 900px) {
-      .section-card {
-        min-width: 380px;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .section-layout {
-        flex-direction: column;
-      }
-      
-      .section-card {
-        width: 100%;
-        min-width: auto;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC01-BP03 制御目標を特定し検証する</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
 </head>
 <body>
-  <div class="container">
-    <!-- ヘッダー -->
-    <div class="header">
-      <div class="title">
-        <i class="fa-solid fa-clipboard-check fa-7x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
-        <h1>SEC01-BP03 管理目標を特定および検証する</h1>
-      </div>
-      <div class="date">2025年3月29日</div>
-    </div>
-    
-    <!-- セクション1: 概要 -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>概要</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-              <span><span class="keyword-tag">脅威モデル</span>から特定された<span class="keyword-tag">コンプライアンス要件</span>と<span class="keyword-tag">リスク</span>に基づく</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-crosshairs" aria-hidden="true"></i>
-              <span>ワークロードに適用する必要がある<span class="keyword-tag">管理目標</span>と<span class="keyword-tag">管理</span>を導き出し</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-check-double" aria-hidden="true"></i>
-              <span>管理目標と制御を<span class="keyword-tag">継続的に検証</span></span>
-            </li>
-            <li>
-              <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
-              <span><span class="keyword-tag">リスク軽減の効果測定</span>に役立つ</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble">
-          <span class="handwritten">
-            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
-            脅威モデルからコンプライアンス目標を
-            <br>
-            明確にして、継続的に検証する
-            <br>
-            サイクルが大切なんだ！
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション2: 期待される成果 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-check-circle fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
-          <h2>期待される成果</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-align-left" aria-hidden="true"></i>
-              <span>ビジネスのセキュリティコントロール上の目標が<span class="keyword-tag">コンプライアンス要件</span>に一致するように<span class="keyword-tag">明確に定義</span></span>
-            </li>
-            <li>
-              <i class="fa-solid fa-gears" aria-hidden="true"></i>
-              <span><span class="keyword-tag">自動化</span>と<span class="keyword-tag">ポリシー</span>を通じて統制が<span class="keyword-tag">実装・実施</span></span>
-            </li>
-            <li>
-              <i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>
-              <span>目標達成のために<span class="keyword-tag">有効かどうかを継続的に評価</span></span>
-            </li>
-            <li>
-              <i class="fa-solid fa-file-contract" aria-hidden="true"></i>
-              <span>監査担当者に<span class="keyword-tag">有効性を示す証拠</span>をすぐに報告可能</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-1 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-shield-halved fa-lg" style="color: var(--ui-color-2);"></i>
-            自動化と継続的な評価で
-            <br>
-            常に最新の統制状況を把握！
-            <br>
-            監査時にもすぐ証拠を提出できるよ
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション3: アンチパターン -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 3s;" aria-hidden="true"></i>
-          <h2>一般的なアンチパターン</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>守るべき<span class="keyword-tag">規制要件</span>、<span class="keyword-tag">市場の期待</span>、<span class="keyword-tag">業界標準</span>についての理解が不十分</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span><span class="keyword-tag">サイバーセキュリティフレームワーク</span>と<span class="keyword-tag">統制目標</span>がビジネス要件とかみ合っていない</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>実施されている統制が<span class="keyword-tag">測定可能な方法</span>で統制目標にしっかりと適合していない</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>統制の有効性の報告に<span class="keyword-tag">自動化</span>を使っていない</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-triangle-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
-            目標と手段がズレていると
-            <br>
-            安全対策の効果が薄れてしまう！
-            <br>
-            適切な把握と測定が重要だよ
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション4: リスクレベル -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: #FF5555; animation: fa-beat-fade 2s infinite;" aria-hidden="true"></i>
-          <h2>リスクレベル</h2>
-        </div>
-        
-        <div class="card-content" style="text-align: center;">
-          <p style="font-size: 24px; margin: 20px 0;">
-            <span class="risk-tag">高</span>
-          </p>
-          <p>このベストプラクティスを活用しない場合のリスクレベル</p>
-        </div>
-        
-        <div class="speech-bubble right">
-          <span class="handwritten">
-            <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-2);"></i>
-            リスクレベルは「高」！
-            <br>
-            目標が曖昧だと何を守るべきか
-            <br>
-            わからなくなってしまうよ
-          </span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- セクション5: サイバーセキュリティフレームワーク -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-cubes fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite linear;" aria-hidden="true"></i>
-          <h2>一般的なサイバーセキュリティフレームワーク</h2>
-        </div>
-        
-        <div class="card-content">
-          <p>ビジネスの規制要件、市場の期待、業界標準を考慮し、どのフレームワークがニーズに最も適しているかを判断してください。</p>
-          
-          <div class="framework-box">
-            <div class="framework-icon">
-              <i class="fa-solid fa-file-contract" aria-hidden="true"></i>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-shield-halved fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>SEC01-BP03 制御目標を特定し検証する</h1>
+            <p class="header-description">
+                コンプライアンス要件と脅威モデルから制御目標を導出し、継続的に検証してリスク軽減の効果を測定します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
             </div>
-            <div>
-              <div class="framework-name">AICPA SOC 2</div>
-              <p>サービス組織のセキュリティ、可用性、処理の完全性に関する信頼性基準</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                        <span>高リスク</span>
+                    </div>
+                    <p>このベストプラクティスを確立しない場合のリスクレベルです。</p>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation" style="color: var(--ui-color-5);"></i>
+                        適切な実装で<br>
+                        <span class="keyword-tag">リスク軽減</span>！
+                    </span>
+                </div>
             </div>
-          </div>
-          
-          <div class="framework-box">
-            <div class="framework-icon">
-              <i class="fa-solid fa-hospital" aria-hidden="true"></i>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                <div class="card-content">
+                    <p>ビジネスのセキュリティ制御目標が明確に定義され、コンプライアンス要件と整合し、自動化とポリシーを通じて実装・適用されます。</p>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star" style="color: var(--ui-color-2);"></i>
+                        明確な<br>
+                        <span class="keyword-tag">目標設定</span>！
+                    </span>
+                </div>
             </div>
-            <div>
-              <div class="framework-name">HITRUST</div>
-              <p>ヘルスケア業界向けの包括的なセキュリティフレームワーク</p>
+
+            <!-- 主要フレームワーク -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-certificate fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>主要フレームワーク</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-certificate" aria-hidden="true"></i>
+                            <span>AICPA SOC 2</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-hospital" aria-hidden="true"></i>
+                            <span>HITRUST</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-credit-card" aria-hidden="true"></i>
+                            <span>PCI-DSS</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                            <span>ISO 27001</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-flag-usa" aria-hidden="true"></i>
+                            <span>NIST SP 800-53</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star" style="color: var(--ui-color-2);"></i>
+                        適切な<br><span class="keyword-tag">フレームワーク</span>選択！
+                    </span>
+                </div>
             </div>
-          </div>
-          
-          <div class="framework-box">
-            <div class="framework-icon">
-              <i class="fa-solid fa-credit-card" aria-hidden="true"></i>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>現状の評価と分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-map" aria-hidden="true"></i>
+                            <span>実装計画の策定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span>段階的な実装</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>効果測定と改善</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-check-circle" style="color: var(--ui-color-2);"></i>
+                        段階的な<br>
+                        <span class="keyword-tag">実装</span>で確実に！
+                    </span>
+                </div>
             </div>
-            <div>
-              <div class="framework-name">PCI-DSS</div>
-              <p>支払いカード業界のデータセキュリティ標準</p>
-            </div>
-          </div>
-          
-          <div class="framework-box">
-            <div class="framework-icon">
-              <i class="fa-solid fa-globe" aria-hidden="true"></i>
-            </div>
-            <div>
-              <div class="framework-name">ISO 27001</div>
-              <p>国際的に認められた情報セキュリティマネジメントシステム標準</p>
-            </div>
-          </div>
-          
-          <div class="framework-box">
-            <div class="framework-icon">
-              <i class="fa-solid fa-building-columns" aria-hidden="true"></i>
-            </div>
-            <div>
-              <div class="framework-name">NIST SP 800-53</div>
-              <p>米国連邦情報システムのセキュリティ管理標準</p>
-            </div>
-          </div>
         </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
-            業界に合ったフレームワークを
-            <br>
-            選べば、「何を守るべきか」が
-            <br>
-            明確になるよ！
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション6: AWSサービスの活用 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-cloud fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>AWSサービスの活用</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="service-box">
-            <div class="service-icon">
-              <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
-            </div>
-            <div class="service-content">
-              <div class="service-name">AWS Artifact</div>
-              <p>目標とするフレームワークに沿ったドキュメントやレポートを入手し、AWSと顧客の責任範囲を理解</p>
-            </div>
-          </div>
-          
-          <div class="service-box">
-            <div class="service-icon">
-              <i class="fa-solid fa-sitemap" aria-hidden="true"></i>
-            </div>
-            <div class="service-content">
-              <div class="service-name">AWS Organizations - SCP</div>
-              <p>サービスコントロールポリシー（SCP）を使用して、非準拠のリソース構成やアクションを予防</p>
-            </div>
-          </div>
-          
-          <div class="service-box">
-            <div class="service-icon">
-              <i class="fa-solid fa-gear" aria-hidden="true"></i>
-            </div>
-            <div class="service-content">
-              <div class="service-name">AWS Config</div>
-              <p>非準拠のリソースを監視および報告するためのルールを適用し、必要に応じて強制モードに切り替え</p>
-            </div>
-          </div>
-          
-          <div class="service-box">
-            <div class="service-icon">
-              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-            </div>
-            <div class="service-content">
-              <div class="service-name">AWS Security Hub</div>
-              <p>サイバーセキュリティフレームワークに合わせた事前定義されたマネージドルールの導入</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-cloud fa-lg" style="color: var(--ui-color-5);"></i>
-            AWSのサービスを使えば
-            <br>
-            統制の実装と監視が
-            <br>
-            ずっと簡単になるんだよ！
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション7: 統制の種類 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-shield-alt fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
-          <h2>統制の種類</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-ban" style="margin-right: 5px;"></i>予防的統制</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>問題が発生する<span class="keyword-tag">前に阻止</span>するための統制</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>例: <span class="keyword-tag">サービスコントロールポリシー (SCP)</span>、<span class="keyword-tag">IAMポリシー</span>、<span class="keyword-tag">リソースポリシー</span>などの<span class="keyword-tag">ガードレール</span></span>
-              </li>
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>非準拠のリソース構成やアクションを<span class="keyword-tag">事前に防止</span></span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-magnifying-glass" style="margin-right: 5px;"></i>発見的統制</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>問題を<span class="keyword-tag">検知</span>するための統制</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>例: <span class="keyword-tag">AWS Config</span>のルール、<span class="keyword-tag">Security Hub</span>の検出、<span class="keyword-tag">GuardDuty</span>のファインディングなど</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>非準拠のリソースを<span class="keyword-tag">監視</span>および<span class="keyword-tag">報告</span></span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-arrows-rotate" style="margin-right: 5px;"></i>是正的統制</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>問題を<span class="keyword-tag">修正</span>するための統制</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>例: <span class="keyword-tag">AWS Config</span>の自動修復ルール、<span class="keyword-tag">EventBridge</span>と<span class="keyword-tag">Lambda</span>の組み合わせなど</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>非準拠のリソースを<span class="keyword-tag">自動的に修正</span></span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
-            予防・発見・是正の
-            <br>
-            3種類の統制をバランスよく
-            <br>
-            組み合わせるのがポイント！
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション8: Security Hubの活用 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-shield-halved fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>Security Hubの活用</h2>
-        </div>
-        
-        <div class="card-content">
-          <p>自社のサイバーセキュリティのフレームワークに合わせて、事前定義されたマネージドルール一式を導入するには、AWS Security Hubの標準の使用を検討します。</p>
-          
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i>Security Hubの主要標準</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-flag" aria-hidden="true"></i>
-                <span><span class="keyword-tag">AWS Foundational Security Best Practices (FSBP)</span>: AWSのベストプラクティスに基づく基本的なセキュリティ管理</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-flag" aria-hidden="true"></i>
-                <span><span class="keyword-tag">CIS AWS Foundations Benchmark</span>: インターネットセキュリティセンターによるAWSセキュリティベンチマーク</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-flag" aria-hidden="true"></i>
-                <span><span class="keyword-tag">PCI DSS</span>: 支払いカード業界のデータセキュリティ標準</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-flag" aria-hidden="true"></i>
-                <span><span class="keyword-tag">NIST SP 800-53</span>: 米国連邦情報システムのセキュリティ管理標準</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-puzzle-piece" style="margin-right: 5px;"></i>Security Hubの補完</div>
-            <p>Security Hubに希望する統制検出の機能が組み込まれていない場合は、AWS Config コンフォーマンスパックで補完できます。</p>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-gear" aria-hidden="true"></i>
-                <span><span class="keyword-tag">AWS Config コンフォーマンスパック</span>: 特定のガバナンスやコンプライアンス要件に合わせたAWS Configルールの集まり</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-file-code" aria-hidden="true"></i>
-                <span>業界標準（<span class="keyword-tag">HIPAA</span>、<span class="keyword-tag">NIST</span>など）に基づく<span class="keyword-tag">テンプレート</span>が用意されている</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-wand-magic-sparkles fa-lg" style="color: var(--ui-color-5);"></i>
-            Security Hubの標準を使えば
-            <br>
-            一気に数百の統制を
-            <br>
-            簡単に導入できるよ！
-          </span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- セクション9: 実装手順 -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-list-check fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
-          <h2>実装手順</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="step-box">
-            <p><strong>1. サイバーセキュリティフレームワークの選択</strong></p>
-            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
-              <li>一般的なサイバーセキュリティフレームワークを<span class="keyword-tag">評価</span></li>
-              <li>選択したフレームワークに合わせて<span class="keyword-tag">統制目標</span>を定める</li>
-              <li>ビジネスの要件や業界特有の要件に<span class="keyword-tag">適合</span>させる</li>
-            </ul>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>2. AWS Artifactでのドキュメント入手</strong></p>
-            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
-              <li>フレームワークのガイダンスと責任に関する<span class="keyword-tag">関連文書</span>を入手</li>
-              <li><span class="keyword-tag">責任共有モデル</span>においてどの部分がAWS側の責任で、どの部分が自社の責任かを理解</li>
-              <li><span class="keyword-tag">AWS Customer Compliance Guides</span>を参照</li>
-            </ul>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>3. 予防的統制の実装</strong></p>
-            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
-              <li><span class="keyword-tag">SCP</span>、<span class="keyword-tag">リソースポリシー</span>、<span class="keyword-tag">ロール信頼ポリシー</span>などのガードレールを使用</li>
-              <li>非準拠のリソース構成やアクションを<span class="keyword-tag">防止</span></li>
-              <li>予防的統制の<span class="keyword-tag">有効性</span>を検証</li>
-            </ul>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>4. 発見的統制の導入</strong></p>
-            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
-              <li>自社の統制目標に沿った<span class="keyword-tag">Security Hub</span>の標準を評価・導入</li>
-              <li><span class="keyword-tag">AWS Config コンフォーマンスパック</span>で補完</li>
-              <li>最初は<span class="keyword-tag">監視モード</span>で実行し、動作を確認できたら<span class="keyword-tag">強制モード</span>に切り替え</li>
-            </ul>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>5. 継続的な検証と改善</strong></p>
-            <ul style="margin-top: 5px; list-style-type: disc; padding-left: 20px;">
-              <li>統制の<span class="keyword-tag">有効性</span>を定期的に検証</li>
-              <li>検証結果に基づいて統制を<span class="keyword-tag">改善</span></li>
-              <li>新しい脅威や規制要件に応じて<span class="keyword-tag">更新</span></li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-check-double fa-lg" style="color: var(--ui-color-2);"></i>
-            フレームワーク選択→文書入手→
-            <br>
-            統制実装→検証改善の
-            <br>
-            サイクルをしっかり回そう！
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション10: 責任共有モデル -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-handshake fa-5x" style="color: var(--ui-color-1); animation: fa-shake 3s;" aria-hidden="true"></i>
-          <h2>責任共有モデル</h2>
-        </div>
-        
-        <div class="card-content">
-          <p>AWS環境での統制目標を検討する際には、責任共有モデルを理解することが重要です。</p>
-          
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-cloud" style="margin-right: 5px;"></i>AWS側の責任</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span><span class="keyword-tag">クラウドの</span>セキュリティ</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>AWSサービスを実行する<span class="keyword-tag">インフラストラクチャ</span>の保護</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span><span class="keyword-tag">物理的セキュリティ</span>、<span class="keyword-tag">ネットワークインフラ</span>、<span class="keyword-tag">仮想化レイヤー</span>など</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="category-box">
-            <div class="category-title"><i class="fa-solid fa-user" style="margin-right: 5px;"></i>顧客側の責任</div>
-            <ul class="keyword-list" style="margin-top: 10px;">
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span><span class="keyword-tag">クラウドでの</span>セキュリティ</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span>AWSに<span class="keyword-tag">デプロイ</span>するもののセキュリティ構成</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-check" aria-hidden="true"></i>
-                <span><span class="keyword-tag">アクセス管理</span>、<span class="keyword-tag">データ保護</span>、<span class="keyword-tag">OS/アプリケーションパッチ</span>、<span class="keyword-tag">ネットワーク構成</span>など</span>
-              </li>
-            </ul>
-          </div>
-          
-          <p style="margin-top: 15px;">AWS Artifactから入手できるフレームワークドキュメントには、各統制における責任分担が詳細に記載されています。</p>
-        </div>
-        
-        <div class="speech-bubble variant-2 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-handshake fa-lg" style="color: var(--ui-color-5);"></i>
-            AWSと顧客の責任を
-            <br>
-            明確に理解することが
-            <br>
-            効果的な統制の第一歩！
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション11: まとめ -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-check-circle fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
-          <h2>まとめと効果</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
-              <span><span class="keyword-tag">明確な管理目標</span>: コンプライアンスとビジネス要件に基づく目標設定</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-              <span><span class="keyword-tag">効果的な統制</span>: 予防的・発見的統制の適切な組み合わせ</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-robot" aria-hidden="true"></i>
-              <span><span class="keyword-tag">自動化</span>: AWSサービスによる統制の自動実装と評価</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i>
-              <span><span class="keyword-tag">継続的評価</span>: 統制の有効性を常に検証し改善</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-file-contract" aria-hidden="true"></i>
-              <span><span class="keyword-tag">監査対応</span>: 統制の有効性を示す証拠をすぐに提示可能</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
-              <span><span class="keyword-tag">リスク軽減</span>: 体系的なアプローチによるセキュリティリスクの低減</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-2);"></i>
-            明確な目標と継続的な検証で
-            <br>
-            セキュリティの効果を最大化！
-            <br>
-            自動化で効率も上がるよ
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
+    </main>
 </body>
 </html>

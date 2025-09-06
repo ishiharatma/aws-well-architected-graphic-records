@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS07-BP01: 人員の能力確保 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-users fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS07-BP01: 人員の能力確保</h1>
+            <p class="header-description">ワークロードをサポートするために適切な数の訓練された人員がいることを検証するメカニズムを持ちます。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_personnel_capability.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 高リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-user-slash" aria-hidden="true"></i>訓練されていない人員による<span class="keyword-tag">運用困難</span></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>オンコール対応の<span class="keyword-tag">人員不足</span></li>
+                        <li><i class="fa-solid fa-fire" aria-hidden="true"></i>チームメンバーの<span class="keyword-tag">燃え尽き症候群</span></li>
+                        <li><i class="fa-solid fa-exclamation-circle" aria-hidden="true"></i>インシデント対応の<span class="keyword-tag">遅延</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        適切な人員がいないと、
+                        <br>
+                        ワークロードの効果的なサポートが困難になり、
+                        <br>
+                        <span class="keyword-tag">チーム負荷</span>が増大します！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-users-cog" aria-hidden="true"></i>ワークロード利用可能時間での<span class="keyword-tag">十分な訓練された人員</span></li>
+                        <li><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>ソフトウェアとサービスに関する<span class="keyword-tag">人員トレーニング</span>提供</li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i><span class="keyword-tag">オンコール対応</span>の適切なローテーション</li>
+                        <li><i class="fa-solid fa-calendar-alt" aria-hidden="true"></i>休暇取得時の<span class="keyword-tag">継続的サポート</span>体制</li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i>燃え尽き症候群の<span class="keyword-tag">リスク軽減</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        スキルを持つチームメンバーにより、
+                        <br>
+                        効果的なワークロードサポートを実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-check-double" aria-hidden="true"></i><span class="keyword-tag">人員数検証</span>：十分な訓練された人員の確認</li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i><span class="keyword-tag">チームメンバー確保</span>：通常運用とオンコール対応</li>
+                        <li><i class="fa-solid fa-book-open" aria-hidden="true"></i><span class="keyword-tag">プラットフォーム訓練</span>：ワークロード構成要素の理解</li>
+                        <li><i class="fa-solid fa-certificate" aria-hidden="true"></i><span class="keyword-tag">認定取得推奨</span>：AWS認定資格の取得支援</li>
+                        <li><i class="fa-solid fa-sync-alt" aria-hidden="true"></i><span class="keyword-tag">定期評価</span>：チームサイズとスキルの見直し</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-1);"></i>
+                        継続的なトレーニングと評価により、
+                        <br>
+                        <span class="keyword-tag">チーム能力</span>を維持・向上！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-1" aria-hidden="true"></i><span class="keyword-tag">人員配置</span>：運用、オンコール、セキュリティ対応の適切な人数</li>
+                        <li><i class="fa-solid fa-2" aria-hidden="true"></i><span class="keyword-tag">トレーニング実施</span>：ワークロード構成要素の教育</li>
+                        <li><i class="fa-solid fa-3" aria-hidden="true"></i><span class="keyword-tag">定期評価</span>：チームサイズとスキルの継続的見直し</li>
+                        <li><i class="fa-solid fa-4" aria-hidden="true"></i><span class="keyword-tag">能力調整</span>：運用要件に合わせた人員とスキル調整</li>
+                        <li><i class="fa-solid fa-5" aria-hidden="true"></i><span class="keyword-tag">ライフサイクル対応</span>：計画されたイベントへの対応能力確認</li>
+                        <li><i class="fa-solid fa-6" aria-hidden="true"></i><span class="keyword-tag">AWS Health対応</span>：セキュリティと運用通知への対応</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-2);"></i>
+                        段階的な実装により、
+                        <br>
+                        持続可能なチーム体制を構築！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- トレーニングリソース -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-graduation-cap fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>AWSトレーニングリソース</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-book" aria-hidden="true"></i><span class="keyword-tag">AWS Training and Certification</span>：無料・有料コース</li>
+                        <li><i class="fa-solid fa-calendar" aria-hidden="true"></i><span class="keyword-tag">AWSイベント・ウェビナー</span>：専門家からの学習</li>
+                        <li><i class="fa-solid fa-certificate" aria-hidden="true"></i><span class="keyword-tag">AWS認定資格</span>：スキル証明と向上</li>
+                        <li><i class="fa-solid fa-laptop" aria-hidden="true"></i><span class="keyword-tag">オンライン・対面</span>：柔軟な学習形式</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-book fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連ドキュメント</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS Training and Certification</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS Events and Webinars</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS Health Dashboard</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>OPS11-BP04: 知識管理の実行</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

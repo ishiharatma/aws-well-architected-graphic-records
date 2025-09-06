@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS03-BP07: チームの適切なリソース配分</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-balance-scale fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS03-BP07: チームの適切なリソース配分</h1>
+                <p class="header-description">チームメンバーが運用の成功に向けて行動することを奨励し、継続的な改善を促進します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_org_culture_team_res_appro.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <main>
+            <div class="section-layout">
+                <!-- リスクレベル -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-2); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>リスクレベル</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="risk-level medium">
+                            <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+                            <span>Medium（中）</span>
+                        </div>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                リソース不足は<br>
+                                ヒューマンエラーの<br>
+                                リスクを増大！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 概要 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-users-cog fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>概要</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-user-check" aria-hidden="true"></i>
+                                <span>適切な数の熟練したチームメンバーの配置</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-tools" aria-hidden="true"></i>
+                                <span>ワークロードニーズをサポートするツール・リソース提供</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                                <span>チームメンバーの過負荷によるヒューマンエラーリスク回避</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                                <span>自動化投資によるチーム効果性のスケール</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
+                                <span>追加キャパシティなしでより多くのワークロード支援</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                適切なリソース配分は<br>
+                                効率性と品質の<br>
+                                両立を実現！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 期待される成果 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                        <h2>期待される成果</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                                <span>移行計画に応じたAWSスキルセットの適切な人員配置</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                                <span>自動化・ワークフロー活用による効率的リソース利用</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>少数チームによる多数インフラ管理の実現</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-search" aria-hidden="true"></i>
+                                <span>運用優先度変化時のリソース制約の事前特定</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-heartbeat" aria-hidden="true"></i>
+                                <span>運用負荷メトリクス（オンコール疲労等）の監視</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2 right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                                適切な配分で<br>
+                                チーム満足度も<br>
+                                向上します！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 実装ガイダンス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-clipboard-list fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                        <h2>実装ガイダンス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+                                <span>運用メトリクスによる成功基準の定義</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                                <span>リソースキャパシティ計画・検査メカニズムの定義</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-poll" aria-hidden="true"></i>
+                                <span>チームの課題理解のためのメカニズム作成（月次調査等）</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                                <span>生産性課題のトレンド発見・チーム連携</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                                <span>現在のリソースの十分性定期レビュー・調整</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble top">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                実装レベル：中<br>
+                                継続的な監視と<br>
+                                調整が重要！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-layout">
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>よくあるアンチパターン</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+                                <span>多年クラウド移行計画完了時のAWSスキル不足</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                                <span>アジャイル移行時のストーリーポイント未割り当て</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-question-circle" aria-hidden="true"></i>
+                                <span>必要キャパシティレベルや適切スキル配分の不明確性</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                                <span>パートナー移行後のサポート移行計画不在</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-tired" aria-hidden="true"></i>
+                                <span>ワークロード効率的・効果的サポートの困難</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                                計画的なリソース配分<br>
+                                なしでは移行後の<br>
+                                運用が困難に！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ベネフィット -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                        <h2>ベネフィット</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-user-graduate" aria-hidden="true"></i>
+                                <span>ワークロードサポートに適切なスキルを持つメンバー確保</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-exchange-alt" aria-hidden="true"></i>
+                                <span>パフォーマンス影響なしの優先度変化への適応</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+                                <span>顧客イノベーションへの時間最大化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-smile" aria-hidden="true"></i>
+                                <span>従業員満足度の向上</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>ワークロード支援の熟練性向上</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                適切なリソース配分は<br>
+                                組織全体の<br>
+                                パフォーマンス向上に！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 関連ベストプラクティス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>関連ベストプラクティス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">OPS03-BP06</span> スキルセット維持・向上奨励</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">OPS09-BP03</span> 運用メトリクスレビュー・改善優先順位付け</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">OPS10-BP01</span> イベント・インシデント・問題管理プロセス</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">OPS10-BP07</span> イベントへの自動応答</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-network-wired fa-lg" style="color: var(--ui-color-1);"></i>
+                                他のベストプラクティス<br>
+                                との連携で<br>
+                                効果を最大化！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AWS Well-Architected Framework グラフィックレコード</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS07-BP04: プレイブックを使用した問題調査 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-search fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS07-BP04: プレイブックを使用した問題調査</h1>
+            <p class="header-description">プレイブックはインシデントを調査するために使用されるステップバイステップガイドです。調査、影響範囲の特定、根本原因の特定に使用されます。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_use_playbooks.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level medium">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 中リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-question-circle" aria-hidden="true"></i>インシデント調査の<span class="keyword-tag">標準方法不在</span></li>
+                        <li><i class="fa-solid fa-brain" aria-hidden="true"></i><span class="keyword-tag">記憶や経験</span>に依存したトラブルシューティング</li>
+                        <li><i class="fa-solid fa-user-plus" aria-hidden="true"></i>新メンバーの<span class="keyword-tag">試行錯誤</span>による学習</li>
+                        <li><i class="fa-solid fa-share-alt" aria-hidden="true"></i>調査ベストプラクティスの<span class="keyword-tag">チーム間共有不足</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        標準的な調査方法がないと、
+                        <br>
+                        インシデント対応が非効率になり、
+                        <br>
+                        <span class="keyword-tag">復旧時間</span>が延長します！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-book-open" aria-hidden="true"></i>一般的なインシデント用の<span class="keyword-tag">プレイブック</span>保有</li>
+                        <li><i class="fa-solid fa-database" aria-hidden="true"></i><span class="keyword-tag">中央保存</span>とチームメンバーへのアクセス提供</li>
+                        <li><i class="fa-solid fa-sync-alt" aria-hidden="true"></i>プレイブックの<span class="keyword-tag">頻繁な更新</span></li>
+                        <li><i class="fa-solid fa-link" aria-hidden="true"></i>既知の根本原因への<span class="keyword-tag">コンパニオンランブック</span>構築</li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>チーム全体での<span class="keyword-tag">一貫した調査手法</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        プレイブックにより、
+                        <br>
+                        インシデント軽減の取り組みを強化し、
+                        <br>
+                        <span class="keyword-tag">復旧時間</span>を短縮！
+                    </span>
+                </div>
+            </div>
+
+            <!-- プレイブックの特徴 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-clipboard-list fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>優れたプレイブックの特徴</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-route" aria-hidden="true"></i><span class="keyword-tag">ステップバイステップ</span>：発見プロセスのガイド</li>
+                        <li><i class="fa-solid fa-tools" aria-hidden="true"></i><span class="keyword-tag">ツール・権限</span>：必要なリソースの明確化</li>
+                        <li><i class="fa-solid fa-bullhorn" aria-hidden="true"></i><span class="keyword-tag">コミュニケーション計画</span>：ステークホルダー更新</li>
+                        <li><i class="fa-solid fa-level-up-alt" aria-hidden="true"></i><span class="keyword-tag">エスカレーション計画</span>：根本原因不明時の対応</li>
+                        <li><i class="fa-solid fa-link" aria-hidden="true"></i><span class="keyword-tag">ランブック連携</span>：解決方法への指針</li>
+                        <li><i class="fa-solid fa-bell" aria-hidden="true"></i><span class="keyword-tag">アラート統合</span>：特定アラートからの直接アクセス</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-1);"></i>
+                        多くの場合、プレイブックが根本原因を特定し、
+                        <br>
+                        <span class="keyword-tag">ランブック</span>で軽減策を実行！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-1" aria-hidden="true"></i><span class="keyword-tag">インシデント特定</span>：一般的なインシデントのリスト作成</li>
+                        <li><i class="fa-solid fa-2" aria-hidden="true"></i><span class="keyword-tag">低リスクから開始</span>：シンプルなシナリオから構築</li>
+                        <li><i class="fa-solid fa-3" aria-hidden="true"></i><span class="keyword-tag">テキスト形式</span>：中央ドキュメントリポジトリでの管理</li>
+                        <li><i class="fa-solid fa-4" aria-hidden="true"></i><span class="keyword-tag">段階的自動化</span>：Python等のスクリプト言語活用</li>
+                        <li><i class="fa-solid fa-5" aria-hidden="true"></i><span class="keyword-tag">AWS統合</span>：Systems Manager Automationの活用</li>
+                        <li><i class="fa-solid fa-6" aria-hidden="true"></i><span class="keyword-tag">完全自動化</span>：イベント応答による自動実行</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-2);"></i>
+                        組織の成熟度に応じて、
+                        <br>
+                        テキストから完全自動化まで進化！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- AWSサービス -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-brands fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>インシデント管理サービス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-clipboard-check" aria-hidden="true"></i><span class="keyword-tag">AWS Systems Manager Incident Manager</span>：統合インシデント対応</li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i><span class="keyword-tag">AWS Systems Manager Automation</span>：プレイブック自動化</li>
+                        <li><i class="fa-solid fa-laptop-code" aria-hidden="true"></i><span class="keyword-tag">Jupyter Notebook</span>：半自動化スクリプト実行</li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i><span class="keyword-tag">Collaboration Tools</span>：チーム連携機能</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-book fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連ドキュメント</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS Systems Manager Incident Manager ユーザーガイド</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS Systems Manager Automation ユーザーガイド</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>プレイブックテンプレート例</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>インシデント対応ベストプラクティス</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

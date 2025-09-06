@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS08-BP03: ワークロードトレースの分析 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-route fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS08-BP03: ワークロードトレースの分析</h1>
+            <p class="header-description">トレースデータの分析は、アプリケーションの運用ジャーニーの包括的なビューを実現するために重要です。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_workload_observability_analyze_workload_traces.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level medium">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 中リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-eye-slash" aria-hidden="true"></i>ログとメトリクスのみに依存し<span class="keyword-tag">トレースデータを見落とす</span></li>
+                        <li><i class="fa-solid fa-unlink" aria-hidden="true"></i>トレースデータと関連ログの<span class="keyword-tag">相関不足</span></li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>レイテンシや障害率など<span class="keyword-tag">トレース由来メトリクスの無視</span></li>
+                        <li><i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>コンポーネント間相互作用の<span class="keyword-tag">可視性不足</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        トレースデータを見落とすと、
+                        <br>
+                        分散システムのボトルネックや
+                        <br>
+                        <span class="keyword-tag">依存関係の問題</span>を特定できません！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i>アプリケーションの分散運用への<span class="keyword-tag">明確な可視性</span></li>
+                        <li><i class="fa-solid fa-tools" aria-hidden="true"></i>迅速な問題解決と<span class="keyword-tag">MTTR短縮</span></li>
+                        <li><i class="fa-solid fa-link" aria-hidden="true"></i>依存関係とその影響の<span class="keyword-tag">洞察獲得</span></li>
+                        <li><i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i>パフォーマンス問題の<span class="keyword-tag">迅速な特定と修正</span></li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>最適化されたコンポーネント相互作用による<span class="keyword-tag">ユーザー体験向上</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        コンポーネント間の相互作用を可視化し、
+                        <br>
+                        パフォーマンスを微調整！
+                    </span>
+                </div>
+            </div>
+
+            <!-- AWS X-Ray機能 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-search-plus fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>AWS X-Ray機能</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-sitemap" aria-hidden="true"></i><span class="keyword-tag">サービスマップ</span>：サービス相互作用とアプリケーション健全性監視</li>
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i><span class="keyword-tag">ServiceLens</span>：トレース、メトリクス、ログの統合ビュー</li>
+                        <li><i class="fa-solid fa-lightbulb" aria-hidden="true"></i><span class="keyword-tag">X-Ray Insights</span>：自動異常検出とルート原因分析</li>
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i><span class="keyword-tag">X-Ray Analytics</span>：トレースデータの詳細分析</li>
+                        <li><i class="fa-solid fa-robot" aria-hidden="true"></i><span class="keyword-tag">DevOps Guru統合</span>：機械学習による運用洞察</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-1);"></i>
+                        AWS X-Rayの包括的なスイートにより、
+                        <br>
+                        <span class="keyword-tag">アクション可能な洞察</span>を獲得！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-1" aria-hidden="true"></i><span class="keyword-tag">AWS X-Ray統合</span>：アプリケーションでのトレースデータキャプチャ</li>
+                        <li><i class="fa-solid fa-2" aria-hidden="true"></i><span class="keyword-tag">X-Rayメトリクス分析</span>：レイテンシ、リクエスト率、障害率の監視</li>
+                        <li><i class="fa-solid fa-3" aria-hidden="true"></i><span class="keyword-tag">ServiceLens活用</span>：サービスとアプリケーションの強化された観測可能性</li>
+                        <li><i class="fa-solid fa-4" aria-hidden="true"></i><span class="keyword-tag">X-Ray Insights有効化</span>：トレースデータの自動異常検出</li>
+                        <li><i class="fa-solid fa-5" aria-hidden="true"></i><span class="keyword-tag">X-Ray Analytics使用</span>：トレースデータの詳細分析とクエリ</li>
+                        <li><i class="fa-solid fa-6" aria-hidden="true"></i><span class="keyword-tag">DevOps Guru統合</span>：機械学習による運用洞察強化</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-2);"></i>
+                        段階的な実装により、
+                        <br>
+                        分散システムの完全な可視性を実現！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- AWSサービス -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-brands fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>主要AWSサービス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-route" aria-hidden="true"></i><span class="keyword-tag">AWS X-Ray</span>：分散トレーシングと分析</li>
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i><span class="keyword-tag">CloudWatch ServiceLens</span>：統合観測可能性</li>
+                        <li><i class="fa-solid fa-robot" aria-hidden="true"></i><span class="keyword-tag">Amazon DevOps Guru</span>：機械学習による運用洞察</li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span class="keyword-tag">Amazon CloudWatch</span>：メトリクスとアラーム</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-book fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連ドキュメント</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS X-Ray 開発者ガイド</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>CloudWatch ServiceLens ユーザーガイド</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>X-Ray Insights ドキュメント</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>X-Ray Analytics ガイド</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

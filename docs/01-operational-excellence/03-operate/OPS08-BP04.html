@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS08-BP04: アクション可能なアラートの作成 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-bell fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS08-BP04: アクション可能なアラートの作成</h1>
+            <p class="header-description">アプリケーションの動作の逸脱を迅速に検出し、対応することが重要です。特にKPIに基づく成果がリスクにさらされている場合の認識が不可欠です。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_workload_observability_create_alerts.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 高リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-bell-slash" aria-hidden="true"></i>重要でないアラートが多すぎて<span class="keyword-tag">アラート疲れ</span>を引き起こす</li>
+                        <li><i class="fa-solid fa-business-time" aria-hidden="true"></i>KPIに基づかないアラートで<span class="keyword-tag">ビジネス影響の理解困難</span></li>
+                        <li><i class="fa-solid fa-repeat" aria-hidden="true"></i>根本原因への対処不足で<span class="keyword-tag">同じ問題の繰り返しアラート</span></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>問題検出の<span class="keyword-tag">遅延</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        効果的でないアラートは、
+                        <br>
+                        重要な問題を見逃し、
+                        <br>
+                        <span class="keyword-tag">システム信頼性</span>を損ないます！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>潜在的問題の迅速な特定と軽減のための<span class="keyword-tag">タイムリーなアラート</span></li>
+                        <li><i class="fa-solid fa-bullseye" aria-hidden="true"></i>KPI成果がリスクにさらされた際の<span class="keyword-tag">関連性の高いアラート</span></li>
+                        <li><i class="fa-solid fa-tools" aria-hidden="true"></i><span class="keyword-tag">アクション可能</span>で実用的なアラート</li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i>プロアクティブな問題検出による<span class="keyword-tag">システム稼働時間向上</span></li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>チーム連携の強化と<span class="keyword-tag">迅速な問題解決</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        KPIに基づくアラートにより、
+                        <br>
+                        ビジネス影響を直接反映した
+                        <br>
+                        <span class="keyword-tag">意味のある通知</span>を実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アラート戦略 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-strategy fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>効果的なアラート戦略</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span class="keyword-tag">KPI重視</span>：ビジネス影響を反映するアラート</li>
+                        <li><i class="fa-solid fa-robot" aria-hidden="true"></i><span class="keyword-tag">異常検出</span>：CloudWatch、X-Ray Insights活用</li>
+                        <li><i class="fa-solid fa-filter" aria-hidden="true"></i><span class="keyword-tag">アラート疲れ軽減</span>：関連性とアクション可能性に焦点</li>
+                        <li><i class="fa-solid fa-bell" aria-hidden="true"></i><span class="keyword-tag">統合通知</span>：Slack、PagerDuty、Microsoft Teams連携</li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i><span class="keyword-tag">根本原因分析</span>：繰り返しアラートの防止</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-1);"></i>
+                        メトリクス、ログ、トレースデータを活用して、
+                        <br>
+                        <span class="keyword-tag">真に重要な</span>アラートを作成！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-1" aria-hidden="true"></i><span class="keyword-tag">KPI特定</span>：アプリケーションの主要パフォーマンス指標決定</li>
+                        <li><i class="fa-solid fa-2" aria-hidden="true"></i><span class="keyword-tag">異常検出実装</span>：CloudWatch、X-Ray Insights設定</li>
+                        <li><i class="fa-solid fa-3" aria-hidden="true"></i><span class="keyword-tag">DevOps Guru統合</span>：機械学習による異常検出</li>
+                        <li><i class="fa-solid fa-4" aria-hidden="true"></i><span class="keyword-tag">CloudWatchアラーム設定</span>：メトリクス閾値とアクション定義</li>
+                        <li><i class="fa-solid fa-5" aria-hidden="true"></i><span class="keyword-tag">通知統合</span>：Slack、PagerDuty等との連携</li>
+                        <li><i class="fa-solid fa-6" aria-hidden="true"></i><span class="keyword-tag">継続的改善</span>：アラート効果の定期レビューと調整</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-2);"></i>
+                        段階的な実装により、
+                        <br>
+                        効果的なアラートシステムを構築！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- AWSサービス -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-brands fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>主要AWSサービス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-bell" aria-hidden="true"></i><span class="keyword-tag">Amazon CloudWatch Alarms</span>：メトリクスベースアラート</li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i><span class="keyword-tag">CloudWatch Anomaly Detection</span>：異常パターン検出</li>
+                        <li><i class="fa-solid fa-route" aria-hidden="true"></i><span class="keyword-tag">AWS X-Ray Insights</span>：トレースデータ異常検出</li>
+                        <li><i class="fa-solid fa-robot" aria-hidden="true"></i><span class="keyword-tag">Amazon DevOps Guru</span>：機械学習による運用洞察</li>
+                        <li><i class="fa-solid fa-envelope" aria-hidden="true"></i><span class="keyword-tag">Amazon SNS</span>：通知配信</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-book fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連ドキュメント</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>CloudWatch Alarms ユーザーガイド</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>CloudWatch Anomaly Detection</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>X-Ray Insights 通知設定</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>Amazon DevOps Guru ユーザーガイド</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS05-BP01: バージョン管理の使用</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-brands fa-git-alt fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS05-BP01: バージョン管理の使用</h1>
+                <p class="header-description">変更とリリースの追跡を有効にするためにバージョン管理を使用し、チームがコードで協力し、エラーを簡単に元に戻せるようにします。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_dev_integ_version_control.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <main>
+            <div class="section-layout">
+                <!-- リスクレベル -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>リスクレベル</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="risk-level high">
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>High（高）</span>
+                        </div>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                バージョン管理なしでは<br>
+                                コード損失・変更追跡<br>
+                                困難のリスクが高い！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 概要 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-code-branch fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>概要</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-history" aria-hidden="true"></i>
+                                <span>変更・リリースの追跡を有効化</span>
+                            </li>
+                            <li>
+                                <i class="fa-brands fa-git-alt" aria-hidden="true"></i>
+                                <span>Git等のリビジョン・ソース管理システム活用</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                                <span>CloudFormationテンプレート等のインフラコード管理</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                                <span>チーム協業・コード一貫性確保</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                バージョン管理で<br>
+                                安全な開発・デプロイ<br>
+                                サイクルを実現！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 期待される成果 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                        <h2>期待される成果</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                                <span>チームのコード協業</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                                <span>マージ時のコード一貫性・変更損失防止</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-undo" aria-hidden="true"></i>
+                                <span>適切なバージョニングによるエラーの簡単復元</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>既知の良好な状態への復帰可能性</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2 right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                                正しいバージョニングで<br>
+                                開発チームの<br>
+                                生産性を向上！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 実装ガイダンス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                        <h2>実装ガイダンス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-database" aria-hidden="true"></i>
+                                <span>バージョン管理リポジトリでのアセット維持</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>変更追跡・新バージョンデプロイサポート</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-search" aria-hidden="true"></i>
+                                <span>既存バージョンへの変更検知</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-history" aria-hidden="true"></i>
+                                <span>以前バージョンへの復帰（ロールバック）</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                                <span>構成管理システムのバージョン管理機能統合</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble top">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                すべてのアセットを<br>
+                                バージョン管理下に<br>
+                                置くことが重要！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-layout">
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>よくあるアンチパターン</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-laptop" aria-hidden="true"></i>
+                                <span>ワークステーションでの開発・保存：ストレージ障害でコード損失</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                                <span>既存コード上書き後のアプリケーション動作不能・変更復帰不可</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                                <span>ファイル書き込みロック：他メンバーの作業阻害</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                                <span>重要レポートの誤上書き・復帰不可による再作成必要</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                                バージョン管理なしでは<br>
+                                重要な作業成果を<br>
+                                失うリスクが高い！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ベネフィット -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                        <h2>ベネフィット</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-undo" aria-hidden="true"></i>
+                                <span>既知の良好な状態・以前バージョンへの簡単復帰</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>アセット損失リスクの制限</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                                <span>チーム協業の効率化・競合回避</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>変更履歴の完全な可視性・追跡可能性</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                バージョン管理は<br>
+                                現代開発の<br>
+                                必須基盤技術！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AWSサービス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-brands fa-aws fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>関連AWSサービス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-brands fa-git-alt" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">Git</span> - 分散バージョン管理システム</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">AWS CloudFormation</span> - インフラストラクチャのバージョン管理</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-code" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">AWS CodeCommit</span> - マネージドGitリポジトリ</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-tools" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">構成管理システム</span> - バージョン管理機能統合</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-cloud fa-lg" style="color: var(--ui-color-1);"></i>
+                                AWSサービスの<br>
+                                バージョン管理機能を<br>
+                                フル活用しよう！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AWS Well-Architected Framework グラフィックレコード</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS11-BP05: 改善の推進要因定義 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-bullseye fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS11-BP05: 改善の推進要因定義</h1>
+            <p class="header-description">データとフィードバックループに基づいて機会を評価し優先順位を付けるために、改善の推進要因を特定します。システムとプロセスの改善機会を探求し、適切な場合は自動化します。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_drivers_for_imp.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level medium">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 中リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-disconnect" aria-hidden="true"></i>環境全体からデータ収集するが<span class="keyword-tag">イベントと活動を関連付けない</span></li>
+                        <li><i class="fa-solid fa-dollar-sign" aria-hidden="true"></i>詳細データ収集でCloudWatchとCloudTrailコストが高いが<span class="keyword-tag">有意義に活用しない</span></li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>改善推進要因定義時に<span class="keyword-tag">ビジネス成果を考慮しない</span></li>
+                        <li><i class="fa-solid fa-question-circle" aria-hidden="true"></i>新機能の効果を<span class="keyword-tag">測定しない</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-2);"></i>
+                        データを集めても活用しないと、
+                        <br>
+                        コストだけかかって
+                        <br>
+                        <span class="keyword-tag">価値</span>を生みません！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i>環境全体からの<span class="keyword-tag">データ追跡</span></li>
+                        <li><i class="fa-solid fa-link" aria-hidden="true"></i>イベントと活動の<span class="keyword-tag">ビジネス成果への関連付け</span></li>
+                        <li><i class="fa-solid fa-balance-scale" aria-hidden="true"></i>環境とシステム間の<span class="keyword-tag">比較対照</span></li>
+                        <li><i class="fa-solid fa-history" aria-hidden="true"></i>デプロイと成果の<span class="keyword-tag">詳細な活動履歴</span>維持</li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i>セキュリティ体制をサポートする<span class="keyword-tag">データ収集</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        データ駆動型の改善により、
+                        <br>
+                        客観的で効果的な
+                        <br>
+                        <span class="keyword-tag">意思決定</span>が可能！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-database" aria-hidden="true"></i>環境全体からデータ収集するが<span class="keyword-tag">イベントと活動を関連付けない</span></li>
+                        <li><i class="fa-solid fa-money-bill-wave" aria-hidden="true"></i>詳細データ収集で高コストを発生させるが<span class="keyword-tag">有意義に使用しない</span></li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>改善推進要因定義時に<span class="keyword-tag">ビジネス成果を考慮しない</span></li>
+                        <li><i class="fa-solid fa-question" aria-hidden="true"></i>新機能の効果を<span class="keyword-tag">測定しない</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        「とりあえずデータを集める」
+                        <br>
+                        だけでは意味がありません。
+                        <br>
+                        <span class="keyword-tag">目的</span>を明確に！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 改善推進要因の理解 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>改善推進要因の理解</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-star"></i> 望ましい機能</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-lightbulb" aria-hidden="true"></i>改善機会評価時の<span class="keyword-tag">望ましい機能と能力</span>の評価</li>
+                        <li><i class="fa-solid fa-aws" aria-hidden="true"></i><span class="keyword-tag">AWS新機能</span>の継続的な確認</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-bug"></i> 受け入れ不可能な問題</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>受け入れ不可能な問題、バグ、<span class="keyword-tag">脆弱性の評価</span></li>
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i><span class="keyword-tag">ライトサイジング</span>オプションの追跡</li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i><span class="keyword-tag">最適化機会</span>の探求</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-shield-alt"></i> コンプライアンス要件</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-balance-scale" aria-hidden="true"></i>規制、ポリシー遵守のための<span class="keyword-tag">更新と変更</span>評価</li>
+                        <li><i class="fa-solid fa-handshake" aria-hidden="true"></i>サードパーティサポート維持のための<span class="keyword-tag">要件評価</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        望ましい成果がサポートされる場合のみ
+                        <br>
+                        システムに変更を加える
+                        <br>
+                        <span class="keyword-tag">原則</span>を守りましょう！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスの利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-brain" aria-hidden="true"></i>改善基準決定による<span class="keyword-tag">イベントベース動機や感情的投資の影響最小化</span></li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>技術的イベントだけでなく<span class="keyword-tag">ビジネスイベントへの対応</span></li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i>改善領域特定のための<span class="keyword-tag">環境測定</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        明確な推進要因により、
+                        <br>
+                        感情ではなくデータに基づく
+                        <br>
+                        <span class="keyword-tag">合理的改善</span>を実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book"></i> 関連ベストプラクティス</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-building" aria-hidden="true"></i><span class="keyword-tag">OPS01</span>: 組織の優先事項</li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i><span class="keyword-tag">OPS02</span>: 関係性と所有権</li>
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i><span class="keyword-tag">OPS04-BP01</span>: 主要業績評価指標の特定</li>
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i><span class="keyword-tag">OPS08</span>: ワークロード可観測性の活用</li>
+                        <li><i class="fa-solid fa-heartbeat" aria-hidden="true"></i><span class="keyword-tag">OPS09</span>: 運用健全性の理解</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-file-text"></i> 関連ドキュメント・ツール</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-aws" aria-hidden="true"></i><span class="keyword-tag">AWS新機能</span>、セキュリティ速報</li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i><span class="keyword-tag">AWS Trusted Advisor</span></li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span class="keyword-tag">Cloud Intelligence Dashboards</span></li>
+                        <li><i class="fa-solid fa-balance-scale" aria-hidden="true"></i><span class="keyword-tag">AWSコンプライアンス</span>プログラム</li>
+                        <li><i class="fa-solid fa-database" aria-hidden="true"></i><span class="keyword-tag">Amazon Athena</span>、QuickSight、AWS Glue</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-video"></i> 関連動画</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-play" aria-hidden="true"></i><span class="keyword-tag">AWS re:Invent 2023</span> - サポートによる運用効率と回復力向上</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap fa-lg" style="color: var(--ui-color-1);"></i>
+                        これらのリソースを活用して、
+                        <br>
+                        効果的な改善推進要因を
+                        <br>
+                        <span class="keyword-tag">定義</span>しましょう！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

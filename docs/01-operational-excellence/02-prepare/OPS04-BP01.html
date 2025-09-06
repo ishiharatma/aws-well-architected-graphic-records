@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS04-BP01: 主要パフォーマンス指標の特定</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-chart-line fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS04-BP01: 主要パフォーマンス指標の特定</h1>
+                <p class="header-description">ビジネス要件に基づいてデータ駆動型の意思決定を行うために、監視活動とビジネス目標の整合性を確保する主要パフォーマンス指標（KPI）を定義し、監視します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_identify_kpis.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <main>
+            <div class="section-layout">
+                <!-- リスクレベル -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>リスクレベル</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="risk-level high">
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>High（高）</span>
+                        </div>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                KPI未定義は監視の<br>
+                                過不足を招き、重要な<br>
+                                シグナルを見逃す！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 概要 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>概要</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                                <span>ビジネス要件に基づくデータ駆動型意思決定</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-target" aria-hidden="true"></i>
+                                <span>監視活動とビジネス目標の整合性確保</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-search" aria-hidden="true"></i>
+                                <span>問題の効率的な特定と対処</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                                <span>ワークロード進化に応じたKPIの継続的見直し</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                効果的なKPIで<br>
+                                ビジネス成果に<br>
+                                直結した監視を！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 期待される成果 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                        <h2>期待される成果</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-align-center" aria-hidden="true"></i>
+                                <span>ビジネス目標と密接に連携した効率的な可観測性</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-crosshairs" aria-hidden="true"></i>
+                                <span>具体的なビジネス成果に貢献する監視活動</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                                <span>重要なメトリクスへの監視リソース・注意の優先配分</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>ビジネス影響拡大前の問題認識・対処</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2 right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                                明確なKPIで<br>
+                                プロアクティブな<br>
+                                運用を実現！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 実装ガイダンス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                        <h2>実装ガイダンス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                                <span>ビジネス成果から開始（売上増加、ユーザー関与度向上等）</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-link" aria-hidden="true"></i>
+                                <span>技術メトリクスとビジネス目標の相関関係特定</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">Amazon CloudWatch</span>を活用したKPI定義・監視</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                                <span>KPIの定期的レビュー・更新</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                                <span>技術・ビジネスチーム両方の関与</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble top">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                実装レベル：中<br>
+                                継続的な見直しが<br>
+                                成功の鍵！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-layout">
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>よくあるアンチパターン</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-question-circle" aria-hidden="true"></i>
+                                <span>KPI未定義：監視の過不足、重要シグナルの見逃し</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-stop-circle" aria-hidden="true"></i>
+                                <span>静的KPI：ワークロード・ビジネス目標進化への未対応</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-disconnect" aria-hidden="true"></i>
+                                <span>ミスアライメント：ビジネス成果と直接相関しない技術メトリクス重視</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+                                <span>現実問題との相関が困難なメトリクスへの集中</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                                適切なKPI設定なしでは<br>
+                                効果的な監視は<br>
+                                実現できません！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ベネフィット -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-medal fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                        <h2>ベネフィット</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-search-plus" aria-hidden="true"></i>
+                                <span>問題特定の容易さ：ビジネスKPIによる明確な問題表面化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                                <span>ビジネス整合性：監視活動のビジネス目標直接サポート</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i>
+                                <span>効率性：重要メトリクスへの監視リソース・注意の優先配分</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                                <span>プロアクティブ性：ビジネス影響拡大前の問題認識・対処</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                効果的なKPIは<br>
+                                運用効率を<br>
+                                大幅に向上させます！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 関連リソース -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>関連リソース</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-book" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">AWS Observability Best Practices</span></span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">CloudWatch User Guide</span></span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">AWS Observability Skill Builder Course</span></span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-flask" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">One Observability Workshop</span></span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-1);"></i>
+                                豊富なAWSリソースで<br>
+                                可観測性を<br>
+                                マスターしよう！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AWS Well-Architected Framework グラフィックレコード</p>
+        </footer>
+    </div>
+</body>
+</html>

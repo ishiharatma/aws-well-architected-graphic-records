@@ -1,87 +1,329 @@
+/* AWS Well-Architected グラフィックレコーディング 共通スタイル */
+
 @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
+/* カラーパレット */
+:root {
+  --ui-color-1: #1B6C8C;
+  --ui-color-2: #BF8136;
+  --ui-color-3: #F2E8E4;
+  --ui-color-4: #260101;
+  --ui-color-5: #BF5656;
+  --background-color: #FFF8F5;
+}
+
+/* 基本設定 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    font-family: 'Zen Kurenaido', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #FFF8F5;
+      font-family: 'Zen Kurenaido', sans-serif;
+  background-color: var(--background-color);
+  color: var(--ui-color-4);
+  line-height: 1.6;
+  padding: 20px;
 }
 
-header {
-    background-color: #333;
-    color: white;
-    padding: 1rem;
-    text-align: center;
+/* コンテナ */
+.container {
+  max-width: 2000px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
-.card-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    padding: 1rem;
-    justify-content: center;
+/* ヘッダー */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 30px 0;
 }
 
-.card {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
-    width: 300px;
-    text-align: center;
+.header h1 {
+  font-size: 36px;
+  color: var(--ui-color-4);
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
-.card h2 {
-    margin: 0.5rem 0;
+.header .date {
+  font-size: 14px;
+  color: #777777;
+  margin-top: 10px;
 }
 
-.card p {
-    color: #555;
+.mega-title-icon {
+  font-size: 4rem;
+  color: var(--ui-color-1);
+  margin-bottom: 20px;
+  animation: fa-bounce 2s infinite;
 }
 
-.btn {
-    display: inline-block;
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    background-color: #f90;
-    color: #000716;
-    text-decoration: none;
-    border-radius: 40px;
+/* セクション区切り線 */
+.section-divider {
+    background: linear-gradient(90deg, var(--ui-color-1), var(--ui-color-2));
+    height: 3px;
+    border-radius: 2px;
+    margin: 40px 0;
+}
+/* セクションレイアウト */
+.section-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 40px;
 }
 
-.btn:hover {
-    background-color: #ec7211 ;
+/* カードスタイル */
+.section-card {
+  flex: 1;
+  min-width: 220px;
+  max-width: 450px;
+  background-color: white;
+  border-radius: 20px;
+  padding: 15px;
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease;
 }
 
-.scroll-to-top {
-    position: fixed;
-    bottom: 20px; /* 画面下から20px */
-    right: 20px; /* 画面右から20px */
-    width: 50px;
-    height: 50px;
-    background-color: #f90;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    display: flex; /* 初期状態で非表示にするために opacity を使用 */
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* 他の要素より前面に表示 */
-    opacity: 0; /* 初期状態で透明 */
-    transform: translateY(20px); /* 初期状態で少し下に移動 */
-    transition: opacity 0.3s ease, transform 0.3s ease; /* トランジション効果 */
+.section-card:hover {
+  transform: translateY(-5px);
 }
 
-.scroll-to-top.show {
-    opacity: 1; /* 表示時に透明度を100%に */
-    transform: translateY(0); /* 元の位置に移動 */
+/* カード内アイコンコンテナ */
+.mega-icon-container {
+  text-align: center;
+  margin: 15px 0;
 }
 
-.scroll-to-top:hover {
-    background-color: #ec7211;
+.mega-icon-container i {
+  font-size: 4rem;
+  color: var(--ui-color-1);
+  margin-bottom: 15px;
+}
+
+.mega-icon-container h2 {
+  font-size: 24px;
+  color: #555555;
+  margin-bottom: 10px;
+}
+
+/* カードコンテンツ */
+.card-content {
+  padding: 0 10px 15px;
+}
+
+/* キーワードリスト */
+.keyword-list {
+  margin: 15px 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.keyword-list li {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: flex-start;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.keyword-list li i {
+  margin-right: 8px;
+  color: var(--ui-color-2);
+  min-width: 16px;
+  margin-top: 2px;
+}
+
+/* キーワードタグ */
+.keyword-tag {
+  background-color: var(--ui-color-3);
+  color: var(--ui-color-4);
+  padding: 3px 8px;
+  border-radius: 5px;
+  margin-right: 5px;
+  display: inline-block;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* 手書き風吹き出し */
+.speech-bubble {
+  position: relative;
+  background: #fff;
+  border: 3px solid var(--ui-color-1);
+  border-radius: 20px;
+  padding: 10px 15px;
+  margin: 15px 5px;
+  font-family: 'Yomogi', cursive;
+  box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+  transform: rotate(-1deg);
+}
+
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -13px;
+  left: 20px;
+  border-width: 12px 8px 0;
+  border-style: solid;
+  border-color: var(--ui-color-1) transparent;
+  display: block;
+  width: 0;
+}
+
+/* 吹き出しバリエーション */
+.speech-bubble.left::after {
+  top: 50%;
+  left: -16px;      /* バブルの外に出す */
+  bottom: auto;
+  right: auto;
+  transform: translateY(-50%) rotate(90deg); /* 角度も調整 */
+}
+
+.speech-bubble.right::after {
+  left: auto;
+  right: 20px;
+  transform: rotate(15deg);
+}
+
+.speech-bubble.top::after {
+  bottom: auto;
+  top: -13px;
+  border-width: 0 8px 12px;
+  transform: rotate(-5deg);
+}
+
+.speech-bubble.variant-1 {
+  background: #FFF9E3;
+  border-color: var(--ui-color-2);
+  transform: rotate(1deg);
+}
+
+.speech-bubble.variant-1::after {
+  border-color: var(--ui-color-2) transparent;
+}
+
+.speech-bubble.variant-2 {
+  background: #FFE9E9;
+  border-color: var(--ui-color-5);
+  transform: rotate(-2deg);
+}
+
+.speech-bubble.variant-2::after {
+  border-color: var(--ui-color-5) transparent;
+}
+
+/** 著者セクション */
+.author-speech-row {
+  display: flex;
+  align-items: center;
+  margin: 40px 0 40px 20px;
+  max-width: 600px;
+  justify-content: flex-start; /* 左寄せ */
+}
+.author-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-left: 0;
+  margin-right: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* 手書き文字 */
+.handwritten {
+  font-family: 'Yomogi', cursive;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #333;
+}
+
+/* コードプレビュー */
+pre {
+  background: #f5f5f5;
+  padding: 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  margin-top: 10px;
+  overflow-x: auto;
+  font-family: 'Courier New', monospace;
+}
+
+/* アニメーション */
+.fade-in-scale {
+  animation: fadeInScale 0.6s ease-out;
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 1600px) {
+  .section-card {
+    min-width: 280px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .section-card {
+    min-width: 320px;
+  }
+}
+
+@media (max-width: 900px) {
+  .section-card {
+    min-width: 380px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-layout {
+    flex-direction: column;
+  }
+  
+  .section-card {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .header h1 {
+    font-size: 28px;
+  }
+  
+  .mega-title-icon {
+    font-size: 3rem;
+  }
+}
+
+/* 特別なスタイル */
+.highlight {
+  background-color: var(--ui-color-3);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.important {
+  color: var(--ui-color-5);
+  font-weight: bold;
+}
+
+.success {
+  color: var(--ui-color-1);
+  font-weight: bold;
 }

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS07: 運用準備の確保 - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+        
+        .bp-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .bp-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .bp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, var(--ui-color-1), var(--ui-color-2));
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .risk-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .risk-high {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        
+        .risk-medium {
+            background-color: #fff3e0;
+            color: #ef6c00;
+            border: 1px solid #ffcc02;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-clipboard-check fa-7x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                </div>
+                <h1>OPS07: 運用準備の確保</h1>
+                <p class="subtitle">Ensure readiness to support</p>
+                <div class="header-links">
+                    <a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/ops-07.html" target="_blank">
+                        <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- 統計情報 -->
+        <div class="stats-section">
+            <h2><i class="fa-solid fa-chart-bar"></i> OPS07 統計情報</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">6</span>
+                    <span class="stat-label">ベストプラクティス</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">高リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">2</span>
+                    <span class="stat-label">中リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">低リスク</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-info-circle fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>カテゴリ概要</h2>
+                </div>
+                <div class="card-content">
+                    <p>ワークロードの運用準備、プロセスと手順、および人員を評価して、ワークロードに関連する運用リスクを理解します。適切な数の訓練された人員、運用準備レビュー（ORR）、ランブック、プレイブック、そして情報に基づいた意思決定プロセスを確保することが重要です。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bp-grid">
+            <!-- OPS07-BP01 -->
+            <a href="OPS07-BP01.html" class="bp-card">
+                <div class="bp-header">
+                    <div class="bp-icon">
+                        <i class="fa-solid fa-users fa-4x" style="color: var(--ui-color-5);"></i>
+                    </div>
+                    <div class="bp-info">
+                        <h3>OPS07-BP01</h3>
+                        <h4>人員の能力確保</h4>
+                        <div class="risk-indicator high">
+                            <i class="fa-solid fa-exclamation-triangle"></i>
+                            <span>高リスク</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bp-description">
+                    <p>ワークロードをサポートするために適切な数の訓練された人員がいることを検証するメカニズムを持ちます。</p>
+                    <div class="bp-tags">
+                        <span class="tag">人員配置</span>
+                        <span class="tag">トレーニング</span>
+                        <span class="tag">オンコール対応</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- OPS07-BP02 -->
+            <a href="OPS07-BP02.html" class="bp-card">
+                <div class="bp-header">
+                    <div class="bp-icon">
+                        <i class="fa-solid fa-clipboard-check fa-4x" style="color: var(--ui-color-5);"></i>
+                    </div>
+                    <div class="bp-info">
+                        <h3>OPS07-BP02</h3>
+                        <h4>運用準備の一貫したレビューの確保</h4>
+                        <div class="risk-indicator high">
+                            <i class="fa-solid fa-exclamation-triangle"></i>
+                            <span>高リスク</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bp-description">
+                    <p>運用準備レビュー（ORR）を使用して、ワークロードを運用できることを検証します。</p>
+                    <div class="bp-tags">
+                        <span class="tag">ORR</span>
+                        <span class="tag">チェックリスト</span>
+                        <span class="tag">ベストプラクティス</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- OPS07-BP03 -->
+            <a href="OPS07-BP03.html" class="bp-card">
+                <div class="bp-header">
+                    <div class="bp-icon">
+                        <i class="fa-solid fa-book-open fa-4x" style="color: var(--ui-color-2);"></i>
+                    </div>
+                    <div class="bp-info">
+                        <h3>OPS07-BP03</h3>
+                        <h4>ランブックを使用した手順の実行</h4>
+                        <div class="risk-indicator medium">
+                            <i class="fa-solid fa-exclamation-triangle"></i>
+                            <span>中リスク</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bp-description">
+                    <p>ランブックは特定の結果を達成するための文書化されたプロセスです。一連のステップで構成され、一貫した結果を提供します。</p>
+                    <div class="bp-tags">
+                        <span class="tag">ランブック</span>
+                        <span class="tag">手順書</span>
+                        <span class="tag">自動化</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- OPS07-BP04 -->
+            <a href="OPS07-BP04.html" class="bp-card">
+                <div class="bp-header">
+                    <div class="bp-icon">
+                        <i class="fa-solid fa-search fa-4x" style="color: var(--ui-color-2);"></i>
+                    </div>
+                    <div class="bp-info">
+                        <h3>OPS07-BP04</h3>
+                        <h4>プレイブックを使用した問題調査</h4>
+                        <div class="risk-indicator medium">
+                            <i class="fa-solid fa-exclamation-triangle"></i>
+                            <span>中リスク</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bp-description">
+                    <p>プレイブックはインシデントを調査するために使用されるステップバイステップガイドです。調査、影響範囲の特定、根本原因の特定に使用されます。</p>
+                    <div class="bp-tags">
+                        <span class="tag">プレイブック</span>
+                        <span class="tag">インシデント調査</span>
+                        <span class="tag">根本原因分析</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- OPS07-BP05 -->
+            <a href="OPS07-BP05.html" class="bp-card">
+                <div class="bp-header">
+                    <div class="bp-icon">
+                        <i class="fa-solid fa-balance-scale fa-4x" style="color: var(--ui-color-1);"></i>
+                    </div>
+                    <div class="bp-info">
+                        <h3>OPS07-BP05</h3>
+                        <h4>システムと変更のデプロイに関する情報に基づいた意思決定</h4>
+                        <div class="risk-indicator low">
+                            <i class="fa-solid fa-info-circle"></i>
+                            <span>低リスク</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bp-description">
+                    <p>ワークロードの成功および失敗した変更に対するプロセスを整備します。プリモーテムを使用して失敗を予測し、適切な手順を作成します。</p>
+                    <div class="bp-tags">
+                        <span class="tag">プリモーテム</span>
+                        <span class="tag">意思決定</span>
+                        <span class="tag">ガバナンス</span>
+                    </div>
+                </div>
+            </a>
+            <!-- OPS07-BP06 -->
+            <a href="OPS07-BP06.html" class="bp-card">
+                <div class="bp-header">
+                    <div class="bp-icon">
+                        <i class="fa-solid fa-life-ring fa-4x" style="color: var(--ui-color-1);"></i>
+                    </div>
+                    <div class="bp-info">
+                        <h3>OPS07-BP06</h3>
+                        <h4>本番ワークロード用のサポートプランの作成</h4>
+                        <div class="risk-indicator low">
+                            <i class="fa-solid fa-info-circle"></i>
+                            <span>低リスク</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bp-description">
+                    <p>本番ワークロードが依存するソフトウェアとサービスのサポートを有効にします。本番サービスレベルのニーズを満たす適切なサポートレベルを選択します。</p>
+                    <div class="bp-tags">
+                        <span class="tag">サポートプラン</span>
+                        <span class="tag">AWS Business Support</span>
+                        <span class="tag">ベンダー管理</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

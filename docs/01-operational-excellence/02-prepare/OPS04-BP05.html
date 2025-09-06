@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS04-BP05: 分散トレーシングの実装</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-route fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS04-BP05: 分散トレーシングの実装</h1>
+                <p class="header-description">分散システムの様々なコンポーネントを通過するリクエストを監視・可視化し、複数のソースからトレースデータを取得して統合ビューで分析することで、リクエストフローとボトルネックを理解します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_dist_trace.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <main>
+            <div class="section-layout">
+                <!-- リスクレベル -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>リスクレベル</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="risk-level high">
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>High（高）</span>
+                        </div>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                不整合な計装は<br>
+                                分散システムの<br>
+                                全体像把握を困難に！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 概要 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-project-diagram fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>概要</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-route" aria-hidden="true"></i>
+                                <span>分散システム各コンポーネント間のリクエスト監視・可視化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>複数ソースからのトレースデータ取得・統合ビュー分析</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-search" aria-hidden="true"></i>
+                                <span>リクエストフロー・ボトルネック・最適化ポイントの理解</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-bug" aria-hidden="true"></i>
+                                <span>精密なデバッグ・パフォーマンス最適化・UX向上</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                分散トレーシングで<br>
+                                システム全体の<br>
+                                動作を完全把握！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 期待される成果 -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                        <h2>期待される成果</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                                <span>分散システム全体のリクエストフローの包括的視点</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-search-plus" aria-hidden="true"></i>
+                                <span>障害・パフォーマンス問題発生箇所の迅速特定</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                                <span>実ユーザーデータに基づく監視・最適化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                                <span>実世界需要に応えるシステム確保によるUX向上</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2 right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                                エントリーからエグジットまで<br>
+                                リクエストパス全体を<br>
+                                可視化！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 実装ガイダンス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                        <h2>実装ガイダンス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-route" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">AWS X-Ray</span>の採用・統合</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                                <span>全サービスの計装（Lambda・EC2等）</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">CloudWatch RUM</span>・<span class="keyword-tag">合成監視</span>の組み込み</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">CloudWatchエージェント</span>の使用</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">Amazon DevOps Guru</span>の活用</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                                <span>トレースデータの定期分析・アラート設定</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble top">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                                計装するサービスが多いほど<br>
+                                エンドツーエンドの<br>
+                                視点が明確に！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-layout">
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                        <h2>よくあるアンチパターン</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+                                <span>不整合な計装：分散システム内の一部サービスのみトレーシング計装</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                                <span>レイテンシ無視：エラーのみ重視、レイテンシ・段階的パフォーマンス劣化未考慮</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
+                                <span>部分的視点：システム全体のリクエストフロー把握困難</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-search" aria-hidden="true"></i>
+                                <span>デバッグ困難：問題発生箇所の特定に時間を要する</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-1">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                                分散トレーシングなしでは<br>
+                                複雑なシステムの<br>
+                                問題解決は困難！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ベネフィット -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                        <h2>ベネフィット</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                                <span>包括的システム概要：エントリーからエグジットまでのリクエストパス可視化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-bug" aria-hidden="true"></i>
+                                <span>デバッグ強化：障害・パフォーマンス問題発生箇所の迅速特定</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                                <span>ユーザー体験向上：実ユーザーデータに基づく監視・最適化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span>実世界需要対応：システムの実際の要求への適合確保</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble variant-2">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                                分散トレーシングは<br>
+                                現代システムの<br>
+                                必須技術です！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AWSサービス -->
+                <div class="section-card fade-in-scale">
+                    <div class="mega-icon-container">
+                        <i class="fa-brands fa-aws fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                        <h2>主要AWSサービス</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul class="keyword-list">
+                            <li>
+                                <i class="fa-solid fa-route" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">AWS X-Ray</span> - 分散トレーシング・分析・デバッグ</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">CloudWatch ServiceLens Map</span> - サービスマップ可視化</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">Amazon DevOps Guru</span> - 実用的推奨事項提供</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-search" aria-hidden="true"></i>
+                                <span><span class="keyword-tag">X-Ray Analytics・Insights</span> - 自動トレース分析</span>
+                            </li>
+                        </ul>
+                        <div class="speech-bubble right">
+                            <span class="handwritten">
+                                <i class="fa-solid fa-cloud fa-lg" style="color: var(--ui-color-1);"></i>
+                                X-Rayを中心とした<br>
+                                AWSサービス連携で<br>
+                                完璧なトレーシングを！
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AWS Well-Architected Framework グラフィックレコード</p>
+        </footer>
+    </div>
+</body>
+</html>

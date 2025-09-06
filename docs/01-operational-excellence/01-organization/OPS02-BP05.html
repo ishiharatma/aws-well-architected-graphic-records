@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS02-BP05: 追加・変更・例外要求メカニズム - AWS Well-Architected グラフィックレコーディング</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+</head>
+<body>
+    <div class="container">        <header class="header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-sitemap fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+                <h1>OPS02-BP05: 追加・変更・例外要求メカニズム</h1>
+                <p class="header-description">チーム間の責任を理解し、効果的な協力を促進するために、チーム間の責任を理解します。</p>
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_req_add_chg_exception.html" target="_blank" class="header-link">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-info-circle fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-info" aria-hidden="true"></i>
+                            <span>このベストプラクティスを確立しない場合の<span class="keyword-tag">リスクレベル: 中</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-info fa-lg" style="color: var(--ui-color-2);"></i>
+                        変更要求メカニズム不備は
+                        <br>
+                        <span class="keyword-tag">中リスク</span>
+                        <br>
+                        進化・改善が困難
+                    </span>
+                </div>
+            </div>
+
+            <!-- メインカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exchange-alt fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>追加・変更・例外要求メカニズム</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-user-cog" aria-hidden="true"></i>
+                            <span>プロセス・手順・リソース<span class="keyword-tag">所有者への要求</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-plus-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">追加・変更・例外</span>要求を含む</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">変更管理プロセス</span>を通じた要求</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">利益・リスク評価</span>後の情報に基づく承認決定</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        要件変化に応じて
+                        <br>
+                        <span class="keyword-tag">プロセス・手順・リソース</span>
+                        <br>
+                        が進化できる！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                            <span>割り当てられた所有権に基づく<span class="keyword-tag">変更要求</span>可能</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">利益・リスク</span>を考慮した意図的な変更</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-check-circle fa-lg" style="color: var(--ui-color-1);"></i>
+                        所有者が
+                        <br>
+                        <span class="keyword-tag">情報に基づいた</span>
+                        <br>
+                        変更決定を実施！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>よくあるアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                            <span>アプリケーション<span class="keyword-tag">デプロイ方法更新</span>が必要だが運用チームへの変更要求方法なし</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-life-ring" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">災害復旧計画</span>更新が必要だが変更要求先の所有者不明</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-warning fa-lg" style="color: var(--ui-color-5);"></i>
+                        変更要求メカニズムなしは
+                        <br>
+                        <span class="keyword-tag">中リスク</span>！
+                        <br>
+                        進化・改善が困難
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-route fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
+                            <span>プロセス・手順・リソースへの<span class="keyword-tag">変更要求能力</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-feather" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">軽量</span>な変更管理プロセス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span>変更管理プロセスの<span class="keyword-tag">文書化</span></span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-cogs fa-lg" style="color: var(--ui-color-2);"></i>
+                        <span class="keyword-tag">軽量プロセス</span>で
+                        <br>
+                        効率的な変更管理を
+                        <br>
+                        実現しよう！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 顧客事例 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-store fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>顧客事例</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shopping-cart" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AnyCompany Retail</span>のRACIマトリックス活用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">責任割り当て</span>マトリックスで変更所有者特定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">軽量・簡単</span>な変更管理プロセス文書化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+                            <span>RACIマトリックス・プロセス使用で<span class="keyword-tag">誰でも変更要求</span>可能</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        <span class="keyword-tag">RACIマトリックス</span>で
+                        <br>
+                        明確な責任と
+                        <br>
+                        効率的な変更管理！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>ワークロードの<span class="keyword-tag">プロセス・手順・リソース</span>と所有者特定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                            <span>組織ステークホルダーとの<span class="keyword-tag">変更管理プロセス</span>開発</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span>ナレッジ管理システムでの<span class="keyword-tag">プロセス文書化</span></span>
+                        </li>
+                    </ul>
+                    
+                </div>
+                
+                <div class="speech-bubble variant-1 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-tools fa-lg" style="color: var(--ui-color-1);"></i>
+                        <span class="keyword-tag">AWS Systems Manager</span>
+                        <br>
+                        <span class="keyword-tag">Change Manager</span>で
+                        <br>
+                        ワークロードリソース変更管理！
+                    </span>
+                </div>
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer style="text-align: center; margin-top: 40px; padding: 20px; color: #777;">
+            <p>AWS Well-Architected Framework - Operational Excellence Pillar</p>
+            <p>OPS02-BP05: Mechanisms exist to request additions, changes, and exceptions</p>
+        </footer>
+    </div>
+</body>
+</html>

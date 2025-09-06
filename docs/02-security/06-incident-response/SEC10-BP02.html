@@ -1,968 +1,272 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEC10-BP02 インシデント管理計画を作成する</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
-    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
-    
-    :root {
-      --ui-color-1: #1B6C8C;
-      --ui-color-2: #BF8136;
-      --ui-color-3: #F2E8E4;
-      --ui-color-4: #260101;
-      --ui-color-5: #BF5656;
-    }
-    
-    body {
-      font-family: 'Zen Kurenaido', sans-serif;
-      background-color: #FFF8F5;
-      color: #333333;
-      line-height: 1.6;
-      margin: 0;
-      padding: 20px;
-    }
-    
-    .container {
-      max-width: 2000px;
-      margin: 0 auto;
-    }
-    
-    /* ヘッダースタイル */
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-      position: relative;
-      padding: 20px;
-      background-color: white;
-      border-radius: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    
-    .title {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-    
-    .title h1 {
-      font-size: 36px;
-      color: var(--ui-color-1);
-      margin: 15px 0;
-      line-height: 1.2;
-    }
-    
-    .date {
-      font-size: 14px;
-      color: #777777;
-    }
-    
-    /* セクションレイアウト */
-    .section-layout {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-bottom: 20px;
-      justify-content: center;
-    }
-    
-    /* カードスタイル */
-    .section-card {
-      flex: 1;
-      min-width: 220px;
-      max-width: 450px;
-      background-color: white;
-      border-radius: 20px;
-      padding: 15px;
-      box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
-      position: relative;
-      overflow: hidden;
-      animation: fadeInScale 0.5s ease-out;
-    }
-    
-    @keyframes fadeInScale {
-      0% {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-    
-    /* カード内アイコンコンテナ */
-    .mega-icon-container {
-      text-align: center;
-      margin: 15px 0;
-    }
-    
-    /* カードコンテンツ */
-    .card-content {
-      padding: 0 10px 15px;
-    }
-    
-    /* キーワードリスト */
-    .keyword-list {
-      margin: 15px 0;
-      padding: 0;
-      list-style-type: none;
-    }
-    
-    .keyword-list li {
-      margin-bottom: 12px;
-      display: flex;
-      align-items: flex-start;
-    }
-    
-    .keyword-list li i {
-      margin-right: 8px;
-      color: var(--ui-color-2);
-      min-width: 16px;
-      margin-top: 4px;
-    }
-    
-    /* キーワードタグ */
-    .keyword-tag {
-      background-color: var(--ui-color-3);
-      color: var(--ui-color-4);
-      padding: 3px 8px;
-      border-radius: 5px;
-      margin-right: 5px;
-      display: inline-block;
-      font-weight: bold;
-    }
-    
-    .risk-tag {
-      background-color: #FF6B6B;
-      color: white;
-      padding: 3px 10px;
-      border-radius: 5px;
-      display: inline-block;
-      font-weight: bold;
-    }
-    
-    /* 手書き風吹き出し */
-    .speech-bubble {
-      position: relative;
-      background: #fff;
-      border: 3px solid var(--ui-color-1);
-      border-radius: 20px;
-      padding: 10px 15px;
-      margin: 15px 5px;
-      font-family: 'Yomogi', cursive;
-      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
-      transform: rotate(-1deg);
-    }
-    
-    .speech-bubble::after {
-      content: '';
-      position: absolute;
-      bottom: -13px;
-      left: 20px;
-      border-width: 12px 8px 0;
-      border-style: solid;
-      border-color: var(--ui-color-1) transparent;
-      display: block;
-      width: 0;
-    }
-    
-    /* 吹き出しバリエーション */
-    .speech-bubble.right::after {
-      left: auto;
-      right: 20px;
-      transform: rotate(15deg);
-    }
-    
-    .speech-bubble.top::after {
-      bottom: auto;
-      top: -13px;
-      border-width: 0 8px 12px;
-      transform: rotate(-5deg);
-    }
-    
-    .speech-bubble.variant-1 {
-      background: #FFF9E3;
-      border-color: var(--ui-color-2);
-      transform: rotate(1deg);
-    }
-    
-    .speech-bubble.variant-1::after {
-      border-color: var(--ui-color-2) transparent;
-    }
-    
-    .speech-bubble.variant-2 {
-      background: #FFE9E9;
-      border-color: var(--ui-color-5);
-      transform: rotate(-2deg);
-    }
-    
-    .speech-bubble.variant-2::after {
-      border-color: var(--ui-color-5) transparent;
-    }
-    
-    /* 手書き文字 */
-    .handwritten {
-      font-family: 'Yomogi', cursive;
-      font-size: 15px;
-      line-height: 1.5;
-      color: #333;
-    }
-    
-    /* 実装ステップボックス */
-    .step-box {
-      border-left: 4px solid var(--ui-color-1);
-      padding-left: 12px;
-      margin: 10px 0;
-    }
-    
-    /* インシデント対応フロー */
-    .incident-flow {
-      background-color: #f9f9f9;
-      border-radius: 15px;
-      padding: 20px;
-      margin: 15px 0;
-    }
-    
-    .flow-title {
-      font-weight: bold;
-      text-align: center;
-      color: var(--ui-color-1);
-      margin-bottom: 15px;
-      font-size: 18px;
-    }
-    
-    .flow-step {
-      display: flex;
-      align-items: center;
-      margin: 10px 0;
-      padding: 10px;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    
-    .flow-number {
-      background-color: var(--ui-color-1);
-      color: white;
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      margin-right: 15px;
-      flex-shrink: 0;
-    }
-    
-    .flow-content {
-      flex-grow: 1;
-    }
-    
-    .flow-step-title {
-      font-weight: bold;
-      color: var(--ui-color-4);
-      margin-bottom: 5px;
-    }
-    
-    .flow-step-desc {
-      font-size: 14px;
-      color: #666;
-    }
-    
-    /* RACI チャート */
-    .raci-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 15px 0;
-      background-color: white;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    
-    .raci-table th,
-    .raci-table td {
-      padding: 12px 8px;
-      text-align: center;
-      border-bottom: 1px solid #eee;
-    }
-    
-    .raci-table th {
-      background-color: var(--ui-color-1);
-      color: white;
-      font-weight: bold;
-    }
-    
-    .raci-table tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    
-    .raci-r { background-color: #FF6B6B; color: white; padding: 2px 6px; border-radius: 3px; font-size: 12px; }
-    .raci-a { background-color: #4ECDC4; color: white; padding: 2px 6px; border-radius: 3px; font-size: 12px; }
-    .raci-c { background-color: #45B7D1; color: white; padding: 2px 6px; border-radius: 3px; font-size: 12px; }
-    .raci-i { background-color: #FFA726; color: white; padding: 2px 6px; border-radius: 3px; font-size: 12px; }
-    
-    /* AWS サービスボックス */
-    .aws-service-box {
-      background-color: #f0f9ff;
-      border: 1px solid #d0e3f2;
-      border-radius: 8px;
-      padding: 10px;
-      margin: 10px 0;
-      display: flex;
-      align-items: center;
-    }
-    
-    .aws-service-icon {
-      margin-right: 10px;
-      color: var(--ui-color-1);
-      font-size: 24px;
-    }
-    
-    .aws-service-content {
-      flex-grow: 1;
-    }
-    
-    .aws-service-name {
-      font-weight: bold;
-      color: var(--ui-color-1);
-      margin-bottom: 5px;
-    }
-    
-    /* レスポンシブ対応 */
-    @media (max-width: 1600px) {
-      .section-card {
-        min-width: 280px;
-      }
-    }
-    
-    @media (max-width: 1200px) {
-      .section-card {
-        min-width: 320px;
-      }
-    }
-    
-    @media (max-width: 900px) {
-      .section-card {
-        min-width: 380px;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .section-layout {
-        flex-direction: column;
-      }
-      
-      .section-card {
-        width: 100%;
-        min-width: auto;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC10-BP02 セキュリティベストプラクティス</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
 </head>
 <body>
-  <div class="container">
-    <!-- ヘッダー -->
-    <div class="header">
-      <div class="title">
-        <i class="fa-solid fa-clipboard-list fa-7x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
-        <h1>SEC10-BP02 インシデント管理計画を作成する</h1>
-      </div>
-      <div class="date">AWS Well-Architected セキュリティの柱 - 準備</div>
-    </div>
-    
-    <!-- セクション1: 概要 -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-file-shield fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>概要</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-scroll" aria-hidden="true"></i>
-              <span>インシデント対応のために<span class="keyword-tag">最初に作成する文書</span></span>
-            </li>
-            <li>
-              <i class="fa-solid fa-foundation" aria-hidden="true"></i>
-              <span>インシデント対応<span class="keyword-tag">プログラムと戦略の基礎</span>となる</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-route" aria-hidden="true"></i>
-              <span>セキュリティイベントの<span class="keyword-tag">体系的なプロセス</span>を定義</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-clock" aria-hidden="true"></i>
-              <span><span class="keyword-tag">タイムリー</span>な特定、修復、対応を実現</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble">
-          <span class="handwritten">
-            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
-            計画なしでは効果的な対応は困難！
-            <br>
-            インシデント対応の
-            <br>
-            <span class="keyword-tag">道筋</span>を明確にしよう
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション2: メリットとリスクレベル -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-chart-line fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
-          <h2>メリットとリスクレベル</h2>
-        </div>
-        
-        <div class="card-content">
-          <div style="text-align: center; margin: 20px 0;">
-            <p style="font-size: 18px; margin: 10px 0;">
-              <strong>リスクレベル：</strong>
-              <span class="risk-tag">高</span>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-ambulance fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>SEC10-BP02 セキュリティベストプラクティス</h1>
+            <p class="header-description">
+                インシデント対応における重要なベストプラクティスです。適切な実装により、セキュリティ態勢を大幅に向上させることができます。
             </p>
-          </div>
-          
-          <div style="margin: 20px 0;">
-            <h4 style="color: var(--ui-color-1); margin-bottom: 10px;">
-              <i class="fa-solid fa-star" style="margin-right: 5px;"></i>
-              メリット
-            </h4>
-            <ul class="keyword-list">
-              <li>
-                <i class="fa-solid fa-cogs" aria-hidden="true"></i>
-                <span>プロセスの<span class="keyword-tag">熟考</span>と<span class="keyword-tag">明確な定義</span></span>
-              </li>
-              <li>
-                <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
-                <span>インシデント対応プログラムの<span class="keyword-tag">成功</span>と<span class="keyword-tag">拡張性</span></span>
-              </li>
-              <li>
-                <i class="fa-solid fa-stopwatch" aria-hidden="true"></i>
-                <span>明確な手順とワークフローによる<span class="keyword-tag">タイムリーな対応</span></span>
-              </li>
-              <li>
-                <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
-                <span>定期的な<span class="keyword-tag">更新</span>、<span class="keyword-tag">反復</span>、<span class="keyword-tag">テスト</span>が重要</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-1 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-trophy fa-lg" style="color: var(--ui-color-2);"></i>
-            計画がしっかりしていれば
-            <br>
-            緊急時でも冷静に対応できる！
-            <br>
-            成功への投資だよ
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション3: 責任共有モデル -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-handshake fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite;" aria-hidden="true"></i>
-          <h2>AWS責任共有モデル</h2>
-        </div>
-        
-        <div class="card-content">
-          <div style="margin: 15px 0; padding: 15px; background-color: #e8f4fd; border-radius: 10px; border-left: 4px solid var(--ui-color-1);">
-            <div style="font-weight: bold; margin-bottom: 10px; color: var(--ui-color-1);">
-              <i class="fa-solid fa-cloud" style="margin-right: 5px;"></i>AWS の責任
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
             </div>
-            <ul style="margin: 0; padding-left: 20px; list-style-type: disc;">
-              <li><span class="keyword-tag">クラウドのセキュリティ</span>を管理</li>
-              <li>インフラストラクチャの保護</li>
-              <li>マネージドサービスのセキュリティ</li>
-            </ul>
-          </div>
-          
-          <div style="margin: 15px 0; padding: 15px; background-color: #fff3cd; border-radius: 10px; border-left: 4px solid var(--ui-color-2);">
-            <div style="font-weight: bold; margin-bottom: 10px; color: var(--ui-color-2);">
-              <i class="fa-solid fa-user-shield" style="margin-right: 5px;"></i>お客様の責任
+        </div>
+    </header>
+
+    <main>
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                        <span>高リスク</span>
+                    </div>
+                    <p>このベストプラクティスを確立しない場合、セキュリティ態勢に重大な影響を与える可能性があります。</p>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation" style="color: var(--ui-color-5);"></i>
+                        適切な実装で<br>
+                        <span class="keyword-tag">リスク軽減</span>！
+                    </span>
+                </div>
             </div>
-            <ul style="margin: 0; padding-left: 20px; list-style-type: disc;">
-              <li><span class="keyword-tag">クラウド内のセキュリティ</span></li>
-              <li>セキュリティコントロールの実装</li>
-              <li>インシデント対応プロセスの策定</li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-balance-scale fa-lg" style="color: var(--ui-color-5);"></i>
-            責任分担を理解して
-            <br>
-            適切なインシデント管理計画を
-            <br>
-            作成することが重要だね
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション4: 組織内の役割と責任 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-sitemap fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>組織内の役割と責任</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-users" aria-hidden="true"></i>
-              <span><span class="keyword-tag">人事 (HR)</span>: 人的リソースの調整</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-user-tie" aria-hidden="true"></i>
-              <span><span class="keyword-tag">経営陣</span>: 意思決定と承認</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-gavel" aria-hidden="true"></i>
-              <span><span class="keyword-tag">法務部</span>: 法的コンプライアンス</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-code" aria-hidden="true"></i>
-              <span><span class="keyword-tag">アプリケーション所有者・開発者</span>: 技術的専門知識</span>
-            </li>
-          </ul>
-          
-          <div style="margin: 15px 0;">
-            <h4 style="color: var(--ui-color-1); margin-bottom: 10px;">
-              <i class="fa-solid fa-clipboard-check" style="margin-right: 5px;"></i>
-              RACI チャートの作成
-            </h4>
-            <p style="font-size: 14px; color: #666;">責任者、説明責任、相談者、情報伝達者を明確化</p>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-users-cog fa-lg" style="color: var(--ui-color-2);"></i>
-            各部門の役割を明確にして
-            <br>
-            迅速で直接的なコミュニケーションを
-            <br>
-            実現しよう！
-          </span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- セクション5: RACIチャート例 -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-table fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
-          <h2>RACIチャート例</h2>
-        </div>
-        
-        <div class="card-content">
-          <table class="raci-table">
-            <thead>
-              <tr>
-                <th>アクティビティ</th>
-                <th>インシデント管理者</th>
-                <th>技術チーム</th>
-                <th>経営陣</th>
-                <th>法務部</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>インシデント検出</td>
-                <td><span class="raci-a">A</span></td>
-                <td><span class="raci-r">R</span></td>
-                <td><span class="raci-i">I</span></td>
-                <td><span class="raci-i">I</span></td>
-              </tr>
-              <tr>
-                <td>初期対応</td>
-                <td><span class="raci-r">R</span></td>
-                <td><span class="raci-r">R</span></td>
-                <td><span class="raci-i">I</span></td>
-                <td><span class="raci-c">C</span></td>
-              </tr>
-              <tr>
-                <td>外部報告</td>
-                <td><span class="raci-a">A</span></td>
-                <td><span class="raci-c">C</span></td>
-                <td><span class="raci-r">R</span></td>
-                <td><span class="raci-r">R</span></td>
-              </tr>
-              <tr>
-                <td>復旧作業</td>
-                <td><span class="raci-a">A</span></td>
-                <td><span class="raci-r">R</span></td>
-                <td><span class="raci-i">I</span></td>
-                <td><span class="raci-i">I</span></td>
-              </tr>
-            </tbody>
-          </table>
-          
-          <div style="margin: 15px 0; font-size: 14px;">
-            <p><span class="raci-r">R</span>: 実行責任者 | <span class="raci-a">A</span>: 説明責任者 | <span class="raci-c">C</span>: 相談対象者 | <span class="raci-i">I</span>: 情報共有対象者</p>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-chart-gantt fa-lg" style="color: var(--ui-color-5);"></i>
-            RACIで役割分担を明確化！
-            <br>
-            誰が何をするかが
-            <br>
-            一目瞭然になるよ
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション6: インシデント対応フロー -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-route fa-5x" style="color: var(--ui-color-1); animation: fa-spin 6s linear infinite;" aria-hidden="true"></i>
-          <h2>インシデント対応フロー</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="incident-flow">
-            <div class="flow-title">
-              <i class="fa-solid fa-flow-chart" style="margin-right: 8px;"></i>
-              標準的なインシデント対応プロセス
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                <div class="card-content">
+                    <p>このベストプラクティスの実装により、インシデント対応における以下の成果が期待されます：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-check" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">セキュリティ態勢</span>の大幅な向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-minimize" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">攻撃面</span>の効果的な削減</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">可視性</span>と監視能力の向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動化</span>による運用効率化</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star" style="color: var(--ui-color-2);"></i>
+                        明確な<br>
+                        <span class="keyword-tag">目標設定</span>！
+                    </span>
+                </div>
             </div>
-            
-            <div class="flow-step">
-              <div class="flow-number">1</div>
-              <div class="flow-content">
-                <div class="flow-step-title">検出 (Detection)</div>
-                <div class="flow-step-desc">セキュリティイベントの発見・識別</div>
-              </div>
+
+            <!-- 主要概念 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-ambulance fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>主要概念</h2>
+                </div>
+                <div class="card-content">
+                    <p>インシデント対応における重要な概念と原則：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">多層防御</span> - 複数のセキュリティレイヤーによる保護</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-minimize" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">最小権限の原則</span> - 必要最小限のアクセス権限</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">デフォルトセキュア</span> - 安全な初期設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sync" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">継続的改善</span> - 定期的な見直しと更新</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb" style="color: var(--ui-color-2);"></i>
+                        基本原則を<br>
+                        <span class="keyword-tag">理解</span>しよう！
+                    </span>
+                </div>
             </div>
-            
-            <div class="flow-step">
-              <div class="flow-number">2</div>
-              <div class="flow-content">
-                <div class="flow-step-title">分析 (Analysis)</div>
-                <div class="flow-step-desc">インシデントの詳細調査・影響範囲の特定</div>
-              </div>
+
+            <!-- 実装アプローチ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-route fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>実装アプローチ</h2>
+                </div>
+                <div class="card-content">
+                    <p>効果的な実装のための段階的アプローチ：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">現状評価</span> - 既存環境の詳細分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-map" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">計画策定</span> - 実装ロードマップの作成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">段階実装</span> - リスクを最小化した展開</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">効果測定</span> - 継続的な監視と改善</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket" style="color: var(--ui-color-1);"></i>
+                        段階的な<br>
+                        <span class="keyword-tag">実装</span>が鍵！
+                    </span>
+                </div>
             </div>
-            
-            <div class="flow-step">
-              <div class="flow-number">3</div>
-              <div class="flow-content">
-                <div class="flow-step-title">封じ込め (Containment)</div>
-                <div class="flow-step-desc">被害拡大の防止・一時的な対策</div>
-              </div>
+
+            <!-- AWSサービス活用 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>AWSサービス活用</h2>
+                </div>
+                <div class="card-content">
+                    <p>インシデント対応で活用できる主要AWSサービス：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Security Hub</span> - 統合セキュリティ管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon GuardDuty</span> - 脅威検出サービス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Config</span> - 設定管理と監査</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-trail" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS CloudTrail</span> - API呼び出し記録</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic" style="color: var(--ui-color-2);"></i>
+                        AWSサービスで<br>
+                        <span class="keyword-tag">効率化</span>！
+                    </span>
+                </div>
             </div>
-            
-            <div class="flow-step">
-              <div class="flow-number">4</div>
-              <div class="flow-content">
-                <div class="flow-step-title">根絶 (Eradication)</div>
-                <div class="flow-step-desc">脅威の完全除去・脆弱性の修正</div>
-              </div>
+
+            <!-- ベストプラクティス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>ベストプラクティス</h2>
+                </div>
+                <div class="card-content">
+                    <p>実装時に考慮すべき重要なポイント：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動化優先</span> - 手動作業の最小化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">メトリクス監視</span> - 定量的な効果測定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">チーム教育</span> - 継続的なスキル向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-book" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">文書化</span> - 手順とプロセスの明文化</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-check-circle" style="color: var(--ui-color-2);"></i>
+                        ベストプラクティスで<br>
+                        <span class="keyword-tag">成功確率向上</span>！
+                    </span>
+                </div>
             </div>
-            
-            <div class="flow-step">
-              <div class="flow-number">5</div>
-              <div class="flow-content">
-                <div class="flow-step-title">復旧 (Recovery)</div>
-                <div class="flow-step-desc">通常運用への復帰・監視強化</div>
-              </div>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book" aria-hidden="true"></i> 学習リソース</h3>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                            <span>AWS Well-Architected Labs</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-video" aria-hidden="true"></i>
+                            <span>AWS re:Invent セッション</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span>AWS公式ドキュメント</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span>AWSコミュニティフォーラム</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap" style="color: var(--ui-color-1);"></i>
+                        豊富な<br>
+                        <span class="keyword-tag">学習リソース</span>で<br>
+                        理解を深めよう！
+                    </span>
+                </div>
             </div>
-            
-            <div class="flow-step">
-              <div class="flow-number">6</div>
-              <div class="flow-content">
-                <div class="flow-step-title">教訓 (Lessons Learned)</div>
-                <div class="flow-step-desc">事後分析・プロセス改善</div>
-              </div>
-            </div>
-          </div>
         </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-arrows-rotate fa-lg" style="color: var(--ui-color-2);"></i>
-            各段階で取るべき措置を
-            <br>
-            明確に定義することで
-            <br>
-            効率的な対応が可能に！
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション7: インシデント管理計画の構成要素 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-puzzle-piece fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>計画の構成要素</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-users-gear" aria-hidden="true"></i>
-              <span><span class="keyword-tag">インシデント対応チームの概要</span>: 目標と機能</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-user-tag" aria-hidden="true"></i>
-              <span><span class="keyword-tag">役割と責任</span>: 利害関係者とその役割</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-comments" aria-hidden="true"></i>
-              <span><span class="keyword-tag">コミュニケーションプラン</span>: 連絡先と連絡方法</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-phone-slash" aria-hidden="true"></i>
-              <span><span class="keyword-tag">通信手段のバックアップ</span>: 帯域外通信の確保</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-list-ol" aria-hidden="true"></i>
-              <span><span class="keyword-tag">各段階と取るべき措置</span>: 詳細な手順</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
-              <span><span class="keyword-tag">深刻度と優先順位</span>: 分類とエスカレーション</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-clipboard-list fa-lg" style="color: var(--ui-color-5);"></i>
-            正式な文書として作成し
-            <br>
-            組織に最適化した
-            <br>
-            内容にカスタマイズしよう
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション8: AWS対応チームとサポート -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-headset fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
-          <h2>AWS対応チームとサポート</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="aws-service-box">
-            <div class="aws-service-icon">
-              <i class="fa-solid fa-life-ring" aria-hidden="true"></i>
-            </div>
-            <div class="aws-service-content">
-              <div class="aws-service-name">AWS Support</div>
-              <p>AWS環境の計画、導入、最適化をサポート。サポートセンターが中心窓口。</p>
-            </div>
-          </div>
-          
-          <div class="aws-service-box">
-            <div class="aws-service-icon">
-              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-            </div>
-            <div class="aws-service-content">
-              <div class="aws-service-name">AWS CIRT (カスタマーインシデント対応チーム)</div>
-              <p>24時間365日体制の専門チーム。アクティブなセキュリティイベント中にサポート。</p>
-            </div>
-          </div>
-          
-          <div class="aws-service-box">
-            <div class="aws-service-icon">
-              <i class="fa-solid fa-shield" aria-hidden="true"></i>
-            </div>
-            <div class="aws-service-content">
-              <div class="aws-service-name">AWS Shield</div>
-              <p>DDoS攻撃からウェブアプリケーションを保護するマネージド型防御サービス。</p>
-            </div>
-          </div>
-          
-          <div class="aws-service-box">
-            <div class="aws-service-icon">
-              <i class="fa-solid fa-cogs" aria-hidden="true"></i>
-            </div>
-            <div class="aws-service-content">
-              <div class="aws-service-name">AWS Managed Services (AMS)</div>
-              <p>インフラ管理を継続提供。24時間365日でセキュリティ検出とアラート対応。</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-1 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-hands-helping fa-lg" style="color: var(--ui-color-2);"></i>
-            AWSの専門チームと連携して
-            <br>
-            より強固なインシデント対応を
-            <br>
-            実現できるよ！
-          </span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- セクション9: コンプライアンス要件 -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-balance-scale fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite;" aria-hidden="true"></i>
-          <h2>コンプライアンス要件</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-flag-usa" aria-hidden="true"></i>
-              <span><span class="keyword-tag">FedRAMP準拠</span>ワークロード: NIST SP 800-61 ガイド</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-globe-europe" aria-hidden="true"></i>
-              <span><span class="keyword-tag">GDPR対象</span>のPIIデータ: データレジデンシー対応</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-gavel" aria-hidden="true"></i>
-              <span>現地の<span class="keyword-tag">規制</span>やコンプライアンス要件への適合</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-building" aria-hidden="true"></i>
-              <span>組織の<span class="keyword-tag">ビジネス成果</span>との整合性</span>
-            </li>
-          </ul>
-          
-          <div style="margin: 15px 0; padding: 15px; background-color: #fff3cd; border-radius: 10px; border-left: 4px solid var(--ui-color-2);">
-            <div style="font-weight: bold; margin-bottom: 10px; color: var(--ui-color-2);">
-              <i class="fa-solid fa-exclamation-triangle" style="margin-right: 5px;"></i>重要なポイント
-            </div>
-            <p style="margin: 0; font-size: 14px;">ビジネス成果とコンプライアンス要件に最も合致する対応・復旧戦略を組み込むことが重要</p>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-clipboard-check fa-lg" style="color: var(--ui-color-5);"></i>
-            各業界の規制に合わせた
-            <br>
-            カスタマイズが必要！
-            <br>
-            法務部との連携も重要だよ
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション10: 継続的改善プロセス -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-arrows-rotate fa-5x" style="color: var(--ui-color-1); animation: fa-spin 4s linear infinite;" aria-hidden="true"></i>
-          <h2>継続的改善プロセス</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="step-box">
-            <p><strong>1. 定期的な練習とテスト</strong></p>
-            <p>インシデント対応計画を実際に練習し、すべての役割と責任を含めてテスト</p>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>2. プロセスの合理化</strong></p>
-            <p>調整され、効率的な対応が行われていることを確認</p>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>3. 定期的な見直しと更新</strong></p>
-            <p>組織構造や要件の変化に応じてロール、責任、RACIチャートを更新</p>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>4. SMEとの関係構築</strong></p>
-            <p>アプリケーション所有者・開発者との実際のインシデント対応シナリオ演習</p>
-          </div>
-          
-          <div style="margin: 15px 0; padding: 15px; background-color: #e8f4fd; border-radius: 10px; border-left: 4px solid var(--ui-color-1);">
-            <div style="font-weight: bold; margin-bottom: 10px; color: var(--ui-color-1);">
-              <i class="fa-solid fa-lightbulb" style="margin-right: 5px;"></i>クラウド運用の目標との整合
-            </div>
-            <p style="margin: 0; font-size: 14px;">効果的なインシデント管理計画は、クラウド運用の目標に沿って継続的に反復し、最新の状態を保つ必要があります</p>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-cycle fa-lg" style="color: var(--ui-color-2);"></i>
-            作って終わりではなく
-            <br>
-            継続的な改善が成功の鍵！
-            <br>
-            実践を通じて磨き上げよう
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション11: まとめ -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-check-circle fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
-          <h2>まとめ</h2>
-        </div>
-        
-        <div class="card-content">
-          <div style="text-align: center; margin: 20px 0; padding: 20px; background-color: #f0f9ff; border-radius: 15px;">
-            <h3 style="color: var(--ui-color-1); margin-bottom: 15px;">
-              <i class="fa-solid fa-star" style="margin-right: 8px;"></i>
-              インシデント管理計画の価値
-            </h3>
-            <ul class="keyword-list">
-              <li>
-                <i class="fa-solid fa-foundation" aria-hidden="true"></i>
-                <span>インシデント対応<span class="keyword-tag">プログラムの基礎</span>となる</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-users-cog" aria-hidden="true"></i>
-                <span>明確な<span class="keyword-tag">役割分担</span>と<span class="keyword-tag">責任</span>の定義</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-route" aria-hidden="true"></i>
-                <span>体系的な<span class="keyword-tag">プロセス</span>による効率的対応</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-                <span><span class="keyword-tag">AWS専門チーム</span>との連携強化</span>
-              </li>
-              <li>
-                <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
-                <span>継続的な<span class="keyword-tag">改善</span>と<span class="keyword-tag">最適化</span></span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
-            しっかりとした計画があれば
-            <br>
-            どんなインシデントにも
-            <br>
-            自信を持って対応できる！
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
+    </main>
 </body>
 </html>

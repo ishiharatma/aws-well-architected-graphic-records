@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS11-BP04: ナレッジ管理の実行 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-brain fa-6x" style="color: var(--ui-color-1); animation: fa-pulse 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS11-BP04: ナレッジ管理の実行</h1>
+            <p class="header-description">ナレッジ管理はチームメンバーが業務を遂行するための情報を見つけるのに役立ちます。学習組織では情報が自由に共有され、個人に力を与えます。情報は発見可能で検索可能であり、正確で最新です。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_knowledge_management.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 高リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-laptop" aria-hidden="true"></i>中央集約されたナレッジストレージがなく<span class="keyword-tag">個人のローカルマシンでメモ管理</span></li>
+                        <li><i class="fa-solid fa-calendar-times" aria-hidden="true"></i>セルフホストwikiはあるが情報管理メカニズムがなく<span class="keyword-tag">古い情報が残存</span></li>
+                        <li><i class="fa-solid fa-question-circle" aria-hidden="true"></i>不足情報の特定はするが追加要求プロセスがなく<span class="keyword-tag">重要ステップの見落とし</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        ナレッジ管理がないと、
+                        <br>
+                        同じ問題を何度も解決し
+                        <br>
+                        <span class="keyword-tag">効率</span>が悪化します！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>チームメンバーの<span class="keyword-tag">タイムリーで正確な情報</span>へのアクセス</li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i><span class="keyword-tag">検索可能</span>な情報</li>
+                        <li><i class="fa-solid fa-plus-circle" aria-hidden="true"></i>情報の追加、更新、アーカイブの<span class="keyword-tag">メカニズム存在</span></li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>情報の自由な共有による<span class="keyword-tag">チームメンバーの権限付与</span></li>
+                        <li><i class="fa-solid fa-rocket" aria-hidden="true"></i>最新で検索可能なドキュメントによる<span class="keyword-tag">新メンバーの迅速なオンボーディング</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        適切なナレッジ管理により、
+                        <br>
+                        組織全体の学習能力が
+                        <br>
+                        <span class="keyword-tag">向上</span>します！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-database" aria-hidden="true"></i>ナレッジ保存のための<span class="keyword-tag">コンテンツ管理システム</span>特定</li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i>情報の追加、更新、アーカイブのための<span class="keyword-tag">ランブック開発</span></li>
+                        <li><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>これらのプロセスに関する<span class="keyword-tag">チーム教育</span></li>
+                        <li><i class="fa-solid fa-list-check" aria-hidden="true"></i>日常活動（ランブックとプレイブック）から始まる<span class="keyword-tag">保存すべきナレッジ</span>特定</li>
+                        <li><i class="fa-solid fa-calendar" aria-hidden="true"></i>定期的な古い情報の特定と<span class="keyword-tag">アーカイブまたは更新</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        セルフホストwikiや
+                        <br>
+                        バージョン管理リポジトリから
+                        <br>
+                        <span class="keyword-tag">始める</span>ことができます！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスの利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-share-alt" aria-hidden="true"></i>情報の自由な共有による<span class="keyword-tag">チームメンバーの権限付与</span></li>
+                        <li><i class="fa-solid fa-user-plus" aria-hidden="true"></i>最新で検索可能なドキュメントによる<span class="keyword-tag">新メンバーの迅速なオンボーディング</span></li>
+                        <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i><span class="keyword-tag">タイムリーで正確で実行可能</span>な情報</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        ナレッジ管理により、
+                        <br>
+                        組織の集合知を
+                        <br>
+                        <span class="keyword-tag">最大化</span>できます！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book"></i> 関連ベストプラクティス</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-share-alt" aria-hidden="true"></i><span class="keyword-tag">OPS11-BP08</span>: 学んだ教訓の文書化と共有</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-file-text"></i> 関連ドキュメント・例</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-book" aria-hidden="true"></i><span class="keyword-tag">Atlassian</span> - ナレッジ管理</li>
+                        <li><i class="fa-solid fa-wiki-w" aria-hidden="true"></i><span class="keyword-tag">DokuWiki</span> - ファイルベースwiki</li>
+                        <li><i class="fa-solid fa-code-branch" aria-hidden="true"></i><span class="keyword-tag">Gollum</span> - Git連携wiki</li>
+                        <li><i class="fa-solid fa-globe" aria-hidden="true"></i><span class="keyword-tag">MediaWiki</span> - 高機能wiki</li>
+                        <li><i class="fa-solid fa-rocket" aria-hidden="true"></i><span class="keyword-tag">Wiki.js</span> - モダンwiki</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap fa-lg" style="color: var(--ui-color-1);"></i>
+                        これらのツールを活用して、
+                        <br>
+                        効果的なナレッジ管理を
+                        <br>
+                        <span class="keyword-tag">構築</span>しましょう！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

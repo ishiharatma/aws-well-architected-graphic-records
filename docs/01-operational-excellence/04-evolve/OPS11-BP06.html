@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS11-BP06: 洞察の検証 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-check-circle fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS11-BP06: 洞察の検証</h1>
+            <p class="header-description">分析結果と対応をクロスファンクショナルチームとビジネスオーナーとレビューします。これらのレビューを使用して共通理解を確立し、追加の影響を特定し、行動方針を決定します。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_validate_insights.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level medium">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 中リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-rocket" aria-hidden="true"></i>新機能リリース時に顧客行動変化を<span class="keyword-tag">可観測性で考慮しない</span></li>
+                        <li><i class="fa-solid fa-server" aria-hidden="true"></i>CDN更新忘れによる互換性問題で<span class="keyword-tag">間違った次元を測定</span></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>SLA要件と実装の不一致による<span class="keyword-tag">時間と費用の浪費</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-2);"></i>
+                        洞察を検証しないと、
+                        <br>
+                        間違った方向に進んで
+                        <br>
+                        <span class="keyword-tag">リソース</span>を無駄にします！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-users-cog" aria-hidden="true"></i>ビジネスオーナーとの<span class="keyword-tag">定期的な洞察レビュー</span></li>
+                        <li><i class="fa-solid fa-lightbulb" aria-hidden="true"></i>新たに得られた洞察への<span class="keyword-tag">追加コンテキスト提供</span></li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>技術ピアからの洞察レビューと<span class="keyword-tag">フィードバック要請</span></li>
+                        <li><i class="fa-solid fa-share-alt" aria-hidden="true"></i>チーム間での<span class="keyword-tag">学習共有</span></li>
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i>他の技術・ビジネスチーム向けの<span class="keyword-tag">データと洞察公開</span></li>
+                        <li><i class="fa-solid fa-crown" aria-hidden="true"></i>シニアリーダーとの新洞察要約レビューと<span class="keyword-tag">戦略定義</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        多角的な検証により、
+                        <br>
+                        より確実で価値ある
+                        <br>
+                        <span class="keyword-tag">洞察</span>を獲得！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-rocket" aria-hidden="true"></i>新機能リリース時に顧客行動変化を可観測性で考慮せず<span class="keyword-tag">変化の利益を定量化しない</span></li>
+                        <li><i class="fa-solid fa-server" aria-hidden="true"></i>更新時のCDN更新忘れで互換性問題が発生し<span class="keyword-tag">間違った次元を測定して時間を浪費</span></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>SLAが99.9%稼働時間を規定するのにサービスオーナーがゼロダウンタイムを主張し<span class="keyword-tag">高価で複雑な複製ソリューションを実装</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        思い込みや推測ではなく、
+                        <br>
+                        データと多角的視点で
+                        <br>
+                        <span class="keyword-tag">検証</span>することが重要！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-users-cog" aria-hidden="true"></i>ビジネスオーナーと専門家との<span class="keyword-tag">洞察検証</span>実施</li>
+                        <li><i class="fa-solid fa-handshake" aria-hidden="true"></i>収集データの意味に関する<span class="keyword-tag">共通理解と合意</span>確保</li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i>追加の懸念、潜在的影響の<span class="keyword-tag">特定</span></li>
+                        <li><i class="fa-solid fa-route" aria-hidden="true"></i><span class="keyword-tag">行動方針</span>の決定</li>
+                        <li><i class="fa-solid fa-sync" aria-hidden="true"></i>必要に応じた<span class="keyword-tag">対応の調整</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        ビジネスオーナーと専門家の
+                        <br>
+                        視点を組み合わせることで、
+                        <br>
+                        <span class="keyword-tag">包括的理解</span>を実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスの利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-handshake" aria-hidden="true"></i>ビジネスオーナーと専門家との洞察検証による<span class="keyword-tag">共通理解確立</span></li>
+                        <li><i class="fa-solid fa-compass" aria-hidden="true"></i>より効果的な<span class="keyword-tag">改善ガイダンス</span></li>
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i>隠れた問題の発見と<span class="keyword-tag">将来の意思決定への反映</span></li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>技術的成果から<span class="keyword-tag">ビジネス成果</span>への焦点移行</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        検証プロセスにより、
+                        <br>
+                        技術とビジネスの
+                        <br>
+                        <span class="keyword-tag">橋渡し</span>を実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book"></i> 関連ベストプラクティス</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-balance-scale" aria-hidden="true"></i><span class="keyword-tag">OPS01-BP06</span>: 利益とリスクを管理しながらトレードオフを評価</li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i><span class="keyword-tag">OPS02-BP06</span>: チーム間の責任を事前定義または交渉</li>
+                        <li><i class="fa-solid fa-comments" aria-hidden="true"></i><span class="keyword-tag">OPS11-BP03</span>: フィードバックループの実装</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-file-text"></i> 関連ドキュメント</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-building" aria-hidden="true"></i><span class="keyword-tag">Cloud Center of Excellence (CCOE)</span>の設計</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-video"></i> 関連動画</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-play" aria-hidden="true"></i><span class="keyword-tag">回復力向上</span>のための可観測性構築</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap fa-lg" style="color: var(--ui-color-1);"></i>
+                        これらのリソースを活用して、
+                        <br>
+                        効果的な洞察検証を
+                        <br>
+                        <span class="keyword-tag">実現</span>しましょう！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

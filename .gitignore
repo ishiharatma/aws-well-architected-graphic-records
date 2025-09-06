@@ -1,0 +1,19 @@
+# working directory
+_*/
+*- コピー*
+
+# 集計Python
+*.py
+
+# Ignore AWS CLI v2 files
+.aws/config
+.aws/credentials
+.aws/cli/cache
+.aws/cli/history
+.aws/sso/cache
+.aws/sso/cache/*
+.aws/sso/cache/_*
+.aws/amazonq/history/
+.aws/amazonq/cache/
+.aws/amazonq/*.log
+.aws/sso/cache/

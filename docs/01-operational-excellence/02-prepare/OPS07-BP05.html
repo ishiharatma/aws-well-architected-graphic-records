@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS07-BP05: システムと変更のデプロイに関する情報に基づいた意思決定 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-balance-scale fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS07-BP05: システムと変更のデプロイに関する情報に基づいた意思決定</h1>
+            <p class="header-description">ワークロードの成功および失敗した変更に対するプロセスを整備します。プリモーテムを使用して失敗を予測し、適切な手順を作成します。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_informed_deploy_decisions.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-info-circle fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level low">
+                        <h3><i class="fa-solid fa-info-circle"></i> 低リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>失敗したデプロイメントへの<span class="keyword-tag">プロセス不在</span></li>
+                        <li><i class="fa-solid fa-gavel" aria-hidden="true"></i>ガバナンス要件に<span class="keyword-tag">非準拠</span>な変更</li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>リソース使用率の<span class="keyword-tag">ベースライン未確立</span></li>
+                        <li><i class="fa-solid fa-question-circle" aria-hidden="true"></i>変更の利益とリスクの<span class="keyword-tag">評価不足</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        情報に基づかない意思決定は、
+                        <br>
+                        予期しない問題を引き起こし、
+                        <br>
+                        <span class="keyword-tag">ガバナンス違反</span>のリスクがあります！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-brain" aria-hidden="true"></i>ワークロード変更デプロイ時の<span class="keyword-tag">情報に基づいた意思決定</span></li>
+                        <li><i class="fa-solid fa-gavel" aria-hidden="true"></i>変更の<span class="keyword-tag">ガバナンス準拠</span></li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i>失敗した変更への<span class="keyword-tag">準備完了</span></li>
+                        <li><i class="fa-solid fa-balance-scale" aria-hidden="true"></i>利益とリスクの<span class="keyword-tag">適切な評価</span></li>
+                        <li><i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>成功デプロイメントの<span class="keyword-tag">基準確立</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        プリモーテムにより、
+                        <br>
+                        失敗を予測し、
+                        <br>
+                        <span class="keyword-tag">緩和戦略</span>を開発！
+                    </span>
+                </div>
+            </div>
+
+            <!-- プリモーテムの価値 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-crystal-ball fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>プリモーテムの価値</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i><span class="keyword-tag">チーム演習</span>：失敗シミュレーションによる戦略開発</li>
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i><span class="keyword-tag">失敗予測</span>：事前の問題特定と対策準備</li>
+                        <li><i class="fa-solid fa-clipboard-list" aria-hidden="true"></i><span class="keyword-tag">手順作成</span>：適切な場面での対応手順策定</li>
+                        <li><i class="fa-solid fa-undo" aria-hidden="true"></i><span class="keyword-tag">ロールバック検証</span>：テーブルトップ演習での手順確認</li>
+                        <li><i class="fa-solid fa-book" aria-hidden="true"></i><span class="keyword-tag">文書化</span>：緩和戦略の記録と共有</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-1);"></i>
+                        プリモーテムは単なる演習ではなく、
+                        <br>
+                        <span class="keyword-tag">実践的な準備</span>プロセス！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-1" aria-hidden="true"></i><span class="keyword-tag">意思決定基準</span>：成功デプロイメントの基準確立と見直し</li>
+                        <li><i class="fa-solid fa-2" aria-hidden="true"></i><span class="keyword-tag">ロールバック条件</span>：変更の巻き戻しを開始する条件策定</li>
+                        <li><i class="fa-solid fa-3" aria-hidden="true"></i><span class="keyword-tag">利益・リスク評価</span>：変更デプロイの利益と失敗リスクの比較</li>
+                        <li><i class="fa-solid fa-4" aria-hidden="true"></i><span class="keyword-tag">ガバナンス準拠</span>：すべての変更のポリシー準拠確認</li>
+                        <li><i class="fa-solid fa-5" aria-hidden="true"></i><span class="keyword-tag">プリモーテム実施</span>：失敗計画と緩和戦略の文書化</li>
+                        <li><i class="fa-solid fa-6" aria-hidden="true"></i><span class="keyword-tag">テーブルトップ演習</span>：失敗モデル化とロールバック手順検証</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-2);"></i>
+                        組織全体のステークホルダー連携により、
+                        <br>
+                        包括的な準備体制を構築！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 関連ベストプラクティス -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>関連ベストプラクティス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-gavel" aria-hidden="true"></i><span class="keyword-tag">OPS01-BP03</span>：ガバナンス要件の評価</li>
+                        <li><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span class="keyword-tag">OPS06-BP01</span>：失敗した変更に対する計画</li>
+                        <li><i class="fa-solid fa-vial" aria-hidden="true"></i><span class="keyword-tag">OPS06-BP02</span>：デプロイメントのテスト</li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i><span class="keyword-tag">OPS07-BP01</span>：人員の能力確保</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-book fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連ドキュメント</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS Risk and Compliance ホワイトペーパー</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS Shared Responsibility Model</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS Cloud ガバナンス：俊敏性と安全性のバランス</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>プリモーテム実施ガイド</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

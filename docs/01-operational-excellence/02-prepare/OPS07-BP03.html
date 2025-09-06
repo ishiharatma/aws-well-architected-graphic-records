@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS07-BP03: ランブックを使用した手順の実行 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-book-open fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS07-BP03: ランブックを使用した手順の実行</h1>
+            <p class="header-description">ランブックは特定の結果を達成するための文書化されたプロセスです。一連のステップで構成され、一貫した結果を提供します。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_use_runbooks.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level medium">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 中リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-brain" aria-hidden="true"></i>プロセス実行の<span class="keyword-tag">記憶依存</span></li>
+                        <li><i class="fa-solid fa-hand-paper" aria-hidden="true"></i>チェックリストなしの<span class="keyword-tag">手動デプロイメント</span></li>
+                        <li><i class="fa-solid fa-random" aria-hidden="true"></i>チームメンバー間の<span class="keyword-tag">手順・結果の相違</span></li>
+                        <li><i class="fa-solid fa-sync-alt" aria-hidden="true"></i>システム変更との<span class="keyword-tag">ランブック乖離</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        記憶に頼った手順実行は、
+                        <br>
+                        エラー率を高め、
+                        <br>
+                        <span class="keyword-tag">一貫性</span>を損ないます！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-list-check" aria-hidden="true"></i>ワークロードタスクの<span class="keyword-tag">ステップバイステップガイド</span></li>
+                        <li><i class="fa-solid fa-bullseye" aria-hidden="true"></i><span class="keyword-tag">望ましい結果</span>の明確な定義</li>
+                        <li><i class="fa-solid fa-tools" aria-hidden="true"></i>必要な<span class="keyword-tag">ツールと権限</span>の記載</li>
+                        <li><i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i><span class="keyword-tag">エラーハンドリング</span>の詳細な指示</li>
+                        <li><i class="fa-solid fa-database" aria-hidden="true"></i><span class="keyword-tag">中央保存</span>と頻繁な更新</li>
+                        <li><i class="fa-solid fa-heartbeat" aria-hidden="true"></i>AWS Healthイベントへの<span class="keyword-tag">対応能力</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        ランブックにより、
+                        <br>
+                        手動タスクのエラー率を削減し、
+                        <br>
+                        <span class="keyword-tag">一貫した運用</span>を実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- ランブックの利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>ランブックの利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-chart-line-down" aria-hidden="true"></i><span class="keyword-tag">エラー率削減</span>：手動タスクの精度向上</li>
+                        <li><i class="fa-solid fa-equals" aria-hidden="true"></i><span class="keyword-tag">一貫した運用</span>：標準化された手順</li>
+                        <li><i class="fa-solid fa-user-plus" aria-hidden="true"></i><span class="keyword-tag">新メンバー支援</span>：早期のタスク実行開始</li>
+                        <li><i class="fa-solid fa-robot" aria-hidden="true"></i><span class="keyword-tag">自動化可能</span>：作業負荷軽減への道筋</li>
+                        <li><i class="fa-solid fa-share-alt" aria-hidden="true"></i><span class="keyword-tag">知識共有</span>：チーム全体での手順標準化</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-1);"></i>
+                        ランブックは航空業界から始まり、
+                        <br>
+                        クラウド運用でも<span class="keyword-tag">リスク軽減</span>に貢献！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-1" aria-hidden="true"></i><span class="keyword-tag">文書リポジトリ</span>：バージョン管理システムでの管理</li>
+                        <li><i class="fa-solid fa-2" aria-hidden="true"></i><span class="keyword-tag">ランブック作成</span>：Markdownでのステップ記述</li>
+                        <li><i class="fa-solid fa-3" aria-hidden="true"></i><span class="keyword-tag">検証実施</span>：他チームメンバーによる実行テスト</li>
+                        <li><i class="fa-solid fa-4" aria-hidden="true"></i><span class="keyword-tag">定期更新</span>：変更管理プロセスに従った更新</li>
+                        <li><i class="fa-solid fa-5" aria-hidden="true"></i><span class="keyword-tag">自動化移行</span>：AWS Systems Manager Automationの活用</li>
+                        <li><i class="fa-solid fa-6" aria-hidden="true"></i><span class="keyword-tag">イベント連携</span>：自動実行による運用負荷軽減</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-2);"></i>
+                        テキストから自動化まで、
+                        <br>
+                        段階的な成熟度向上を実現！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- AWSサービス -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-brands fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>ランブック自動化サービス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i><span class="keyword-tag">AWS Systems Manager Automation</span>：ランブック自動化</li>
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i><span class="keyword-tag">Visual Design Experience</span>：ローコード作成環境</li>
+                        <li><i class="fa-solid fa-play" aria-hidden="true"></i><span class="keyword-tag">Event-driven Execution</span>：イベント応答実行</li>
+                        <li><i class="fa-solid fa-code" aria-hidden="true"></i><span class="keyword-tag">Scripting Integration</span>：Python等での自動化</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-book fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連ドキュメント</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS Systems Manager Automation ユーザーガイド</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>Automation Visual Designer</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>ランブックテンプレート例</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>変更管理ベストプラクティス</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

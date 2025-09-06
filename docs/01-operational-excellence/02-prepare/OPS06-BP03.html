@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS06-BP03: 安全なデプロイメント戦略の採用 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-shield-alt fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS06-BP03: 安全なデプロイメント戦略の採用</h1>
+            <p class="header-description">顧客への影響を最小限に抑えながら、有益な変更の流れを制御する安全な本番ロールアウトを実施します。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_deploy_mgmt_sys.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level medium">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 中リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>全顧客への<span class="keyword-tag">同時影響</span></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>緊急リリースによる<span class="keyword-tag">長期復旧</span></li>
+                        <li><i class="fa-solid fa-users-cog" aria-hidden="true"></i>複数チームの<span class="keyword-tag">調整負荷</span></li>
+                        <li><i class="fa-solid fa-edit" aria-hidden="true"></i>可変デプロイメントによる<span class="keyword-tag">復旧時間延長</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        一度に全本番環境にデプロイすると、
+                        <br>
+                        失敗時に全顧客が同時に影響を受け、
+                        <br>
+                        <span class="keyword-tag">復旧が困難</span>になります！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-infinity" aria-hidden="true"></i><span class="keyword-tag">CI/CD システム</span>による自動化された安全なロールアウト</li>
+                        <li><i class="fa-solid fa-shield-check" aria-hidden="true"></i>適切な<span class="keyword-tag">安全なロールアウト戦略</span>の使用</li>
+                        <li><i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i>ロールアウト速度と<span class="keyword-tag">一貫性のバランス</span></li>
+                        <li><i class="fa-solid fa-compress-arrows-alt" aria-hidden="true"></i>影響の<span class="keyword-tag">制限</span>による高コストな失敗の防止</li>
+                        <li><i class="fa-solid fa-tools" aria-hidden="true"></i>失敗への<span class="keyword-tag">効率的な対応</span>能力の最大化</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        自動化されたデプロイメントにより、
+                        <br>
+                        速度と一貫性を両立！
+                    </span>
+                </div>
+            </div>
+
+            <!-- デプロイメント戦略 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-route fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>安全なデプロイメント戦略</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-flag" aria-hidden="true"></i><span class="keyword-tag">フィーチャーフラグ</span>：機能の段階的有効化</li>
+                        <li><i class="fa-solid fa-server" aria-hidden="true"></i><span class="keyword-tag">One-box</span>：単一インスタンスでの検証</li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span class="keyword-tag">ローリング（カナリア）</span>：段階的ロールアウト</li>
+                        <li><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span class="keyword-tag">イミュータブル</span>：不変インフラストラクチャ</li>
+                        <li><i class="fa-solid fa-random" aria-hidden="true"></i><span class="keyword-tag">トラフィック分割</span>：段階的トラフィック移行</li>
+                        <li><i class="fa-solid fa-exchange-alt" aria-hidden="true"></i><span class="keyword-tag">Blue/Green</span>：環境切り替え</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-1);"></i>
+                        複数の戦略を組み合わせて、
+                        <br>
+                        <span class="keyword-tag">ゼロダウンタイム</span>デプロイメントを実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-1" aria-hidden="true"></i><span class="keyword-tag">承認ワークフロー</span>：本番ロールアウトシーケンスの開始</li>
+                        <li><i class="fa-solid fa-2" aria-hidden="true"></i><span class="keyword-tag">AWS CodeDeploy</span>：自動デプロイメントシステム</li>
+                        <li><i class="fa-solid fa-3" aria-hidden="true"></i><span class="keyword-tag">Blue/Greenデプロイメント</span>：データベース用</li>
+                        <li><i class="fa-solid fa-4" aria-hidden="true"></i><span class="keyword-tag">デプロイメント監視</span>：CloudWatch、CloudTrail、SNS</li>
+                        <li><i class="fa-solid fa-5" aria-hidden="true"></i><span class="keyword-tag">ポストデプロイメントテスト</span>：自動テスト実行</li>
+                        <li><i class="fa-solid fa-6" aria-hidden="true"></i><span class="keyword-tag">トラブルシューティング</span>：デプロイメント問題の解決</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-2);"></i>
+                        段階的な実装により、
+                        <br>
+                        安全で効率的なデプロイメントを実現！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- AWSサービス -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-brands fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>主要AWSサービス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-rocket" aria-hidden="true"></i><span class="keyword-tag">AWS CodeDeploy</span>：EC2、ECS、Lambda対応</li>
+                        <li><i class="fa-solid fa-database" aria-hidden="true"></i><span class="keyword-tag">Amazon Aurora</span>：Blue/Greenデプロイメント</li>
+                        <li><i class="fa-solid fa-database" aria-hidden="true"></i><span class="keyword-tag">Amazon RDS</span>：Blue/Greenデプロイメント</li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span class="keyword-tag">Amazon CloudWatch</span>：監視とメトリクス</li>
+                        <li><i class="fa-solid fa-trail" aria-hidden="true"></i><span class="keyword-tag">AWS CloudTrail</span>：API監査ログ</li>
+                        <li><i class="fa-solid fa-bell" aria-hidden="true"></i><span class="keyword-tag">Amazon SNS</span>：イベント通知</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-book fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連ドキュメント</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS CodeDeploy ユーザーガイド</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>Amazon Aurora Blue/Green デプロイメント</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>Amazon RDS Blue/Green デプロイメント</li>
+                        <li><i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>AWS CodeDeploy 監視ガイド</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

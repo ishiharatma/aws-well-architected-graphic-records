@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS11-BP08: 学んだ教訓の文書化と共有 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-share-alt fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS11-BP08: 学んだ教訓の文書化と共有</h1>
+            <p class="header-description">運用活動、インシデント、改善取り組みから学んだ教訓を文書化し、組織全体で共有します。これにより、同じ問題の再発を防ぎ、組織の集合知を向上させ、継続的な学習文化を促進します。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_share_lessons_learned.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level medium">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 低リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-repeat" aria-hidden="true"></i>教訓未共有による<span class="keyword-tag">同じ問題の再発</span></li>
+                        <li><i class="fa-solid fa-brain" aria-hidden="true"></i>個人知識に依存した<span class="keyword-tag">組織脆弱性</span></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>新メンバーの<span class="keyword-tag">学習時間延長</span></li>
+                        <li><i class="fa-solid fa-disconnect" aria-hidden="true"></i>チーム間の<span class="keyword-tag">知識格差拡大</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-2);"></i>
+                        教訓を共有しないと、
+                        <br>
+                        同じ失敗を繰り返し
+                        <br>
+                        <span class="keyword-tag">成長機会</span>を失います！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-book" aria-hidden="true"></i>運用活動、インシデント、改善取り組みからの<span class="keyword-tag">教訓文書化</span></li>
+                        <li><i class="fa-solid fa-share-alt" aria-hidden="true"></i>組織全体での<span class="keyword-tag">教訓共有</span></li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i>同じ問題の<span class="keyword-tag">再発防止</span></li>
+                        <li><i class="fa-solid fa-users-cog" aria-hidden="true"></i>組織の<span class="keyword-tag">集合知向上</span></li>
+                        <li><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>継続的な<span class="keyword-tag">学習文化促進</span></li>
+                        <li><i class="fa-solid fa-rocket" aria-hidden="true"></i>新メンバーの<span class="keyword-tag">迅速なオンボーディング</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        教訓の共有により、
+                        <br>
+                        組織全体が学習し
+                        <br>
+                        <span class="keyword-tag">進化</span>し続けます！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-pen" aria-hidden="true"></i><span class="keyword-tag">構造化文書</span>: 問題、原因、解決策、予防策の明確な記録</li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i><span class="keyword-tag">タイムリーな記録</span>: 記憶が新鮮なうちに文書化</li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i><span class="keyword-tag">検索可能</span>: 将来の参照のためのインデックス化</li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i><span class="keyword-tag">アクセス可能</span>: 組織全体での利用促進</li>
+                        <li><i class="fa-solid fa-sync" aria-hidden="true"></i><span class="keyword-tag">定期更新</span>: 新しい知見の追加と古い情報の更新</li>
+                        <li><i class="fa-solid fa-presentation" aria-hidden="true"></i><span class="keyword-tag">積極的共有</span>: 会議、トレーニング、ワークショップでの活用</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        ナレッジベースやwikiを活用して
+                        <br>
+                        教訓を体系的に
+                        <br>
+                        <span class="keyword-tag">管理・共有</span>しましょう！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスの利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i>同じ問題の再発防止による<span class="keyword-tag">運用効率向上</span></li>
+                        <li><i class="fa-solid fa-users-cog" aria-hidden="true"></i>組織の集合知向上による<span class="keyword-tag">問題解決能力強化</span></li>
+                        <li><i class="fa-solid fa-rocket" aria-hidden="true"></i>新メンバーの迅速なオンボーディングによる<span class="keyword-tag">生産性向上</span></li>
+                        <li><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>継続的学習文化の促進による<span class="keyword-tag">組織成長</span></li>
+                        <li><i class="fa-solid fa-handshake" aria-hidden="true"></i>チーム間の知識共有による<span class="keyword-tag">協力関係強化</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        教訓の共有により、
+                        <br>
+                        失敗を成功の糧に変え
+                        <br>
+                        <span class="keyword-tag">組織力</span>を向上！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book"></i> 関連ベストプラクティス</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-brain" aria-hidden="true"></i><span class="keyword-tag">OPS11-BP04</span>: ナレッジ管理の実行</li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i><span class="keyword-tag">OPS11-BP02</span>: インシデント後分析の実行</li>
+                        <li><i class="fa-solid fa-comments" aria-hidden="true"></i><span class="keyword-tag">OPS11-BP03</span>: フィードバックループの実装</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-file-text"></i> 実装ツール例</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-wiki-w" aria-hidden="true"></i><span class="keyword-tag">Wiki システム</span>: Confluence、MediaWiki、Notion</li>
+                        <li><i class="fa-solid fa-database" aria-hidden="true"></i><span class="keyword-tag">ナレッジベース</span>: SharePoint、GitBook</li>
+                        <li><i class="fa-solid fa-comments" aria-hidden="true"></i><span class="keyword-tag">コラボレーション</span>: Slack、Microsoft Teams</li>
+                        <li><i class="fa-solid fa-code-branch" aria-hidden="true"></i><span class="keyword-tag">バージョン管理</span>: Git、GitHub、GitLab</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap fa-lg" style="color: var(--ui-color-1);"></i>
+                        これらのツールを活用して、
+                        <br>
+                        効果的な教訓共有を
+                        <br>
+                        <span class="keyword-tag">実現</span>しましょう！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

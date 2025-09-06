@@ -1,948 +1,272 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEC07-BP04 スケーラブルなデータのライフサイクル管理を定義する</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
-    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
-    
-    :root {
-      --ui-color-1: #1B6C8C;
-      --ui-color-2: #BF8136;
-      --ui-color-3: #F2E8E4;
-      --ui-color-4: #260101;
-      --ui-color-5: #BF5656;
-    }
-    
-    body {
-      font-family: 'Zen Kurenaido', sans-serif;
-      background-color: #FFF8F5;
-      color: #333333;
-      line-height: 1.6;
-      margin: 0;
-      padding: 20px;
-    }
-    
-    .container {
-      max-width: 2000px;
-      margin: 0 auto;
-    }
-    
-    /* ヘッダースタイル */
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-      position: relative;
-      padding: 20px;
-      background-color: white;
-      border-radius: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    
-    .title {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-    
-    .title h1 {
-      font-size: 36px;
-      color: var(--ui-color-1);
-      margin: 15px 0;
-      line-height: 1.2;
-    }
-    
-    .date {
-      font-size: 14px;
-      color: #777777;
-    }
-    
-    /* セクションレイアウト */
-    .section-layout {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-bottom: 20px;
-      justify-content: center;
-    }
-    
-    /* カードスタイル */
-    .section-card {
-      flex: 1;
-      min-width: 220px;
-      max-width: 450px;
-      background-color: white;
-      border-radius: 20px;
-      padding: 15px;
-      box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
-      position: relative;
-      overflow: hidden;
-      animation: fadeInScale 0.5s ease-out;
-    }
-    
-    @keyframes fadeInScale {
-      0% {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-    
-    /* カード内アイコンコンテナ */
-    .mega-icon-container {
-      text-align: center;
-      margin: 15px 0;
-    }
-    
-    /* カードコンテンツ */
-    .card-content {
-      padding: 0 10px 15px;
-    }
-    
-    /* キーワードリスト */
-    .keyword-list {
-      margin: 15px 0;
-      padding: 0;
-      list-style-type: none;
-    }
-    
-    .keyword-list li {
-      margin-bottom: 12px;
-      display: flex;
-      align-items: flex-start;
-    }
-    
-    .keyword-list li i {
-      margin-right: 8px;
-      color: var(--ui-color-2);
-      min-width: 16px;
-      margin-top: 4px;
-    }
-    
-    /* キーワードタグ */
-    .keyword-tag {
-      background-color: var(--ui-color-3);
-      color: var(--ui-color-4);
-      padding: 3px 8px;
-      border-radius: 5px;
-      margin-right: 5px;
-      display: inline-block;
-      font-weight: bold;
-    }
-    
-    .risk-tag {
-      background-color: #FF5533;
-      color: white;
-      padding: 3px 10px;
-      border-radius: 5px;
-      display: inline-block;
-      font-weight: bold;
-    }
-    
-    /* 手書き風吹き出し */
-    .speech-bubble {
-      position: relative;
-      background: #fff;
-      border: 3px solid var(--ui-color-1);
-      border-radius: 20px;
-      padding: 10px 15px;
-      margin: 15px 5px;
-      font-family: 'Yomogi', cursive;
-      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
-      transform: rotate(-1deg);
-    }
-    
-    .speech-bubble::after {
-      content: '';
-      position: absolute;
-      bottom: -13px;
-      left: 20px;
-      border-width: 12px 8px 0;
-      border-style: solid;
-      border-color: var(--ui-color-1) transparent;
-      display: block;
-      width: 0;
-    }
-    
-    /* 吹き出しバリエーション */
-    .speech-bubble.right::after {
-      left: auto;
-      right: 20px;
-      transform: rotate(15deg);
-    }
-    
-    .speech-bubble.top::after {
-      bottom: auto;
-      top: -13px;
-      border-width: 0 8px 12px;
-      transform: rotate(-5deg);
-    }
-    
-    .speech-bubble.variant-1 {
-      background: #FFF9E3;
-      border-color: var(--ui-color-2);
-      transform: rotate(1deg);
-    }
-    
-    .speech-bubble.variant-1::after {
-      border-color: var(--ui-color-2) transparent;
-    }
-    
-    .speech-bubble.variant-2 {
-      background: #FFE9E9;
-      border-color: var(--ui-color-5);
-      transform: rotate(-2deg);
-    }
-    
-    .speech-bubble.variant-2::after {
-      border-color: var(--ui-color-5) transparent;
-    }
-    
-    /* 手書き文字 */
-    .handwritten {
-      font-family: 'Yomogi', cursive;
-      font-size: 15px;
-      line-height: 1.5;
-      color: #333;
-    }
-    
-    /* コードプレビュー */
-    pre {
-      background: #f5f5f5;
-      padding: 8px;
-      border-radius: 5px;
-      font-size: 12px;
-      margin-top: 10px;
-      overflow-x: auto;
-    }
-    
-    /* 実装ステップボックス */
-    .step-box {
-      border-left: 4px solid var(--ui-color-1);
-      padding-left: 12px;
-      margin: 10px 0;
-    }
-    
-    /* ライフサイクルフロー */
-    .lifecycle-flow {
-      display: flex;
-      flex-direction: column;
-      margin: 20px 0;
-    }
-    
-    .lifecycle-stage {
-      display: flex;
-      align-items: center;
-      margin-bottom: 15px;
-      padding: 10px;
-      border-radius: 10px;
-      background-color: #f9f9f9;
-      position: relative;
-    }
-    
-    .lifecycle-stage::after {
-      content: '\f078';
-      font-family: 'Font Awesome 6 Free';
-      font-weight: 900;
-      position: absolute;
-      bottom: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: var(--ui-color-1);
-      font-size: 16px;
-    }
-    
-    .lifecycle-stage:last-child::after {
-      display: none;
-    }
-    
-    .lifecycle-icon {
-      flex: 0 0 60px;
-      height: 60px;
-      background-color: var(--ui-color-1);
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 15px;
-      font-size: 24px;
-    }
-    
-    .lifecycle-content {
-      flex: 1;
-    }
-    
-    .lifecycle-title {
-      font-weight: bold;
-      margin-bottom: 5px;
-      color: var(--ui-color-1);
-    }
-    
-    /* 図形と接続線 */
-    .process-diagram {
-      position: relative;
-      margin: 30px 0;
-      padding: 15px;
-      background-color: #f9f9f9;
-      border-radius: 15px;
-    }
-    
-    .process-step {
-      padding: 10px;
-      margin: 10px 0;
-      background-color: white;
-      border-radius: 10px;
-      border-left: 4px solid var(--ui-color-2);
-      position: relative;
-    }
-    
-    .process-step-title {
-      font-weight: bold;
-      color: var(--ui-color-2);
-      margin-bottom: 5px;
-    }
-    
-    /* AWS サービスボックス */
-    .aws-service-box {
-      background-color: #f0f9ff;
-      border: 1px solid #d0e3f2;
-      border-radius: 8px;
-      padding: 10px;
-      margin: 10px 0;
-      display: flex;
-      align-items: center;
-    }
-    
-    .aws-service-icon {
-      margin-right: 10px;
-      color: var(--ui-color-1);
-      font-size: 24px;
-    }
-    
-    .aws-service-content {
-      flex-grow: 1;
-    }
-    
-    .aws-service-name {
-      font-weight: bold;
-      color: var(--ui-color-1);
-      margin-bottom: 5px;
-    }
-    
-    /* レスポンシブ対応 */
-    @media (max-width: 1600px) {
-      .section-card {
-        min-width: 280px;
-      }
-    }
-    
-    @media (max-width: 1200px) {
-      .section-card {
-        min-width: 320px;
-      }
-    }
-    
-    @media (max-width: 900px) {
-      .section-card {
-        min-width: 380px;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .section-layout {
-        flex-direction: column;
-      }
-      
-      .section-card {
-        width: 100%;
-        min-width: auto;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC07-BP04 セキュリティベストプラクティス</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
 </head>
 <body>
-  <div class="container">
-    <!-- ヘッダー -->
-    <div class="header">
-      <div class="title">
-        <i class="fa-solid fa-recycle fa-7x" style="color: var(--ui-color-1); animation: fa-spin 10s linear infinite;" aria-hidden="true"></i>
-        <h1>SEC07-BP04 スケーラブルなデータのライフサイクル管理を定義する</h1>
-      </div>
-      <div class="date">2025年4月10日</div>
-    </div>
-    
-    <!-- セクション1: 概要 -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-timeline fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>概要</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-cubes" aria-hidden="true"></i>
-              <span>データのライフサイクルの要件を、<span class="keyword-tag">データ分類</span>や<span class="keyword-tag">取り扱い</span>に応じて把握</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-file-import" aria-hidden="true"></i>
-              <span>データを初めて環境に<span class="keyword-tag">取り込んだときの取り扱い方法</span></span>
-            </li>
-            <li>
-              <i class="fa-solid fa-random" aria-hidden="true"></i>
-              <span>データの<span class="keyword-tag">変換方法</span>と処理プロセス</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-trash-alt" aria-hidden="true"></i>
-              <span>データの<span class="keyword-tag">破棄のルール</span>と実行方法</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
-              <span><span class="keyword-tag">保存期間</span>、<span class="keyword-tag">アクセス</span>、<span class="keyword-tag">監査</span>、<span class="keyword-tag">出所追跡</span>などの要素を考慮</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble">
-          <span class="handwritten">
-            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
-            データも人間と同じで
-            <br>
-            「ゆりかごから墓場まで」のライフサイクルがあるよ！
-            <br>
-            それぞれの段階で適切なケアが必要なんだ
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション2: 期待される成果 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-check-double fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
-          <h2>期待される成果</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-tags" aria-hidden="true"></i>
-              <span>取り込みに<span class="keyword-tag">近いポイント</span>および<span class="keyword-tag">時点でデータを分類</span></span>
-            </li>
-            <li>
-              <i class="fa-solid fa-mask" aria-hidden="true"></i>
-              <span>データの分類に<span class="keyword-tag">マスキング</span>や<span class="keyword-tag">トークン化</span>、機密情報を保護するその他の対策が必要な場合は、取り込みポイントに近い時点で実施</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-trash" aria-hidden="true"></i>
-              <span>保管しておくことが適切でなくなったデータは、その<span class="keyword-tag">分類に基づいて</span>、<span class="keyword-tag">ポリシーに従って削除</span></span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-1 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-bolt fa-lg" style="color: var(--ui-color-2);"></i>
-            早い段階で分類・保護することが重要！
-            <br>
-            「入口」でしっかり管理すれば
-            <br>
-            後々の問題が大幅に減るよ
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション3: アンチパターン -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 3s;" aria-hidden="true"></i>
-          <h2>一般的なアンチパターン</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>データのライフサイクル管理に<span class="keyword-tag">画一的なアプローチ</span>を実装し、さまざまな機密度やアクセス要件が考慮されていない</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span><span class="keyword-tag">利用可能なデータ</span>と<span class="keyword-tag">バックアップされているデータ</span>の両方ではなく、いずれか一方の視点でのみライフサイクル管理を検討している</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>データがその<span class="keyword-tag">価値や出所を確認</span>することなく、ワークロードに入力された時点で有効だと仮定されている</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>データのバックアップや保護を行う代わりに、<span class="keyword-tag">データの耐久性に頼り切っている</span></span>
-            </li>
-            <li>
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-              <span>データが有用でなくなり、<span class="keyword-tag">必要な保持期間が過ぎても保持し続けている</span></span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-exclamation-circle fa-lg" style="color: var(--ui-color-5);"></i>
-            「とりあえず全部取っておこう」は危険！
-            <br>
-            コストがかかるだけでなく
-            <br>
-            リスクも大きくなるよ
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション4: リスクレベル -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: #FF5533; animation: fa-beat-fade 2s infinite;" aria-hidden="true"></i>
-          <h2>リスクレベル</h2>
-        </div>
-        
-        <div class="card-content" style="text-align: center;">
-          <p style="font-size: 24px; margin: 20px 0;">
-            <span class="risk-tag">高</span>
-          </p>
-          <p>このベストプラクティスを活用しない場合のリスクレベル</p>
-          
-          <div style="margin-top: 20px; text-align: left;">
-            <p><strong>想定されるリスク:</strong></p>
-            <ul style="list-style-type: disc; padding-left: 20px;">
-              <li>不必要なデータストレージコストの増加</li>
-              <li>機密データの不適切な管理によるセキュリティリスク</li>
-              <li>コンプライアンス違反と法的制裁</li>
-              <li>データ品質の低下</li>
-              <li>データ利用の非効率性</li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
-            リスクレベルは「高」！
-            <br>
-            適切なライフサイクル管理を怠ると
-            <br>
-            大きな問題になるよ
-          </span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- セクション5: メリット -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-2); animation: fa-spin 6s linear infinite;" aria-hidden="true"></i>
-          <h2>このベストプラクティスを活用するメリット</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
-              <span><span class="keyword-tag">規制コンプライアンス</span>の維持</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
-              <span><span class="keyword-tag">データセキュリティ</span>の向上</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-coins" aria-hidden="true"></i>
-              <span><span class="keyword-tag">ストレージコスト</span>の最適化</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i>
-              <span><span class="keyword-tag">効率的なデータアクセス</span>と共有</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-cogs" aria-hidden="true"></i>
-              <span>適切な<span class="keyword-tag">コントロール</span>を維持しながらデータ活用が可能に</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-search" aria-hidden="true"></i>
-              <span>データの<span class="keyword-tag">可視性</span>と<span class="keyword-tag">追跡可能性</span>の向上</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
-              <span>データ量の増加に応じた<span class="keyword-tag">スケーラビリティ</span></span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-thumbs-up fa-lg" style="color: var(--ui-color-2);"></i>
-            適切なライフサイクル管理で
-            <br>
-            セキュリティ向上とコスト削減の
-            <br>
-            両方が実現できるんだ！
-          </span>
-        </div>
-      </div>
-      
-      <!-- データ価値の変化 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-chart-line fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s infinite;" aria-hidden="true"></i>
-          <h2>データ価値の変化</h2>
-        </div>
-        
-        <div class="card-content">
-          <p>多くのデータは<span class="keyword-tag">時間依存性</span>があり、時間の経過とともに価値が変化します。</p>
-          
-          <div style="background-color: #f5f5f5; border-radius: 10px; padding: 15px; margin: 15px 0;">
-            <p style="font-weight: bold; color: var(--ui-color-1);"><i class="fa-solid fa-clock-rotate-left" style="margin-right: 8px;"></i>時間と価値の関係</p>
-            <ul style="list-style-type: disc; padding-left: 20px;">
-              <li><strong>高価値期間（取り込み直後）</strong>: リアルタイム分析、即時の意思決定に活用</li>
-              <li><strong>中価値期間（数週間〜数ヶ月）</strong>: トレンド分析、定期レポートに活用</li>
-              <li><strong>低価値期間（数ヶ月〜数年）</strong>: 履歴分析、コンプライアンス要件のために保持</li>
-              <li><strong>最小価値期間（数年以上）</strong>: アーカイブまたは削除の候補</li>
-            </ul>
-          </div>
-          
-          <div style="background-color: #f0f8ff; border-radius: 10px; padding: 15px; margin: 15px 0;">
-            <p style="font-weight: bold; color: var(--ui-color-1);"><i class="fa-solid fa-gears" style="margin-right: 8px;"></i>戦略的なストレージ活用</p>
-            <ul style="list-style-type: disc; padding-left: 20px;">
-              <li>価値の高いデータ: <span class="keyword-tag">高パフォーマンス層</span>（EBS, RDS）</li>
-              <li>中価値データ: <span class="keyword-tag">標準ストレージ層</span>（S3 Standard）</li>
-              <li>低価値データ: <span class="keyword-tag">低頻度アクセス層</span>（S3 IA）</li>
-              <li>アーカイブデータ: <span class="keyword-tag">アーカイブ層</span>（S3 Glacier）</li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-fire fa-lg" style="color: var(--ui-color-5);"></i>
-            データは「旬」があるんだ！
-            <br>
-            新鮮なうちに価値を引き出して
-            <br>
-            古くなったら適切な場所に移そう
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション6: データライフサイクルのステージ -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-circle-nodes fa-5x" style="color: var(--ui-color-1); animation: fa-flip 3s infinite linear;" aria-hidden="true"></i>
-          <h2>データライフサイクルのステージ</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="lifecycle-flow">
-            <div class="lifecycle-stage">
-              <div class="lifecycle-icon">
-                <i class="fa-solid fa-file-import" aria-hidden="true"></i>
-              </div>
-              <div class="lifecycle-content">
-                <div class="lifecycle-title">1. 取り込み (Ingestion)</div>
-                <p>データがシステムに初めて入る段階。データの<span class="keyword-tag">分類</span>と<span class="keyword-tag">検証</span>を行い、出所を記録</p>
-              </div>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-lock fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>SEC07-BP04 セキュリティベストプラクティス</h1>
+            <p class="header-description">
+                データ保護における重要なベストプラクティスです。適切な実装により、セキュリティ態勢を大幅に向上させることができます。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
             </div>
-            
-            <div class="lifecycle-stage">
-              <div class="lifecycle-icon">
-                <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
-              </div>
-              <div class="lifecycle-content">
-                <div class="lifecycle-title">2. 保護 (Protection)</div>
-                <p>分類に基づき<span class="keyword-tag">マスキング</span>や<span class="keyword-tag">暗号化</span>などの保護措置を適用</p>
-              </div>
-            </div>
-            
-            <div class="lifecycle-stage">
-              <div class="lifecycle-icon">
-                <i class="fa-solid fa-database" aria-hidden="true"></i>
-              </div>
-              <div class="lifecycle-content">
-                <div class="lifecycle-title">3. 保存 (Storage)</div>
-                <p>適切な<span class="keyword-tag">ストレージ層</span>や<span class="keyword-tag">バックアップポリシー</span>でデータを保存</p>
-              </div>
-            </div>
-            
-            <div class="lifecycle-stage">
-              <div class="lifecycle-icon">
-                <i class="fa-solid fa-exchange-alt" aria-hidden="true"></i>
-              </div>
-              <div class="lifecycle-content">
-                <div class="lifecycle-title">4. 変換 (Transformation)</div>
-                <p>データを処理、変換し、<span class="keyword-tag">ビジネス価値</span>を創出</p>
-              </div>
-            </div>
-            
-            <div class="lifecycle-stage">
-              <div class="lifecycle-icon">
-                <i class="fa-solid fa-archive" aria-hidden="true"></i>
-              </div>
-              <div class="lifecycle-content">
-                <div class="lifecycle-title">5. アーカイブ (Archive)</div>
-                <p>アクセス頻度の低いデータを<span class="keyword-tag">低コストストレージ</span>に移動</p>
-              </div>
-            </div>
-            
-            <div class="lifecycle-stage">
-              <div class="lifecycle-icon">
-                <i class="fa-solid fa-trash-alt" aria-hidden="true"></i>
-              </div>
-              <div class="lifecycle-content">
-                <div class="lifecycle-title">6. 破棄 (Deletion)</div>
-                <p>保持期間が終了したデータを<span class="keyword-tag">安全に削除</span></p>
-              </div>
-            </div>
-          </div>
         </div>
-        
-        <div class="speech-bubble variant-1 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-arrows-spin fa-lg" style="color: var(--ui-color-2);"></i>
-            各ステージで適切な管理が必要！
-            <br>
-            特に最初の「取り込み」と
-            <br>
-            最後の「破棄」が見落とされがちだよ
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション7: 自動化ツール -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-robot fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>AWSの自動ライフサイクル管理ツール</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="aws-service-box">
-            <div class="aws-service-icon">
-              <i class="fa-solid fa-cubes" aria-hidden="true"></i>
+    </header>
+
+    <main>
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                        <span>高リスク</span>
+                    </div>
+                    <p>このベストプラクティスを確立しない場合、セキュリティ態勢に重大な影響を与える可能性があります。</p>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation" style="color: var(--ui-color-5);"></i>
+                        適切な実装で<br>
+                        <span class="keyword-tag">リスク軽減</span>！
+                    </span>
+                </div>
             </div>
-            <div class="aws-service-content">
-              <div class="aws-service-name">Amazon S3 ライフサイクルポリシー</div>
-              <p>オブジェクトの自動移行と削除を定義。S3標準からS3 Glacier Flexible Retrievalなどへの移行や、一定期間後の削除を自動化</p>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                <div class="card-content">
+                    <p>このベストプラクティスの実装により、データ保護における以下の成果が期待されます：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-check" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">セキュリティ態勢</span>の大幅な向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-minimize" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">攻撃面</span>の効果的な削減</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">可視性</span>と監視能力の向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動化</span>による運用効率化</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star" style="color: var(--ui-color-2);"></i>
+                        明確な<br>
+                        <span class="keyword-tag">目標設定</span>！
+                    </span>
+                </div>
             </div>
-          </div>
-          
-          <div class="aws-service-box">
-            <div class="aws-service-icon">
-              <i class="fa-solid fa-calendar-day" aria-hidden="true"></i>
+
+            <!-- 主要概念 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-lock fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>主要概念</h2>
+                </div>
+                <div class="card-content">
+                    <p>データ保護における重要な概念と原則：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">多層防御</span> - 複数のセキュリティレイヤーによる保護</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-minimize" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">最小権限の原則</span> - 必要最小限のアクセス権限</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">デフォルトセキュア</span> - 安全な初期設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sync" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">継続的改善</span> - 定期的な見直しと更新</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb" style="color: var(--ui-color-2);"></i>
+                        基本原則を<br>
+                        <span class="keyword-tag">理解</span>しよう！
+                    </span>
+                </div>
             </div>
-            <div class="aws-service-content">
-              <div class="aws-service-name">Amazon Data Lifecycle Manager</div>
-              <p>EBSスナップショットやAMIの作成、保持、削除を自動化するライフサイクルポリシーを設定</p>
+
+            <!-- 実装アプローチ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-route fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>実装アプローチ</h2>
+                </div>
+                <div class="card-content">
+                    <p>効果的な実装のための段階的アプローチ：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">現状評価</span> - 既存環境の詳細分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-map" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">計画策定</span> - 実装ロードマップの作成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">段階実装</span> - リスクを最小化した展開</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">効果測定</span> - 継続的な監視と改善</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket" style="color: var(--ui-color-1);"></i>
+                        段階的な<br>
+                        <span class="keyword-tag">実装</span>が鍵！
+                    </span>
+                </div>
             </div>
-          </div>
-          
-          <div class="aws-service-box">
-            <div class="aws-service-icon">
-              <i class="fa-solid fa-hourglass-half" aria-hidden="true"></i>
+
+            <!-- AWSサービス活用 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>AWSサービス活用</h2>
+                </div>
+                <div class="card-content">
+                    <p>データ保護で活用できる主要AWSサービス：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Security Hub</span> - 統合セキュリティ管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon GuardDuty</span> - 脅威検出サービス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Config</span> - 設定管理と監査</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-trail" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS CloudTrail</span> - API呼び出し記録</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic" style="color: var(--ui-color-2);"></i>
+                        AWSサービスで<br>
+                        <span class="keyword-tag">効率化</span>！
+                    </span>
+                </div>
             </div>
-            <div class="aws-service-content">
-              <div class="aws-service-name">Amazon DynamoDB TTL</div>
-              <p>Time to Live機能で項目ごとの有効期限タイムスタンプを定義し、自動的に期限切れデータを削除</p>
+
+            <!-- ベストプラクティス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>ベストプラクティス</h2>
+                </div>
+                <div class="card-content">
+                    <p>実装時に考慮すべき重要なポイント：</p>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動化優先</span> - 手動作業の最小化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">メトリクス監視</span> - 定量的な効果測定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">チーム教育</span> - 継続的なスキル向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-book" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">文書化</span> - 手順とプロセスの明文化</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-check-circle" style="color: var(--ui-color-2);"></i>
+                        ベストプラクティスで<br>
+                        <span class="keyword-tag">成功確率向上</span>！
+                    </span>
+                </div>
             </div>
-          </div>
-          
-          <div class="aws-service-box">
-            <div class="aws-service-icon">
-              <i class="fa-solid fa-database" aria-hidden="true"></i>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book" aria-hidden="true"></i> 学習リソース</h3>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                            <span>AWS Well-Architected Labs</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-video" aria-hidden="true"></i>
+                            <span>AWS re:Invent セッション</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span>AWS公式ドキュメント</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span>AWSコミュニティフォーラム</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap" style="color: var(--ui-color-1);"></i>
+                        豊富な<br>
+                        <span class="keyword-tag">学習リソース</span>で<br>
+                        理解を深めよう！
+                    </span>
+                </div>
             </div>
-            <div class="aws-service-content">
-              <div class="aws-service-name">AWS Backup</div>
-              <p>複数のAWSサービス間でデータバックアップを一元管理・自動化。保持期間設定や定期的な削除も可能</p>
-            </div>
-          </div>
-          
-          <div class="aws-service-box">
-            <div class="aws-service-icon">
-              <i class="fa-solid fa-lock" aria-hidden="true"></i>
-            </div>
-            <div class="aws-service-content">
-              <div class="aws-service-name">S3 Object Lock & AWS Backup ボールトロック</div>
-              <p>バックアップの保護を強化し、指定した期間内に削除や変更ができないように保護</p>
-            </div>
-          </div>
         </div>
-        
-        <div class="speech-bubble">
-          <span class="handwritten">
-            <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-1);"></i>
-            AWSの自動化ツールを活用すれば
-            <br>
-            手動管理の手間とミスを大幅に削減！
-            <br>
-            スケーラブルな運用が可能になるよ
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション8: データ出所追跡 -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-route fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 3s infinite;" aria-hidden="true"></i>
-          <h2>データ出所追跡 (Data Lineage)</h2>
-        </div>
-        
-        <div class="card-content">
-          <p><strong>データ出所追跡とは：</strong>ワークロードの進行状況に応じたデータの履歴を記録することで、データの発生源、変換内容、所有者、変更プロセスを把握できるようにします。</p>
-          
-          <div style="margin: 15px 0; padding: 15px; background-color: #f9f9f9; border-radius: 10px; border-left: 4px solid var(--ui-color-1);">
-            <div style="font-weight: bold; margin-bottom: 10px; color: var(--ui-color-1);">
-              <i class="fa-solid fa-list-check" style="margin-right: 5px;"></i>データ出所追跡の主な要素
-            </div>
-            <ul style="margin: 0; padding-left: 20px; list-style-type: disc;">
-              <li>データの<span class="keyword-tag">発生源</span>の記録</li>
-              <li>データに対する<span class="keyword-tag">変換内容</span>の追跡</li>
-              <li>変更を行った<span class="keyword-tag">所有者やプロセス</span>の特定</li>
-              <li>各変更が行われた<span class="keyword-tag">タイムスタンプ</span>の保存</li>
-              <li>データの<span class="keyword-tag">移動パス</span>全体の可視化</li>
-            </ul>
-          </div>
-          
-          <div style="margin: 15px 0; padding: 15px; background-color: #fff9e6; border-radius: 10px; border-left: 4px solid var(--ui-color-2);">
-            <div style="font-weight: bold; margin-bottom: 10px; color: var(--ui-color-2);">
-              <i class="fa-solid fa-lightbulb" style="margin-right: 5px;"></i>AWS実装例
-            </div>
-            <ul style="margin: 0; padding-left: 20px; list-style-type: disc;">
-              <li>DynamoDBテーブルの変換に関する<span class="keyword-tag">メタデータをログに記録</span></li>
-              <li>データレイク内で変換後のデータのコピーを<span class="keyword-tag">各ステージで異なるS3バケット</span>に保存</li>
-              <li>スキーマとタイムスタンプ情報を<span class="keyword-tag">AWS Glue Data Catalog</span>に保存</li>
-              <li><span class="keyword-tag">AWS Lake Formation</span>でタグベースのアクセス制御を適用</li>
-            </ul>
-          </div>
-          
-          <p><strong>メリット：</strong> データ出所追跡は、潜在的なセキュリティイベントが発生した際の問題のトラブルシューティングや調査に役立ちます。また、コンプライアンス要件の達成、データ品質の向上、データガバナンスの強化にも貢献します。</p>
-        </div>
-        
-        <div class="speech-bubble variant-1 right">
-          <span class="handwritten">
-            <i class="fa-solid fa-magnifying-glass-chart fa-lg" style="color: var(--ui-color-2);"></i>
-            データの「履歴書」を作っておくと
-            <br>
-            問題発生時にすぐ原因がわかる！
-            <br>
-            監査対応も楽になるよ
-          </span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- セクション9: 実装手順 -->
-    <div class="section-layout">
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-list-check fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 3s infinite;" aria-hidden="true"></i>
-          <h2>実装手順</h2>
-        </div>
-        
-        <div class="card-content">
-          <div class="step-box">
-            <p><strong>1. データ分析と分類</strong></p>
-            <p>ワークロードのデータタイプ、機密レベル、アクセス要件を分析してデータを分類し、適切なライフサイクル管理戦略を定義</p>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>2. 保持ポリシーの設計と実装</strong></p>
-            <p>法律、規制、組織の要件に沿ったデータ保持ポリシーと自動破棄プロセスを設計し、実装</p>
-            <ul style="list-style-type: disc; padding-left: 20px; margin-top: 10px;">
-              <li>S3ライフサイクルポリシーの設定</li>
-              <li>DynamoDB TTLの有効化</li>
-              <li>EBSスナップショットの自動管理設定</li>
-              <li>RDSバックアップの保持期間設定</li>
-            </ul>
-          </div>
-          
-          <div class="step-box">
-            <p><strong>3. 継続的な監視と調整</strong></p>
-            <p>ワークロードの要件や規制の変化に応じて、データライフサイクル管理の戦略、統制、ポリシーを継続的に監視、監査、調整するためのプロセスと自動化を確立</p>
-            <ul style="list-style-type: disc; padding-left: 20px; margin-top: 10px;">
-              <li>AWS Configで自動ライフサイクル管理が有効になっていないリソースを検出</li>
-              <li>CloudWatchアラームでライフサイクルポリシーの実行状況を監視</li>
-              <li>AWS SecurityHubでコンプライアンス状況を一元管理</li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="speech-bubble variant-2">
-          <span class="handwritten">
-            <i class="fa-solid fa-check-double fa-lg" style="color: var(--ui-color-5);"></i>
-            手順は簡単だけど、継続的な
-            <br>
-            モニタリングと改善が重要！
-            <br>
-            設定したら終わりじゃないよ
-          </span>
-        </div>
-      </div>
-      
-      <!-- セクション10: まとめ -->
-      <div class="section-card">
-        <div class="mega-icon-container">
-          <i class="fa-solid fa-check-circle fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s infinite;" aria-hidden="true"></i>
-          <h2>まとめ</h2>
-        </div>
-        
-        <div class="card-content">
-          <ul class="keyword-list">
-            <li>
-              <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
-              <span><span class="keyword-tag">早期の分類</span>: データをできるだけ取り込みポイントに近い時点で分類</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
-              <span><span class="keyword-tag">適切な保護</span>: マスキングやトークン化などの保護対策を早期に適用</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-exchange-alt" aria-hidden="true"></i>
-              <span><span class="keyword-tag">ライフサイクル管理</span>: データの価値変化に応じた適切なストレージ層への移行</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-history" aria-hidden="true"></i>
-              <span><span class="keyword-tag">出所追跡</span>: データの発生源から現在に至るまでの履歴を記録</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-trash-alt" aria-hidden="true"></i>
-              <span><span class="keyword-tag">適切な削除</span>: 保持期間を過ぎたデータを安全に削除</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-robot" aria-hidden="true"></i>
-              <span><span class="keyword-tag">自動化</span>: AWSの自動ライフサイクル管理機能を活用してスケーラブルに運用</span>
-            </li>
-            <li>
-              <i class="fa-solid fa-search" aria-hidden="true"></i>
-              <span><span class="keyword-tag">継続的な監視</span>: ライフサイクル管理の有効性を定期的に評価し改善</span>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="speech-bubble variant-1">
-          <span class="handwritten">
-            <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-2);"></i>
-            データを大切に扱うことで
-            <br>
-            セキュリティ向上・コスト最適化・
-            <br>
-            コンプライアンス対応を同時に実現！
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
+    </main>
 </body>
 </html>

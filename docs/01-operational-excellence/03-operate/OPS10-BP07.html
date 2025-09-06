@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS10-BP07: イベントへの自動対応 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-robot fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS10-BP07: イベントへの自動対応</h1>
+            <p class="header-description">イベント対応の自動化は、迅速で一貫性があり、エラーのない運用処理の鍵です。合理化されたプロセスを作成し、ツールを使用してイベントを自動的に管理・対応し、手動介入を最小化して運用効率を向上させます。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/2024-06-27/framework/ops_event_response_auto_event_response.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level medium">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 中リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-hand-paper" aria-hidden="true"></i>手動イベント処理による<span class="keyword-tag">遅延とエラー</span></li>
+                        <li><i class="fa-solid fa-sync-alt" aria-hidden="true"></i>反復的で重要なタスクでの<span class="keyword-tag">自動化の見落とし</span></li>
+                        <li><i class="fa-solid fa-bell-slash" aria-hidden="true"></i>反復的な手動タスクによる<span class="keyword-tag">アラート疲れと重要問題の見逃し</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-2);"></i>
+                        手動対応だと、
+                        <br>
+                        ヒューマンエラーが発生し
+                        <br>
+                        <span class="keyword-tag">対応が遅れます</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-user-times" aria-hidden="true"></i>自動化によるヒューマンエラーの削減と<span class="keyword-tag">解決時間の短縮</span></li>
+                        <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i><span class="keyword-tag">一貫性があり信頼性の高い</span>運用イベント処理</li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>運用効率とシステム信頼性の<span class="keyword-tag">向上</span></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>システムダウンタイムを削減する<span class="keyword-tag">加速されたイベント対応</span></li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i>自動化された一貫性のあるイベント処理による<span class="keyword-tag">信頼性の高い運用</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        自動化により、
+                        <br>
+                        24時間365日一貫した
+                        <br>
+                        <span class="keyword-tag">高品質な対応</span>が実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i>問題修復、チケット充実、容量管理、スケーリング、デプロイ、テストの<span class="keyword-tag">自動化機会特定</span></li>
+                        <li><i class="fa-solid fa-bell" aria-hidden="true"></i><span class="keyword-tag">CloudWatchアラームアクション</span>による自動対応開始条件の評価</li>
+                        <li><i class="fa-solid fa-route" aria-hidden="true"></i><span class="keyword-tag">EventBridge</span>によるAWSサービス、カスタムワークロード、SaaSアプリケーションのイベント対応</li>
+                        <li><i class="fa-solid fa-book" aria-hidden="true"></i><span class="keyword-tag">Systems Manager Automation</span>ランブックによる保守、デプロイ、修復タスクの簡素化</li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i><span class="keyword-tag">自動セキュリティ対応</span>によるリスクの迅速な対処</li>
+                        <li><i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i><span class="keyword-tag">AWS Auto Scaling</span>による可用性とパフォーマンス維持</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        Incident Managerでインシデントを
+                        <br>
+                        自動作成すると、関連AWS
+                        <br>
+                        リソース詳細が<span class="keyword-tag">自動収集</span>されます！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-hand-paper" aria-hidden="true"></i>手動イベント処理により<span class="keyword-tag">遅延とエラーが発生</span></li>
+                        <li><i class="fa-solid fa-sync-alt" aria-hidden="true"></i>反復的で重要なタスクで<span class="keyword-tag">自動化が見落とされる</span></li>
+                        <li><i class="fa-solid fa-bell-slash" aria-hidden="true"></i>反復的な手動タスクにより<span class="keyword-tag">アラート疲れが発生し重要問題を見逃す</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        同じ作業を何度も手動で行うと、
+                        <br>
+                        疲労でミスが増え、
+                        <br>
+                        <span class="keyword-tag">重要な問題</span>を見逃します...
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスの利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i>システムダウンタイムを削減する<span class="keyword-tag">加速されたイベント対応</span></li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i>自動化された一貫性のあるイベント処理による<span class="keyword-tag">信頼性の高い運用</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        自動化により、
+                        <br>
+                        人間は創造的な作業に
+                        <br>
+                        <span class="keyword-tag">集中</span>できます！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book"></i> 関連ベストプラクティス</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-bell" aria-hidden="true"></i><span class="keyword-tag">OPS08-BP04</span>: 実行可能なアラートの作成</li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i><span class="keyword-tag">OPS10-BP02</span>: アラートごとのプロセスを持つ</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-file-text"></i> 関連ドキュメント</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-book" aria-hidden="true"></i><span class="keyword-tag">Systems Manager Automation</span>ランブックとIncident Manager</li>
+                        <li><i class="fa-solid fa-plus-circle" aria-hidden="true"></i><span class="keyword-tag">Incident Manager</span>でのインシデント作成</li>
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i><span class="keyword-tag">Quota Monitor for AWS</span>によるクォータ監視</li>
+                        <li><i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i><span class="keyword-tag">AWS Auto Scaling</span></li>
+                        <li><i class="fa-solid fa-code" aria-hidden="true"></i><span class="keyword-tag">Amazon CodeCatalyst</span></li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-video"></i> 関連動画</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-play" aria-hidden="true"></i><span class="keyword-tag">Systems Manager</span>でのAutomationランブック作成</li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i><span class="keyword-tag">AWSでのIT運用</span>自動化方法</li>
+                        <li><i class="fa-solid fa-shield-alt" aria-hidden="true"></i><span class="keyword-tag">Security Hub</span>自動化ルール</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap fa-lg" style="color: var(--ui-color-1);"></i>
+                        これらのリソースを活用して、
+                        <br>
+                        効果的なイベント自動化を
+                        <br>
+                        <span class="keyword-tag">実現</span>しましょう！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

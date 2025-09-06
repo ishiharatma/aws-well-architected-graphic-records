@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS10-BP06: ダッシュボードを通じたステータス伝達 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-chart-line fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS10-BP06: ダッシュボードを通じたステータス伝達</h1>
+            <p class="header-description">ダッシュボードを戦略的ツールとして使用し、内部技術チーム、リーダーシップ、顧客を含む異なる対象者にリアルタイムの運用ステータスと主要メトリクスを伝達します。これらのダッシュボードは、システムヘルスとビジネスパフォーマンスの一元化された視覚的表現を提供し、透明性と意思決定効率を向上させます。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/2024-06-27/framework/ops_event_response_dashboards.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level medium">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 中リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>インシデント管理コールに参加するエンジニアが<span class="keyword-tag">状況把握に時間を要する</span></li>
+                        <li><i class="fa-solid fa-clipboard" aria-hidden="true"></i>手動レポートへの依存による<span class="keyword-tag">遅延と潜在的な不正確性</span></li>
+                        <li><i class="fa-solid fa-phone" aria-hidden="true"></i>インシデント中の運用チームへの<span class="keyword-tag">頻繁なステータス更新要求</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-2);"></i>
+                        ダッシュボードがないと、
+                        <br>
+                        毎回状況説明に
+                        <br>
+                        <span class="keyword-tag">時間を浪費</span>します！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i>異なるステークホルダーに関連する<span class="keyword-tag">システムとビジネスメトリクスの包括的ビュー</span></li>
+                        <li><i class="fa-solid fa-self-service" aria-hidden="true"></i>ステークホルダーの<span class="keyword-tag">プロアクティブな運用情報アクセス</span></li>
+                        <li><i class="fa-solid fa-phone-slash" aria-hidden="true"></i>頻繁なステータス要求の<span class="keyword-tag">必要性削減</span></li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>通常運用とインシデント中の<span class="keyword-tag">リアルタイム意思決定</span>向上</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        ダッシュボードにより、
+                        <br>
+                        ステークホルダーが自分で
+                        <br>
+                        <span class="keyword-tag">情報を確認</span>できます！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>技術チーム、リーダーシップ、顧客の<span class="keyword-tag">ステークホルダーニーズ</span>特定</li>
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i><span class="keyword-tag">CloudWatchダッシュボード</span>とQuickSightの適切なツール選択</li>
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i>関連メトリクスとKPIを明確に提示する<span class="keyword-tag">効果的なダッシュボード</span>設計</li>
+                        <li><i class="fa-solid fa-layer-group" aria-hidden="true"></i>システムレベルとビジネスレベルの<span class="keyword-tag">ビューの組み込み</span></li>
+                        <li><i class="fa-solid fa-bell" aria-hidden="true"></i>重要な問題をハイライトする<span class="keyword-tag">自動アラームの統合</span></li>
+                        <li><i class="fa-solid fa-share-alt" aria-hidden="true"></i>関連ステークホルダーへの<span class="keyword-tag">セルフサービスアクセス</span>提供</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        CloudWatch Logs Insightsを使って
+                        <br>
+                        異なるアプリケーションからの
+                        <br>
+                        <span class="keyword-tag">ログデータ</span>を可視化！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-phone" aria-hidden="true"></i>インシデント管理コールに参加するエンジニアが<span class="keyword-tag">状況把握のためのステータス更新を必要とする</span></li>
+                        <li><i class="fa-solid fa-clipboard" aria-hidden="true"></i>管理層への手動レポートに依存し<span class="keyword-tag">遅延と潜在的な不正確性を招く</span></li>
+                        <li><i class="fa-solid fa-bell" aria-hidden="true"></i>インシデント中に運用チームが<span class="keyword-tag">ステータス更新で頻繁に中断される</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        手動レポートに頼ると、
+                        <br>
+                        情報が古くなったり
+                        <br>
+                        <span class="keyword-tag">間違ったり</span>します...
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスの利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-info-circle" aria-hidden="true"></i>重要な情報への即座のアクセスによる<span class="keyword-tag">ステークホルダーの権限付与</span></li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>情報に基づいた<span class="keyword-tag">意思決定の促進</span></li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i>手動レポートと頻繁なステータス照会の最小化による<span class="keyword-tag">運用非効率性の削減</span></li>
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i>システムパフォーマンスとビジネスメトリクスへのリアルタイム可視性による<span class="keyword-tag">透明性と信頼の向上</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        適切なダッシュボードにより、
+                        <br>
+                        全員が同じ情報を共有し
+                        <br>
+                        <span class="keyword-tag">効率的</span>に作業できます！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book"></i> 関連ベストプラクティス</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i><span class="keyword-tag">OPS08-BP05</span>: ダッシュボードの作成</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-file-text"></i> 関連ドキュメント</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i><span class="keyword-tag">運用可視性</span>のためのダッシュボード構築</li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span class="keyword-tag">CloudWatchダッシュボード</span>の使用</li>
+                        <li><i class="fa-solid fa-sliders-h" aria-hidden="true"></i><span class="keyword-tag">ダッシュボード変数</span>による柔軟なダッシュボード作成</li>
+                        <li><i class="fa-solid fa-share-alt" aria-hidden="true"></i><span class="keyword-tag">CloudWatchダッシュボード</span>の共有</li>
+                        <li><i class="fa-solid fa-database" aria-hidden="true"></i><span class="keyword-tag">他のデータソース</span>からのメトリクス照会</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap fa-lg" style="color: var(--ui-color-1);"></i>
+                        これらのリソースを活用して、
+                        <br>
+                        効果的なダッシュボードを
+                        <br>
+                        <span class="keyword-tag">構築</span>しましょう！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

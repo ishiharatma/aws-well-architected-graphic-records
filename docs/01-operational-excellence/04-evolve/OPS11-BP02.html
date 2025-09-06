@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS11-BP02: インシデント後分析の実行 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-search fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS11-BP02: インシデント後分析の実行</h1>
+            <p class="header-description">顧客に影響を与えるイベントをレビューし、寄与要因と予防アクションを特定します。この情報を使用して、再発を制限または防止する軽減策を開発し、迅速で効果的な対応手順を開発します。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_perform_rca_process.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 高リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-question-circle" aria-hidden="true"></i>サポート取得と必要情報収集のための<span class="keyword-tag">事前定義プロセスの欠如</span></li>
+                        <li><i class="fa-solid fa-database" aria-hidden="true"></i>データ損失の原因が不明でも<span class="keyword-tag">重要視しない判断</span></li>
+                        <li><i class="fa-solid fa-repeat" aria-hidden="true"></i>データ損失の頻度増加による<span class="keyword-tag">顧客への影響拡大</span></li>
+                        <li><i class="fa-solid fa-tools" aria-hidden="true"></i>データ復旧による<span class="keyword-tag">追加運用負荷</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        インシデント後分析をしないと、
+                        <br>
+                        同じ問題が繰り返し発生し
+                        <br>
+                        <span class="keyword-tag">学習機会</span>を失います！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i>インシデント後分析を含む<span class="keyword-tag">インシデント管理プロセス</span>の確立</li>
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i>イベントデータ収集のための<span class="keyword-tag">可観測性計画</span>の配置</li>
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i>インシデント後分析プロセスをサポートする<span class="keyword-tag">メトリクスの理解と収集</span></li>
+                        <li><i class="fa-solid fa-lightbulb" aria-hidden="true"></i>将来の成果改善のための<span class="keyword-tag">インシデントからの学習</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        インシデントから学ぶことで、
+                        <br>
+                        組織全体が
+                        <br>
+                        <span class="keyword-tag">より強く</span>なります！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>デプロイ変更、設定変更、インシデント開始時刻、アラーム時刻、<span class="keyword-tag">関与時刻、軽減開始時刻、解決時刻</span>の収集</li>
+                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>インシデントイベント理解のための<span class="keyword-tag">タイムライン上の主要時点</span>記述</li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i>検出時間、診断時間、軽減時間の<span class="keyword-tag">改善可能性</span>検討</li>
+                        <li><i class="fa-solid fa-bell" aria-hidden="true"></i>早期検出のための<span class="keyword-tag">メトリクスとアラーム</span>更新</li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>適切な対応者の早期関与のための<span class="keyword-tag">対応計画とエスカレーション計画</span>更新</li>
+                        <li><i class="fa-solid fa-list-check" aria-hidden="true"></i>チェックリストとアクションの作成、<span class="keyword-tag">全アクションの追跡と実行</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        Incident Managerを使うことで、
+                        <br>
+                        インシデント後分析を
+                        <br>
+                        <span class="keyword-tag">体系的</span>に実行できます！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスの利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i>インシデントに寄与したコンポーネント、条件、アクション、イベントを特定する<span class="keyword-tag">事前定義プロセス</span></li>
+                        <li><i class="fa-solid fa-lightbulb" aria-hidden="true"></i>改善機会の<span class="keyword-tag">特定支援</span></li>
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i>インシデント後分析データの<span class="keyword-tag">改善への活用</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        体系的な分析により、
+                        <br>
+                        根本原因を特定し
+                        <br>
+                        <span class="keyword-tag">再発防止</span>を実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book"></i> 関連ベストプラクティス</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-sync-alt" aria-hidden="true"></i><span class="keyword-tag">OPS11-BP01</span>: 継続的改善のプロセスを持つ</li>
+                        <li><i class="fa-solid fa-eye" aria-hidden="true"></i><span class="keyword-tag">OPS04</span>: 可観測性の実装</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-file-text"></i> 関連ドキュメント</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i><span class="keyword-tag">Incident Manager</span>でのインシデント後分析実行</li>
+                        <li><i class="fa-solid fa-clipboard-check" aria-hidden="true"></i><span class="keyword-tag">運用準備レビュー</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap fa-lg" style="color: var(--ui-color-1);"></i>
+                        これらのリソースを活用して、
+                        <br>
+                        効果的なインシデント後分析を
+                        <br>
+                        <span class="keyword-tag">実現</span>しましょう！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

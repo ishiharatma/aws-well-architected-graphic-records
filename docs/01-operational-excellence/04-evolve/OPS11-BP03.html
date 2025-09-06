@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPS11-BP03: フィードバックループの実装 - AWS Well-Architected</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-comments fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i></h1>
+            <h1>OPS11-BP03: フィードバックループの実装</h1>
+            <p class="header-description">フィードバックループは意思決定を推進する実行可能な洞察を提供します。手順とワークロードにフィードバックループを組み込み、問題と改善が必要な領域を特定し、改善への投資を検証します。</p>
+            <a href="https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_feedback_loops.html" target="_blank" class="header-link">
+                <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-level high">
+                        <h3><i class="fa-solid fa-exclamation-triangle"></i> 高リスク</h3>
+                        <p>このベストプラクティスを確立しない場合のリスクレベル</p>
+                    </div>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-rocket" aria-hidden="true"></i>新機能ローンチ時の<span class="keyword-tag">顧客フィードバック受信方法の不在</span></li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>運用改善投資後の<span class="keyword-tag">検証レトロスペクティブ未実施</span></li>
+                        <li><i class="fa-solid fa-inbox" aria-hidden="true"></i>顧客フィードバック収集はするが<span class="keyword-tag">定期レビューを行わない</span></li>
+                        <li><i class="fa-solid fa-disconnect" aria-hidden="true"></i>フィードバックループからのアクション項目が<span class="keyword-tag">開発プロセスに含まれない</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation fa-lg" style="color: var(--ui-color-5);"></i>
+                        フィードバックループがないと、
+                        <br>
+                        顧客ニーズを見失い
+                        <br>
+                        <span class="keyword-tag">改善機会</span>を逃します！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i><span class="keyword-tag">即座のフィードバック</span>とレトロスペクティブ分析による改善推進</li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>ユーザーとチームメンバーフィードバックの<span class="keyword-tag">キャプチャメカニズム</span></li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>改善を推進するトレンド特定のための<span class="keyword-tag">レトロスペクティブ分析</span>活用</li>
+                        <li><i class="fa-solid fa-sync-alt" aria-hidden="true"></i>顧客から逆算した<span class="keyword-tag">新機能開発</span></li>
+                        <li><i class="fa-solid fa-rocket" aria-hidden="true"></i>変化への<span class="keyword-tag">迅速な組織文化反応</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        フィードバックループにより、
+                        <br>
+                        顧客中心の継続的改善が
+                        <br>
+                        <span class="keyword-tag">実現</span>します！
+                    </span>
+                </div>
+            </div>
+
+            <!-- フィードバックループの種類 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-layer-group fa-5x" style="color: var(--ui-color-2); animation: fa-pulse 2s;" aria-hidden="true"></i>
+                    <h2>フィードバックループの種類</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-bolt"></i> 即座のフィードバック</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i><span class="keyword-tag">A/Bテスト</span>と新機能リリースからの収集</li>
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>チームメンバー、顧客、活動の<span class="keyword-tag">自動出力</span>から</li>
+                        <li><i class="fa-solid fa-zap" aria-hidden="true"></i><span class="keyword-tag">高速な失敗</span>に不可欠</li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-history"></i> レトロスペクティブ分析</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-calendar" aria-hidden="true"></i>スプリント終了時、定期的、または<span class="keyword-tag">主要リリース後</span>に実施</li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>時間経過による<span class="keyword-tag">運用成果とメトリクス</span>のレビュー</li>
+                        <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i>運用やワークロードへの<span class="keyword-tag">投資検証</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        即座のフィードバックで素早く学び、
+                        <br>
+                        レトロスペクティブで
+                        <br>
+                        <span class="keyword-tag">戦略を検証</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-bolt"></i> 即座のフィードバック</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>調査、顧客投票、フィードバックフォームによる<span class="keyword-tag">フィードバック受信メカニズム</span></li>
+                        <li><i class="fa-solid fa-cogs" aria-hidden="true"></i>フィードバックレビュー、改善決定、<span class="keyword-tag">改善スケジューリング</span>プロセス</li>
+                        <li><i class="fa-solid fa-code-branch" aria-hidden="true"></i>ソフトウェア開発プロセスへの<span class="keyword-tag">フィードバック追加</span></li>
+                        <li><i class="fa-solid fa-reply" aria-hidden="true"></i>改善実施時の<span class="keyword-tag">フィードバック提出者へのフォローアップ</span></li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-history"></i> レトロスペクティブ分析</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i>ワークロード関係者を集めた<span class="keyword-tag">レトロスペクティブ会議</span></li>
+                        <li><i class="fa-solid fa-stop-circle" aria-hidden="true"></i><span class="keyword-tag">Stop（やめる）</span>: チームがやめたいこと</li>
+                        <li><i class="fa-solid fa-play-circle" aria-hidden="true"></i><span class="keyword-tag">Start（始める）</span>: 始めたいアイデア</li>
+                        <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i><span class="keyword-tag">Keep（続ける）</span>: 続けたい項目</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        Systems Manager OpsCenterを使って
+                        <br>
+                        改善をOpsItemとして
+                        <br>
+                        <span class="keyword-tag">追跡</span>できます！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスの利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-user-cog" aria-hidden="true"></i>顧客から逆算した<span class="keyword-tag">新機能開発</span></li>
+                        <li><i class="fa-solid fa-rocket" aria-hidden="true"></i>変化への<span class="keyword-tag">迅速な組織文化反応</span></li>
+                        <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i>改善機会特定のための<span class="keyword-tag">トレンド活用</span></li>
+                        <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i>ワークロードと運用への<span class="keyword-tag">投資検証</span></li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        フィードバックループにより、
+                        <br>
+                        組織全体が学習し
+                        <br>
+                        <span class="keyword-tag">進化</span>し続けます！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連リソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連リソース</h2>
+                </div>
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-book"></i> 関連ベストプラクティス</h3>
+                    <ul class="keyword-list">
+                        <li><i class="fa-solid fa-users" aria-hidden="true"></i><span class="keyword-tag">OPS01-BP01</span>: 外部顧客ニーズの評価</li>
+                        <li><i class="fa-solid fa-building" aria-hidden="true"></i><span class="keyword-tag">OPS01-BP02</span>: 内部顧客ニーズの評価</li>
+                        <li><i class="fa-solid fa-search" aria-hidden="true"></i><span class="keyword-tag">OPS11-BP02</span>: インシデント後分析の実行</li>
+                        <li><i class="fa-solid fa-chart-bar" aria-hidden="true"></i><span class="keyword-tag">OPS11-BP07</span>: 運用メトリクスレビューの実行</li>
+                    </ul>
+                </div>
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap fa-lg" style="color: var(--ui-color-1);"></i>
+                        これらのベストプラクティスと
+                        <br>
+                        組み合わせることで、
+                        <br>
+                        <span class="keyword-tag">包括的改善</span>を実現！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -224,8 +224,8 @@ body {
 .author-speech-row {
   display: flex;
   align-items: center;
-  margin: 40px 0 40px 20px;
-  max-width: 600px;
+  margin: 40px auto;         /* 左右autoで中央寄せ */
+  max-width: 1400px;         /* section-layoutと同じ幅 */
   justify-content: flex-start; /* 左寄せ */
 }
 .author-image {

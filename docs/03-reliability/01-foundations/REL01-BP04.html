@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL01-BP04: クォータを監視・管理する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-chart-line fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL01-BP04: クォータを監視・管理する</h1>
+            <p class="header-description">
+                潜在的な使用量を評価し、使用量の計画的な成長を考慮してクォータを適切に増加させます。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_monitor_manage_limits.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-circle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <div class="speech-bubble variant-1">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-exclamation-circle fa-lg" style="color: var(--ui-color-2);"></i>
+                            このベストプラクティスを確立しないと
+                            <br>
+                            <span class="keyword-tag">中リスク</span>
+                            <br>
+                            が発生します！
+                        </span>
+                    </div>
+                    
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span>AWSサービスクォータの自動追跡と使用量監視により、クォータ制限に近づいていることを確認できます</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>この監視データを使用して、クォータ枯渇による劣化を制限できます</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span>管理と監視を行うアクティブで自動化されたシステムがデプロイされている</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                            <span>クォータ使用量のしきい値に近づいていることを確実に検知する運用ソリューション</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-forward" aria-hidden="true"></i>
+                            <span>クォータ変更リクエストによる予防的な修復</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="speech-bubble">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                            自動監視システムで
+                            <br>
+                            <span class="keyword-tag">予防的な対応</span>
+                            <br>
+                            が可能になります！
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
+                            <span>サービスクォータしきい値をチェックする監視を設定しない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                            <span>値を変更できないハード制限の監視を設定しない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>ソフトクォータ変更のリクエストと確保に必要な時間が即座または短期間であると仮定する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-question-circle" aria-hidden="true"></i>
+                            <span>サービスクォータに近づいているときのアラームを設定するが、アラートへの対応プロセスがない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                            <span>AWS Service Quotasでサポートされているサービスのみのアラームを設定し、他のAWSサービスを監視しない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                            <span>マルチリージョン回復力設計のクォータ管理を考慮しない</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span>サポートされているサービスについて、評価してアラートやアラームを送信できるさまざまなサービスを設定してクォータを監視できます</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                            <span>これらのアラームは<span class="keyword-tag">AWS Config</span>、<span class="keyword-tag">Lambda関数</span>、<span class="keyword-tag">Amazon CloudWatch</span>、または<span class="keyword-tag">AWS Trusted Advisor</span>から呼び出すことができます</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>CloudWatch Logsのメトリクスフィルターを使用して、ログのパターンを検索・抽出し、使用量がクォータしきい値に近づいているかを判断できます</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="speech-bubble variant-2">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                            使用量の監視により
+                            <br>
+                            <span class="keyword-tag">近づいているクォータ</span>
+                            <br>
+                            をアラートできます！
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 実装手順 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>実装手順</h2>
+                </div>
+                
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-chart-bar"></i> 監視の場合：</h3>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span>現在のリソース消費量（バケットやインスタンスなど）をキャプチャする</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-list-alt" aria-hidden="true"></i>
+                            <span>サービスに不可欠で適用可能な現在のクォータをキャプチャする：</span>
+                        </li>
+                    </ul>
+                    
+                    <div style="margin-left: 30px;">
+                        <ul class="keyword-list">
+                            <li><i class="fa-solid fa-cog" aria-hidden="true"></i><span><span class="keyword-tag">AWS Service Quotas</span></span></li>
+                            <li><i class="fa-solid fa-check-circle" aria-hidden="true"></i><span><span class="keyword-tag">AWS Trusted Advisor</span></span></li>
+                            <li><i class="fa-solid fa-book" aria-hidden="true"></i><span><span class="keyword-tag">AWSドキュメント</span></span></li>
+                            <li><i class="fa-solid fa-terminal" aria-hidden="true"></i><span><span class="keyword-tag">AWS CLI</span></span></li>
+                            <li><i class="fa-solid fa-code" aria-hidden="true"></i><span><span class="keyword-tag">AWS CDK</span></span></li>
+                        </ul>
+                    </div>
+                    
+                    <h3><i class="fa-solid fa-cogs"></i> 管理の場合：</h3>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動化</span>：AWS Configカスタムルールを設定してリージョン間でサービスクォータをスキャンし、差異を比較する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動化</span>：スケジュールされたLambda関数を設定してリージョン間でサービスクォータをスキャンし、差異を比較する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-hand-paper" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">手動</span>：AWS CLI、API、またはAWSコンソールを通じてサービスクォータをスキャンし、差異を報告する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exchange-alt" aria-hidden="true"></i>
+                            <span>リージョン間でクォータの差異が特定された場合、必要に応じてクォータ変更をリクエストする</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 監視ツール -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-eye fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>監視ツール</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Service Quotas</span>：250以上のAWSサービスのクォータを一箇所から管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Trusted Advisor</span>：さまざまなしきい値で現在のサービス制限を監視</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-history" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">サービスクォータ履歴</span>：リージョンの増加をチェック</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">CloudWatch</span>：メトリクスとログの監視</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Config</span>：カスタムルールによる自動チェック</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>基盤カテゴリに戻る</h3>
+                    <a href="REL01-02.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-foundation"></i> REL01-02: 基盤
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

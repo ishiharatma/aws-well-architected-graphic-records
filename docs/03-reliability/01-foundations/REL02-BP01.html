@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL02-BP01: ワークロードのパブリックエンドポイントに高可用性ネットワーク接続を使用する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-network-wired fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL02-BP01: ワークロードのパブリックエンドポイントに高可用性ネットワーク接続を使用する</h1>
+            <p class="header-description">
+                ワークロードのパブリックエンドポイントへの高可用性ネットワーク接続を構築することで、接続の損失によるダウンタイムを削減し、ワークロードの可用性とSLAを向上させます。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_network_topology_ha_conn_users.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <div class="speech-bubble variant-2">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                            このベストプラクティスを確立しないと
+                            <br>
+                            <span class="keyword-tag">高リスク</span>
+                            <br>
+                            が発生します！
+                        </span>
+                    </div>
+                    
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>高可用性で回復力のあるネットワーク接続の設計により、ワークロードがユーザーにとってアクセス可能で利用可能であることを確保</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>パブリックエンドポイントへの高可用性ネットワーク接続を計画、構築、運用することが重要</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>接続の損失によりワークロードが到達不可能になった場合、ワークロードが実行中で利用可能であっても、顧客はシステムがダウンしていると認識</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span>ワークロードのパブリックエンドポイントの高可用性で回復力のあるネットワーク接続と、ワークロード自体の回復力のあるアーキテクチャを組み合わせることで、顧客に最高の可用性とサービスレベルを提供</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="speech-bubble">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                            接続が失われても
+                            <br>
+                            <span class="keyword-tag">ワークロードが稼働中</span>
+                            <br>
+                            なら、顧客には
+                            <br>
+                            システムダウンに見えます！
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AWSサービス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>高可用性を提供するAWSサービス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Global Accelerator</span>：グローバルネットワークを使用したパフォーマンス向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon CloudFront</span>：コンテンツ配信ネットワーク（CDN）</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-plug" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon API Gateway</span>：APIの管理とスケーリング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Lambda Function URLs</span>：サーバーレス関数のHTTPSエンドポイント</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS AppSync APIs</span>：GraphQL APIの管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Elastic Load Balancing (ELB)</span>：負荷分散</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-route" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon Route 53</span>：高可用性DNSサービス</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>高可用性のためのDNSとネットワーク接続を計画せずに高可用性ワークロードを設計する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span>個々のインスタンスやコンテナでパブリックインターネットアドレスを使用し、DNSでそれらへの接続を管理する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-hashtag" aria-hidden="true"></i>
+                            <span>サービスの場所特定にドメイン名ではなくIPアドレスを使用する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-vial" aria-hidden="true"></i>
+                            <span>パブリックエンドポイントへの接続が失われるシナリオをテストしない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span>ネットワークスループットのニーズと配信パターンを分析しない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                            <span>大きな地理的エリアにコンテンツを提供する際にコンテンツ配信ネットワークを使用しない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>分散サービス拒否（DDoS）攻撃を計画しない</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <h3><i class="fa-solid fa-route"></i> DNS（ドメインネームシステム）：</h3>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-route" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon Route 53</span>などの高可用性でスケーラブルなDNSを使用してドメインのDNSレコードを管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-heartbeat" aria-hidden="true"></i>
+                            <span>Amazon Route 53が提供するヘルスチェックを使用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                            <span>Geo DNSと遅延ベースルーティング機能を検討</span>
+                        </li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-balance-scale"></i> 負荷分散：</h3>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Elastic Load Balancing (ELB)</span>を使用してワークロード自体の高可用性を確保</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-plug" aria-hidden="true"></i>
+                            <span>サーバーレスソリューションには<span class="keyword-tag">Amazon API Gateway</span>と<span class="keyword-tag">AWS Lambda</span>を使用</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="speech-bubble variant-1">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                            ヘルスチェックは
+                            <br>
+                            <span class="keyword-tag">ユーザーの行動を模倣</span>
+                            <br>
+                            するように設定できます！
+                            <br>
+                            Webページや特定のURLの
+                            <br>
+                            リクエストなど
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- マルチリージョン戦略 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-globe-americas fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>マルチリージョン戦略</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">マルチサイトActive/Active</span>：ワークロードが複数のリージョンからトラフィックを処理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">マルチサイトActive/Passive</span>：アクティブリージョンからトラフィックを処理し、セカンダリリージョンにデータを複製</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-heartbeat" aria-hidden="true"></i>
+                            <span>Route 53ヘルスチェックを使用してプライマリリージョンの任意のエンドポイントからセカンダリリージョンのエンドポイントへのDNSフェイルオーバーを制御</span>
+                        </li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-cloud"></i> コンテンツ配信：</h3>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon CloudFront</span>：世界中のエッジロケーションのネットワークを使用して低遅延と高データ転送レートでコンテンツを配信</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-map-marked-alt" aria-hidden="true"></i>
+                            <span>CDNはユーザーの近くにあるまたはキャッシュされた場所からコンテンツを提供</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="speech-bubble variant-2">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                            障害の場合、Route 53は
+                            <br>
+                            <span class="keyword-tag">健全なエンドポイント</span>
+                            <br>
+                            のみにトラフィックを
+                            <br>
+                            誘導します！
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>基盤カテゴリに戻る</h3>
+                    <a href="REL01-02.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-foundation"></i> REL01-02: 基盤
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

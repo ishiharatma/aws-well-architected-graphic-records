@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL01-BP06: フェイルオーバーに対応するための十分なギャップを確保する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-shield-alt fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL01-BP06: フェイルオーバーに対応するための十分なギャップを確保する</h1>
+            <p class="header-description">
+                現在のクォータと最大使用量の間に、フェイルオーバーに対応するための十分なギャップが存在することを確認します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_suff_buffer_limits.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-circle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <div class="speech-bubble variant-1">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-exclamation-circle fa-lg" style="color: var(--ui-color-2);"></i>
+                            このベストプラクティスを確立しないと
+                            <br>
+                            <span class="keyword-tag">中リスク</span>
+                            <br>
+                            が発生します！
+                        </span>
+                    </div>
+                    
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                            <span>サービス中断イベントがアプリケーションの可用性に影響を与える場合、クラウドを使用してこれらのイベントから回復する戦略を実装</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                            <span>サービス制限を使い果たすことなく、フェイルオーバー条件に対応するためにアクセスできないリソースを置き換える追加リソースを作成</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>リソースやリソースアクセシビリティの小さな障害や大きな障害を現在のサービスしきい値内でカバーできる</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-map-marked-alt" aria-hidden="true"></i>
+                            <span>ゾーン障害、ネットワーク障害、さらにはリージョン障害がリソース計画で考慮されている</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="speech-bubble">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                            適切なバッファにより
+                            <br>
+                            <span class="keyword-tag">予期しない障害</span>
+                            <br>
+                            にも対応できます！
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- フェイルオーバーケース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>考慮すべきフェイルオーバーケース</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">中断または アクセス不可能なVPC</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sitemap" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">アクセス不可能なサブネット</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">リソースアクセシビリティに影響する劣化したアベイラビリティーゾーン</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-route" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ブロックまたは変更されたネットワークルートや入出力ポイント</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">リソースアクセシビリティに影響する劣化したリージョン</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">リージョンまたはアベイラビリティーゾーンの障害によって影響を受けるリソースのサブセット</span></span>
+                        </li>
+                    </ul>
+                    
+                    <div class="speech-bubble variant-2">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                            フェイルオーバーの決定は
+                            <br>
+                            <span class="keyword-tag">ビジネス影響</span>
+                            <br>
+                            によって状況ごとに異なります！
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>フェイルオーバーシナリオを考慮せずに現在のニーズに基づいてサービスクォータを設定する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span>サービスのピーククォータを計算する際に静的安定性の原則を考慮しない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                            <span>各リージョンに必要な総クォータを計算する際にアクセス不可能なリソースの可能性を考慮しない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>一部のサービスのAWSサービス障害分離境界とその潜在的な異常使用パターンを考慮しない</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>クォータ制限を評価する際、何らかの劣化により発生する可能性があるフェイルオーバーケースを考慮する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-business-time" aria-hidden="true"></i>
+                            <span>フェイルオーバーの決定は状況ごとに固有であり、ビジネス影響が異なる可能性がある</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-map-marked-alt" aria-hidden="true"></i>
+                            <span>アプリケーションやサービスのフェイルオーバーを決定する前に、フェイルオーバー場所でのリソース容量計画とリソースのクォータに対処する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span>各サービスのクォータをレビューする際、通常よりも高いアクティビティのピークを考慮する</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="speech-bubble variant-1">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                            ネットワークや権限により
+                            <br>
+                            アクセスできないが
+                            <br>
+                            <span class="keyword-tag">まだアクティブなリソース</span>
+                            <br>
+                            もサービスクォータ制限に
+                            <br>
+                            カウントされます！
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 実装手順 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>実装手順</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-space-shuttle" aria-hidden="true"></i>
+                            <span>フェイルオーバーやアクセシビリティの損失に対応するため、サービスクォータと最大使用量の間にスペースを維持する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calculator" aria-hidden="true"></i>
+                            <span>サービスクォータを決定し、典型的なデプロイメントパターン、可用性要件、消費量の増加を考慮する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+                            <span>必要に応じてクォータ増加をリクエストし、クォータ増加リクエストの待機時間を予想する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-target" aria-hidden="true"></i>
+                            <span>信頼性要件（ナインの数）を決定する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>コンポーネント、アベイラビリティーゾーン、またはリージョンの損失などの潜在的な障害シナリオを理解する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                            <span>デプロイメント方法論を確立する（カナリア、ブルー/グリーン、レッド/ブラック、ローリングなど）</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-buffer" aria-hidden="true"></i>
+                            <span>現在のクォータ制限に適切なバッファを含める（例：15%のバッファ）</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span>適切な場合、静的安定性（ゾーンおよびリージョン）の計算を含める</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>消費量の増加を計画し、消費傾向を監視する</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 高度な戦略 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-chess fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>高度な戦略</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>最も重要なワークロードの静的安定性の影響を考慮する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                            <span>すべてのリージョンとアベイラビリティーゾーンで静的に安定したシステムに適合するリソースを評価する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">オンデマンド容量予約</span>を使用してフェイルオーバー前に容量をスケジュールすることを検討する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-business-time" aria-hidden="true"></i>
+                            <span>重要なビジネススケジュールに実装する有用な戦略で、フェイルオーバー時に正しい数量とタイプのリソースを取得するリスクを軽減</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="speech-bubble variant-2">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                            <span class="keyword-tag">15%のバッファ</span>
+                            <br>
+                            を例として、適切な
+                            <br>
+                            バッファを含めることが
+                            <br>
+                            推奨されます！
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>基盤カテゴリに戻る</h3>
+                    <a href="REL01-02.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-foundation"></i> REL01-02: 基盤
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

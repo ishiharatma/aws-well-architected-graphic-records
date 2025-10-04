@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL01-BP02: アカウントとリージョン間でサービスクォータを管理する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-globe fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL01-BP02: アカウントとリージョン間でサービスクォータを管理する</h1>
+            <p class="header-description">
+                複数のアカウントやリージョンを使用している場合、本番ワークロードが実行されるすべての環境で適切なクォータをリクエストします。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_limits_considered.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <div class="speech-bubble variant-2">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                            このベストプラクティスを確立しないと
+                            <br>
+                            <span class="keyword-tag">高リスク</span>
+                            <br>
+                            が発生します！
+                        </span>
+                    </div>
+                    
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>リージョナルサービスが利用できなくなった場合に、セカンダリリージョンやアカウントで現在の負荷を処理できることを確認</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>リージョン損失時に発生するエラー数や劣化レベルを削減できます</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                            <span>アカウントやリージョンにまたがる構成でサービスクォータ枯渇の影響を受けないサービスとアプリケーション</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>ゾーン、リージョン、またはアカウントフェイルオーバーを使用する回復力設計への対応</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="speech-bubble">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                            マルチリージョン・マルチアカウント
+                            <br>
+                            環境での一貫した回復力を
+                            <br>
+                            確保できます！
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>一つの分離リージョンでのリソース使用量の増加を、他のリージョンでの容量維持メカニズムなしに許可する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-hand-paper" aria-hidden="true"></i>
+                            <span>分離リージョンですべてのクォータを手動で独立して設定する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>非プライマリリージョンでの劣化時の将来のクォータニーズに対する回復力アーキテクチャの影響を考慮しない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar" aria-hidden="true"></i>
+                            <span>クォータを定期的に評価せず、ワークロードが実行されるすべてのリージョンとアカウントで必要な変更を行わない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-template" aria-hidden="true"></i>
+                            <span>複数のリージョンとアカウントにわたって増加をリクエストするクォータリクエストテンプレートを活用しない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-dollar-sign" aria-hidden="true"></i>
+                            <span>クォータの増加にコスト影響があると誤って考えて、サービスクォータを更新しない</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-user" aria-hidden="true"></i>
+                            <span>サービスクォータはアカウントごとに追跡されます</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                            <span>特に記載がない限り、各クォータはAWSリージョン固有です</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-flask" aria-hidden="true"></i>
+                            <span>本番環境に加えて、すべての該当する非本番環境でもクォータを管理する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                            <span>高度な回復力を維持するには、サービスクォータを継続的に評価する必要があります</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span>サービスクォータ名の制限は、すべてのリージョンで常に同じではありません</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="speech-bubble variant-1">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                            <span class="keyword-tag">サービスクォータドリフト</span>
+                            <br>
+                            特定のクォータが一つのリージョンで
+                            <br>
+                            変更され、すべてのリージョンで
+                            <br>
+                            変更されない状態を追跡することが
+                            <br>
+                            非常に重要です！
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 実装手順 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>実装手順</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span>リスクレベルの使用量を超えて違反した可能性があるサービスクォータ値をレビューする</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>パッシブリージョン（Active/Passive設計）のサービスクォータ値をレビューする</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span>同じアカウント内のリージョン間でサービスクォータドリフトが発生したかどうかを自動評価する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sitemap" aria-hidden="true"></i>
+                            <span>組織単位（OU）がサポートされた方法で構造化されている場合、サービスクォータテンプレートを更新する</span>
+                        </li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-template"></i> サービスクォータテンプレートの使用：</h3>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                            <span>テンプレートを作成し、クォータ変更にリージョンを関連付ける</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>必要な変更（リージョン、制限、アカウント）について既存のサービスクォータテンプレートをすべてレビューする</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- アーキテクチャパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-project-diagram fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>アーキテクチャパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Active/Active</span>: 複数リージョンで同時に負荷を処理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-fire" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Active/Passive - Hot</span>: セカンダリリージョンが即座に引き継ぎ可能</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-snowflake" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Active/Passive - Cold</span>: セカンダリリージョンは最小限のリソース</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Active/Passive - Pilot Light</span>: 最小限のコアコンポーネントのみ稼働</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="speech-bubble variant-2">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                            パッシブリージョンフェイルオーバーの
+                            <br>
+                            テスト計画は、ピークアクティブ容量まで
+                            <br>
+                            スケールされることは稀です！
+                            <br>
+                            <span class="keyword-tag">ゲームデイ演習</span>
+                            <br>
+                            でリージョン間のクォータ差異を
+                            <br>
+                            見つけられない可能性があります
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>基盤カテゴリに戻る</h3>
+                    <a href="REL01-02.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-foundation"></i> REL01-02: 基盤
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL01-BP03: アーキテクチャを通じて固定サービスクォータと制約に対応する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-drafting-compass fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL01-BP03: アーキテクチャを通じて固定サービスクォータと制約に対応する</h1>
+            <p class="header-description">
+                変更不可能なサービスクォータ、サービス制約、物理リソース制限を認識し、これらの制限が信頼性に影響しないようにアプリケーションとサービスのアーキテクチャを設計します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_aware_fixed_limits.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-circle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <div class="speech-bubble variant-1">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-exclamation-circle fa-lg" style="color: var(--ui-color-2);"></i>
+                            このベストプラクティスを確立しないと
+                            <br>
+                            <span class="keyword-tag">中リスク</span>
+                            <br>
+                            が発生します！
+                        </span>
+                    </div>
+                    
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                            <span>アプリケーションが予想されるすべてのサービス負荷レベルで中断や劣化なしに実行されることを確認</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>通常および高トラフィック条件下でアプリケーションやサービスが期待通りに動作</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span>リソースの固定制約やサービスクォータの制限内で動作するように設計</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="speech-bubble">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                            固定制約を考慮した
+                            <br>
+                            アーキテクチャ設計で
+                            <br>
+                            <span class="keyword-tag">予期しない障害</span>
+                            <br>
+                            を防げます！
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 固定制約の例 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>固定制約の例</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ネットワーク帯域幅</span>の物理的制限</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">サーバーレス関数</span>の呼び出しペイロードサイズ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">API Gateway</span>のスロットルバーストレート</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">データベース</span>への同時ユーザー接続数</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Lambda関数</span>の最大実行時間（15分）</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">SQS</span>のペイロードサイズ（256KB）</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>スケール時に設計を失敗させる設計制約があることを知らずに、サービスのリソースを使用する設計を選択する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span>テスト中にサービス固定クォータに到達する非現実的なベンチマークを実行する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                            <span>固定サービスクォータを超える場合にスケールや変更ができない設計を選択する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
+                            <span>高トラフィックイベント中にリスクにさらされる可能性があるサービスクォータのしきい値を監視・アラートする可観測性が設計・実装されていない</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                            <span>ソフトサービスクォータや高容量ユニットに置き換え可能なリソースとは異なり、<span class="keyword-tag">AWSサービスの固定クォータは変更できません</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-list-alt" aria-hidden="true"></i>
+                            <span>ハード制限はService Quotasコンソールに表示されます（<span class="keyword-tag">ADJUSTABLE = No</span>）</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>ソフトクォータとは異なり、緊急のSeverity 1イベントでもこれらの制限を変更する方法はありません</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="speech-bubble variant-2">
+                        <span class="handwritten">
+                            <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                            例：Pythonアプリケーションを
+                            <br>
+                            Lambda関数で実行する場合、
+                            <br>
+                            <span class="keyword-tag">15分以上</span>
+                            <br>
+                            実行される可能性があるかを
+                            <br>
+                            評価する必要があります！
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 実装手順 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>実装手順</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>アプリケーション設計フェーズで使用される可能性があるAWSサービスの完全なリストをレビューする</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-list-alt" aria-hidden="true"></i>
+                            <span>これらすべてのサービスのソフトクォータ制限とハードクォータ制限をレビューする</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+                            <span>アプリケーションを設計する際、ビジネス成果、ユースケース、依存システム、可用性目標、災害復旧目標などのワークロードのビジネスおよび技術ドライバーをレビューする</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                            <span>リージョンとアカウント間でサービス負荷を分析する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>ゾーン障害およびリージョン障害時のリソース使用量について回復力アーキテクチャを分析する</span>
+                        </li>
+                    </ul>
+                    
+                    <h3><i class="fa-solid fa-vial"></i> テスト戦略：</h3>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-weight-hanging" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ストレステスト</span>でハード制限に到達する可能性を確認</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">負荷テスト</span>で実際の使用パターンを検証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-random" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">カオステスト</span>で予期しない障害パターンを発見</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>基盤カテゴリに戻る</h3>
+                    <a href="REL01-02.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-foundation"></i> REL01-02: 基盤
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

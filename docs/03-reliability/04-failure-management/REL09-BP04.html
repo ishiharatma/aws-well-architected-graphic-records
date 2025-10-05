@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL09-BP04: バックアップの整合性とプロセスを検証するために、データの定期的な復旧を実行する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-check-circle fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL09-BP04: バックアップの整合性とプロセスを検証するために、データの定期的な復旧を実行する</h1>
+            <p class="header-description">
+                復旧テストを実行して、バックアッププロセスの実装が復旧時間目標（RTO）と復旧ポイント目標（RPO）を満たしていることを検証します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_backing_up_data_periodic_recovery_testing_data.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- リスクレベル -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-badge medium">中リスク</div>
+                    <p>このベストプラクティスを確立しないと、実際の障害時にバックアップが使用できない、データが破損している、またはRTO/RPOを満たせないリスクがあります。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 期待される成果 -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>確立された<span class="keyword-tag">RTO</span>内での復旧が可能であることの検証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span>元のデータが破損や欠損なく復元されることの確認</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>データ損失が<span class="keyword-tag">RPO</span>内に収まることの検証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>明確に定義されたメカニズムによる定期的なデータ復旧</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        バックアップがあることと<br>
+                        <span class="keyword-tag">復旧できること</span>は別問題！<br>
+                        定期的なテストが重要です
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 一般的なアンチパターン -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-question-circle" aria-hidden="true"></i>
+                            <span>バックアップを復元するが、データの使用可能性をチェックしない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-assumption" aria-hidden="true"></i>
+                            <span>バックアップが存在すると仮定している</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span>バックアップシステムが完全に動作可能だと仮定している</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>復元時間がワークロードのRTO内に収まると仮定している</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-data" aria-hidden="true"></i>
+                            <span>バックアップデータがワークロードのRPO内に収まると仮定している</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-book" aria-hidden="true"></i>
+                            <span>ランブックや確立された自動化手順なしに復元を実行</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 実装ガイダンス -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-vial fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>テスト実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-flask" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">テスト環境</span>での定期的なバックアップ復元</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-check-double" aria-hidden="true"></i>
+                            <span>データの<span class="keyword-tag">可用性</span>、<span class="keyword-tag">整合性</span>、<span class="keyword-tag">アクセス可能性</span>の検証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon RDS</span>と<span class="keyword-tag">DynamoDB</span>: ポイントインタイム復旧（PITR）テスト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Elastic Disaster Recovery</span>: テストとドリル目的でのインスタンス起動</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Resilience Hub</span>: ワークロードの復旧能力評価</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-info-circle fa-lg" style="color: var(--ui-color-1);"></i>
+                        <span class="keyword-tag">PITR</span>により<br>
+                        特定の日時の状態に<br>
+                        データセットを復元可能！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- データ検証基準 -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-search-plus fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>データ検証基準</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+                            <span><strong>データタイプと形式</strong>: 期待される形式での復元確認</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-hashtag" aria-hidden="true"></i>
+                            <span><strong>チェックサム</strong>: データ整合性の数値的検証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-weight" aria-hidden="true"></i>
+                            <span><strong>サイズ</strong>: 期待されるデータサイズとの比較</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span><strong>カスタム検証ロジック</strong>: ビジネス固有の検証ルール</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span><strong>比較検証</strong>: 復元リソースと元データソースの比較</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 実装手順 -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装手順</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><strong>1. バックアップ中のデータソースとその保存場所を特定</strong></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                            <span><strong>2. 各データソースのデータ検証基準を確立</strong></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+                            <span><strong>3. データの重要度に基づくRTOとRPOの確立</strong></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><strong>4. 復旧能力の評価</strong></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-alt" aria-hidden="true"></i>
+                            <span><strong>5. 定期的な復旧テストスケジュールの確立</strong></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-book" aria-hidden="true"></i>
+                            <span><strong>6. 復旧手順の文書化とランブック作成</strong></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 利点 -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスを確立する利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>必要時にデータが復元可能であることの確信</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span>データの欠損や破損がないことの保証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>ワークロードのRTO内での復元と復旧の実現</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>データ損失がワークロードのRPO内に収まることの確認</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        定期的なテストにより<br>
+                        <span class="keyword-tag">信頼性</span>と<span class="keyword-tag">確信</span>を<br>
+                        構築できます！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>REL09に戻る</h3>
+                    <a href="REL09.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-database"></i> データのバックアップ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

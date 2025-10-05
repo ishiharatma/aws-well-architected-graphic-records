@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL12-BP05: ゲームデイを定期的に実施する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&font-Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-gamepad fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL12-BP05: ゲームデイを定期的に実施する</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/rel_testing_resiliency_game_days_resiliency.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">中リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-book" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">手順書</span>の未検証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">チーム連携</span>の未習熟</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">実障害時</span>の対応遅延</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        練習なしに
+                        <br>
+                        <span class="keyword-tag">本番は戦えない</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- ゲームデイとは -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>ゲームデイとは</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-theater-masks" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">本番環境</span>でのイベントシミュレーション</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">実際のチーム</span>での対応練習</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">システム・プロセス・チーム</span>の総合テスト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ユーザー影響</span>防止措置の強化</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-fire-extinguisher fa-lg" style="color: var(--ui-color-2);"></i>
+                        消防訓練のように
+                        <br>
+                        <span class="keyword-tag">定期的に実施</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 準備文化の構築 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-seedling fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>準備文化の構築</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">定期開催</span>での習慣化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ビジネス標準</span>としての位置づけ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">準備態勢</span>の組織文化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">効率的解決</span>への自信構築</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-tree fa-lg" style="color: var(--ui-color-5);"></i>
+                        文化は一日にして
+                        <br>
+                        <span class="keyword-tag">ならず</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- チーム能力向上 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-users-cog fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>チーム能力向上</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-dumbbell" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">対応スキル</span>の向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-comments" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">コミュニケーション</span>メカニズムのテスト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">協調性</span>と効率性の向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-stopwatch" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">迅速検出・対応</span>能力の構築</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-medal fa-lg" style="color: var(--ui-color-1);"></i>
+                        練習で鍛えた
+                        <br>
+                        <span class="keyword-tag">チームワーク</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 依存関係の発見 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-project-diagram fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>依存関係の発見</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">複雑な依存関係</span>の特定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">重要システム</span>のカバレッジ検証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">スケールアップ</span>能力の確認</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">適時復旧</span>の検証</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magnifying-glass fa-lg" style="color: var(--ui-color-2);"></i>
+                        隠れた糸を
+                        <br>
+                        <span class="keyword-tag">見つけ出す</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- AWS活用 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-aws fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>AWSサービス活用</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-syringe" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS FIS</span>で障害シナリオ作成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">CloudWatch</span>でシステム監視</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search-plus" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">X-Ray</span>で分散トレーシング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Systems Manager</span>でプレイブック実行</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sitemap" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Step Functions</span>でワークフロー管理</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-toolbox fa-lg" style="color: var(--ui-color-5);"></i>
+                        AWSの道具箱で
+                        <br>
+                        <span class="keyword-tag">本格的訓練</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- フィードバックループ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-sync-alt fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>フィードバックループ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">教訓</span>の体系的記録</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">システム改善</span>への反映</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">プロセス強化</span>の実装</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">チーム能力</span>の向上</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-arrows-rotate fa-lg" style="color: var(--ui-color-1);"></i>
+                        学んで改善
+                        <br>
+                        <span class="keyword-tag">螺旋階段</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-calendar-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">プログラム確立</span>: 頻度・範囲・目標定義</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ステークホルダー</span>の事前通知</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-play" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">シナリオ実行</span>と影響監視</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-undo" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">問題発見時</span>のロールバック</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-book" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">教訓文書化</span>と改善実装</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-map fa-lg" style="color: var(--ui-color-2);"></i>
+                        計画的に進めて
+                        <br>
+                        <span class="keyword-tag">確実な成果</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 継続的改善 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-chart-line fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>継続的改善</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">定期評価</span>で戦略適応</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">変化対応</span>での関連性維持</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">効果性</span>の継続確保</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">成功体験</span>での自信構築</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-seedling fa-lg" style="color: var(--ui-color-5);"></i>
+                        毎回少しずつ
+                        <br>
+                        <span class="keyword-tag">成長し続ける</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>避けるべきアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-book-dead" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">文書化のみ</span>で実践なし</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user-times" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ビジネス意思決定者</span>の除外</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ステークホルダー</span>への未通知</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">技術のみ</span>に焦点</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">教訓</span>の未活用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-gavel" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">責任追及</span>文化</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        これらを避けて
+                        <br>
+                        <span class="keyword-tag">効果的な訓練</span>を！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

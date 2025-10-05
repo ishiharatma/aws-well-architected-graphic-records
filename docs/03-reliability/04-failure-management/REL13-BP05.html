@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL13-BP05: 復旧の自動化</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <i class="fa-solid fa-robot fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                <div class="header-text">
+                    <h1>REL13-BP05: 復旧の自動化</h1>
+                    <p class="header-subtitle">信頼性があり、観測可能で、再現可能なテスト済み自動復旧メカニズムを実装し、障害のリスクとビジネスへの影響を軽減する</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <a href="https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/rel_planning_for_recovery_auto_recovery.html" target="_blank" class="official-link">
+                    <i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>
+                    公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベルカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <div class="risk-badge medium">中</div>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-hand-paper" aria-hidden="true"></i>
+                            <span>手動復旧プロセスによる <span class="keyword-tag">人的エラー</span> のリスク</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>手動介入による <span class="keyword-tag">RTO/RPO目標</span> 達成困難</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-question-circle" aria-hidden="true"></i>
+                            <span>復旧プロセスの <span class="keyword-tag">一貫性・予測可能性</span> の欠如</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        自動化は速度だけでなく
+                        <br>
+                        <span class="keyword-tag">信頼性</span>も向上！
+                        <br>
+                        人間は間違える
+                    </span>
+                </div>
+            </div>
+
+            <!-- 自動復旧の利点カード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-trophy fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>自動復旧の利点</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">信頼性・予測可能性・一貫性</span> の向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-stopwatch" aria-hidden="true"></i>
+                            <span>より厳しい <span class="keyword-tag">RTO・RPO目標</span> の達成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-check" aria-hidden="true"></i>
+                            <span>インシデント時の <span class="keyword-tag">復旧失敗リスク</span> 軽減</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user-times" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">人的エラー</span> による障害リスクの削減</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-2);"></i>
+                        自動化で実現する
+                        <br>
+                        <span class="keyword-tag">超高速復旧</span>！
+                        <br>
+                        人間の限界を超越
+                    </span>
+                </div>
+            </div>
+
+            <!-- 依存関係の分類カード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-sitemap fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>依存関係の分類</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ハード依存関係</span>: ワークロードが動作に必須とする依存関係</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exchange-alt" aria-hidden="true"></i>
+                            <span>代替不可能、一時的な代用システムも存在しない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrows-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ソフト依存関係</span>: 通常使用するが代替可能な依存関係</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-level-down-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">グレースフル劣化</span> で一時的な代替処理が可能</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-list-ol fa-lg" style="color: var(--ui-color-2);"></i>
+                        依存関係を理解して
+                        <br>
+                        <span class="keyword-tag">復旧戦略</span>を最適化！
+                        <br>
+                        重要度で優先順位
+                    </span>
+                </div>
+            </div>
+
+            <!-- 自動復旧の実装カード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-1); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>自動復旧の実装</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動障害検出</span>: 問題の即座な識別</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exchange-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動フェイルオーバー</span>: 人的介入なしの切り替え</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">CloudWatchダッシュボード</span>: 復旧プロセスの可視化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-stop-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">緊急停止機能</span>: 危険な状況での復旧中断</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-eye fa-lg" style="color: var(--ui-color-2);"></i>
+                        見える化された
+                        <br>
+                        <span class="keyword-tag">自動復旧</span>！
+                        <br>
+                        安心して任せられる
+                    </span>
+                </div>
+            </div>
+
+            <!-- AWS Elastic Disaster Recoveryカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-magic fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>AWS Elastic Disaster Recovery</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-sync" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">継続的レプリケーション</span>: マシン全体の複製</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span>OS、システム状態、DB、アプリケーション、ファイルを含む</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-play-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動フェイルオーバー</span>: インシデント時の自動変換</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                            <span>復旧リージョンでの <span class="keyword-tag">完全プロビジョニング</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        AWSが提供する
+                        <br>
+                        <span class="keyword-tag">究極の自動化</span>！
+                        <br>
+                        運用負荷ゼロ
+                    </span>
+                </div>
+            </div>
+
+            <!-- オーケストレーションツールカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-project-diagram fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>オーケストレーションツール</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-wrench" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Systems Manager Automation</span>: 復旧ワークフローの自動化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-step-forward" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Step Functions</span>: 複雑な復旧プロセスの調整</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Infrastructure as Code</span>: 一貫した復旧環境</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-git-alt" aria-hidden="true"></i>
+                            <span>復旧プロセスの <span class="keyword-tag">バージョン管理</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-puzzle-piece fa-lg" style="color: var(--ui-color-2);"></i>
+                        複雑な復旧も
+                        <br>
+                        <span class="keyword-tag">ステップ分解</span>で
+                        <br>
+                        確実に自動化！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-check fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">1. 自動復旧計画</span>: アーキテクチャと依存関係の分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">2. 自動復旧開発</span>: 障害検出とフェイルオーバー実装</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">3. 復旧準備</span>: 復旧サイトの事前準備</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users-cog" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">4. 役割定義</span>: 復旧運用の責任と意思決定プロセス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-play" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">5. 開始条件</span>: 復旧プロセス起動の条件定義</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-undo" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">6. フェイルバック計画</span>: プライマリサイト復帰手順</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-clipboard-check fa-lg" style="color: var(--ui-color-2);"></i>
+                        段階的に構築して
+                        <br>
+                        <span class="keyword-tag">完璧な自動化</span>を実現！
+                        <br>
+                        テストも忘れずに
+                    </span>
+                </div>
+            </div>
+
+            <!-- 緊急停止機能カード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-hand fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>緊急停止機能</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-stop-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Andonコード</span>: 復旧プロセスの即座停止</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>危険な状況や予期しない障害の検出時に使用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>停止後の <span class="keyword-tag">調査と修正措置</span> の実施</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-check" aria-hidden="true"></i>
+                            <span>追加のダウンタイムやデータ損失の <span class="keyword-tag">リスク軽減</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-life-ring fa-lg" style="color: var(--ui-color-2);"></i>
+                        自動化にも
+                        <br>
+                        <span class="keyword-tag">安全装置</span>が必要！
+                        <br>
+                        最後の砦
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL07-BP03: ワークロードにより多くのリソースが必要であることを検出した際にリソースを取得する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-chart-line fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL07-BP03: ワークロードにより多くのリソースが必要であることを検出した際にリソースを取得する</h1>
+            <p class="header-description">
+                クラウドコンピューティングの最も価値ある機能の一つは、リソースを動的にプロビジョニングする能力です。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_adapt_to_changes_proactive_adapt_auto.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- リスクレベル -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-badge medium">中リスク</div>
+                    <p>このベストプラクティスを確立しないと、需要の増加に対応できず、キャパシティ不足によりサービス品質が低下する可能性があります。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
+                            <span>需要に応じたコンピュート・データベース・その他リソースの<span class="keyword-tag">自動スケーリング</span>設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span>トラフィックバーストに対応する<span class="keyword-tag">十分なヘッドルーム</span>の提供</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>追加リソースがオンラインになる間のサービス継続</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-target" aria-hidden="true"></i>
+                            <span>定義された<span class="keyword-tag">SLO</span>（サービスレベル目標）の遵守</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        従来のオンプレミスとは異なり、<br>
+                        クラウドでは<span class="keyword-tag">動的プロビジョニング</span>で<br>
+                        ピーク容量を事前確保する必要なし！
+                    </span>
+                </div>
+            </div>
+
+        <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                            <span>スケーラブルリソースの<span class="keyword-tag">固定数プロビジョニング</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>実際の需要と相関しない<span class="keyword-tag">スケーリングメトリクス</span>の選択</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-expand" aria-hidden="true"></i>
+                            <span>需要バーストに対応する<span class="keyword-tag">十分なヘッドルーム</span>の未提供</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>容量追加が遅すぎる<span class="keyword-tag">スケーリングポリシー</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span>最小・最大リソース数の<span class="keyword-tag">設定ミス</span></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>ワークロードコンポーネントの<span class="keyword-tag">水平スケーラビリティ</span>の判定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">EC2インスタンス、ECSタスク、EKSポッド</span>などの水平スケーラブルコンポーネント</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">データベースリードレプリカ、DynamoDB、ElastiCache</span>などの複製リソース</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span>コンテナベースアーキテクチャでの<span class="keyword-tag">2層スケーリング</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-info-circle fa-lg" style="color: var(--ui-color-1);"></i>
+                        <span class="keyword-tag">水平スケーラブル</span>コンポーネントは<br>
+                        同じリソースを提供し、<br>
+                        同一に動作する特徴あり！
+                    </span>
+                </div>
+            </div>
+
+        <!-- スケーリングメカニズム -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-expand-arrows-alt fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>スケーリングメカニズム</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><strong>EC2 Auto Scaling</strong> - <span class="keyword-tag">EC2インスタンス</span>の自動スケーリング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cube" aria-hidden="true"></i>
+                            <span><strong>Application Auto Scaling</strong> - <span class="keyword-tag">ECSタスク</span>のスケーリング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-dharmachakra" aria-hidden="true"></i>
+                            <span><strong>Horizontal Pod Autoscaler (HPA)</strong> - <span class="keyword-tag">Kubernetesポッド</span>のスケーリング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                            <span><strong>KEDA</strong> - <span class="keyword-tag">イベント駆動</span>Kubernetesオートスケーリング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><strong>Capacity Providers / Karpenter</strong> - <span class="keyword-tag">コンピュートリソース</span>のスケーリング</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスを確立する利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>ワークロードの<span class="keyword-tag">高可用性</span>提供</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-target" aria-hidden="true"></i>
+                            <span>定義された<span class="keyword-tag">SLO</span>の遵守</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>現在と予測される需要に対する<span class="keyword-tag">適切なリソース量</span>の提供</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-dollar-sign" aria-hidden="true"></i>
+                            <span>需要減少時のリソース非活性化による<span class="keyword-tag">コスト削減</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                            <span>ピーク容量の静的割り当て不要による<span class="keyword-tag">効率性向上</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        自動スケーリングにより<br>
+                        <span class="keyword-tag">需要に応じた</span>リソース提供で<br>
+                        可用性とコスト効率を両立！
+                    </span>
+                </div>
+            </div>
+
+        <!-- 関連ツール -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連ツールとサービス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon EC2 Auto Scaling</span> - EC2インスタンス自動スケーリング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Application Auto Scaling</span> - 各種AWSサービスの自動スケーリング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cube" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon ECS</span> - コンテナオーケストレーション</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-dharmachakra" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon EKS</span> - マネージドKubernetesサービス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon DynamoDB</span> - NoSQLデータベース自動スケーリング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-memory" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon ElastiCache</span> - インメモリキャッシュ自動スケーリング</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>REL07に戻る</h3>
+                    <a href="REL07.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-expand-arrows-alt"></i> 需要の変化への適応
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

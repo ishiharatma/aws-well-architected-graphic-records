@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL03-BP01: ワークロードのセグメント化方法を選択する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-cubes fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL03-BP01: ワークロードのセグメント化方法を選択する</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_service_architecture_monolith_soa_microservice.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">高リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+                            <span>適切なセグメント化を行わないと、障害の影響範囲が拡大</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chain" aria-hidden="true"></i>
+                            <span>モノリシックアーキテクチャでは単一障害点が発生</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        適切なセグメント化で
+                        <br>
+                        障害の影響を局所化！
+                        <br>
+                        <span class="keyword-tag">可用性向上</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-tools" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">サポート可能</span>なワークロード</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">スケーラブル</span>なアーキテクチャ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-unlink" aria-hidden="true"></i>
+                            <span>可能な限り<span class="keyword-tag">疎結合</span>な設計</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span>利益と複雑さのバランスを考慮</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-2);"></i>
+                        新製品の初期リリースと
+                        <br>
+                        スケール前提の設計は
+                        <br>
+                        <span class="keyword-tag">要件が異なる</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- アーキテクチャタイプ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-sitemap fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>アーキテクチャタイプ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-cube" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">モノリシック</span>: 相互依存する不可分な単位</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">SOA</span>: サービス指向アーキテクチャ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cubes" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">マイクロサービス</span>: より小さく単純なコンポーネント</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                            <span>ステートレスなワークロードはマイクロサービス化が容易</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        AWSでは常にSOAを使用し
+                        <br>
+                        現在はマイクロサービスを採用
+                        <br>
+                        <span class="keyword-tag">可用性向上</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-1); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-route" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Strangler Figパターン</span>でモノリスを段階的にリファクタリング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS App Mesh</span>でサービス発見とアクセス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Cloud Map</span>で動的DNS ベースサービス発見</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exchange-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon MQ</span>でレガシーアプリケーションのサービスバス</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-tools fa-lg" style="color: var(--ui-color-2);"></i>
+                        AWS X-Rayで分散システムの
+                        <br>
+                        デバッグとトレースを支援
+                        <br>
+                        <span class="keyword-tag">運用性向上</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>アンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-skull-crossbones" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">マイクロサービス Death Star</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-link" aria-hidden="true"></i>
+                            <span>原子コンポーネントが高度に相互依存</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-domino" aria-hidden="true"></i>
+                            <span>1つの障害がより大きな障害を引き起こす</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-warning" aria-hidden="true"></i>
+                            <span>モノリスと同様に硬直的で脆弱</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        過度な相互依存は
+                        <br>
+                        マイクロサービスの利点を
+                        <br>
+                        <span class="keyword-tag">無効化</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>利点</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                            <span>より高い<span class="keyword-tag">俊敏性</span>と組織の柔軟性</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-expand" aria-hidden="true"></i>
+                            <span>優れた<span class="keyword-tag">スケーラビリティ</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>サービス中断の<span class="keyword-tag">影響軽減</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span>チームの<span class="keyword-tag">責任明確化</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        コンポーネントごとに
+                        <br>
+                        異なる可用性要件を
+                        <br>
+                        <span class="keyword-tag">サポート可能</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- データベース分割 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-database fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 2s;" aria-hidden="true"></i>
+                    <h2>データベース分割</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-building" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ビジネスユニット</span>別の分割</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">アクセスパターン</span>別の分割</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-project-diagram" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">データ構造</span>別の分割</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrows-alt" aria-hidden="true"></i>
+                            <span>リレーショナル vs <span class="keyword-tag">NoSQL</span>の選択</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-database fa-lg" style="color: var(--ui-color-2);"></i>
+                        単一の共有データベースから
+                        <br>
+                        より小さなセグメントへ
+                        <br>
+                        <span class="keyword-tag">再編成</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- トレードオフ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-balance-scale fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>トレードオフ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>レイテンシの<span class="keyword-tag">増加可能性</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bug" aria-hidden="true"></i>
+                            <span>より複雑な<span class="keyword-tag">デバッグ</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span>運用負荷の<span class="keyword-tag">増加</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                            <span>分散コンピュートアーキテクチャの複雑性</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-balance-scale fa-lg" style="color: var(--ui-color-2);"></i>
+                        利点と複雑さの
+                        <br>
+                        バランスを慎重に
+                        <br>
+                        <span class="keyword-tag">検討</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 AWS Well-Architected Framework グラフィックレコーディング</p>
+    </footer>
+</body>
+</html>

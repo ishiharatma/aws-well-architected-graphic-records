@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL06-BP03: 通知を送信する（リアルタイム処理とアラーム） - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-bell fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL06-BP03: 通知を送信する（リアルタイム処理とアラーム）</h1>
+            <p class="header-description">
+                組織が潜在的な問題を検出した場合、適切な担当者とシステムにリアルタイムの通知とアラートを送信して、これらの問題に迅速かつ効果的に対応します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_notification_monitor.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- リスクレベル -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-badge high">高リスク</div>
+                    <p>このベストプラクティスを確立しないと、問題の早期発見ができず、運用インシデントへの迅速な対応が困難になります。</p>
+                </div>
+            </div>
+
+        <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i>
+                            <span>サービスとアプリケーションメトリクスに基づく<span class="keyword-tag">関連アラーム</span>の設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                            <span>アラーム閾値違反時の<span class="keyword-tag">適切な担当者とシステム</span>への通知</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>運用イベントへの<span class="keyword-tag">迅速な対応</span>の実現</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>問題の<span class="keyword-tag">早期発見</span>と根本原因への対処</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        適切な閾値設定が重要！<br>
+                        高すぎると重要な通知を逃し、<br>
+                        低すぎるとノイズになります
+                    </span>
+                </div>
+            </div>
+
+        <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+                            <span>過度に高い閾値の設定により、重要な通知の送信に失敗</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
+                            <span>低すぎる閾値により、過度な通知のノイズで重要なアラートが無視される</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-times" aria-hidden="true"></i>
+                            <span>使用量変化時のアラームと閾値の更新を行わない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span>自動化で対処すべきアラームを担当者に通知し、過度な通知を発生</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-aws" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon CloudWatch</span>: メトリクスアラームとコンポジットアラームの作成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">CloudWatch ダッシュボード</span>: メトリクスとアラートのカスタマイズされたビュー</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon SNS</span>: アラーム状態変化時の通知配信</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon EventBridge</span>: CloudWatchイベントに基づくルール実行</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-tools" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Systems Manager</span>: OpsItemやインシデントの自動作成</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-info-circle fa-lg" style="color: var(--ui-color-1);"></i>
+                        <span class="keyword-tag">CloudWatch</span>アラームは<br>
+                        静的閾値、異常検出、<br>
+                        その他の基準で設定可能！
+                    </span>
+                </div>
+            </div>
+        <!-- アラームアクション -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-play fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>アラームアクション</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                            <span><strong>SNS通知</strong>: Amazon SNSトピックへの通知送信</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><strong>EC2アクション</strong>: インスタンスの停止、終了、再起動、復旧</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
+                            <span><strong>Auto Scalingアクション</strong>: スケーリングポリシーの実行</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                            <span><strong>OpsItem作成</strong>: Systems Manager OpsItemの自動作成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span><strong>インシデント作成</strong>: Systems Managerインシデントの自動作成</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスを確立する利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>問題の早期発見</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>運用インシデントへの迅速な対応</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>アプリケーション可用性への影響の最小化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span>自動化された対応のトリガー</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        リアルタイム通知により<br>
+                        <span class="keyword-tag">MTTR</span>（平均復旧時間）を<br>
+                        大幅に短縮できます！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>REL06に戻る</h3>
+                    <a href="REL06.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-chart-line"></i> ワークロードリソースの監視
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

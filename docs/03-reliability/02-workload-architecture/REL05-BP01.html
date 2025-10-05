@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL05-BP01: グレースフルデグラデーションを実装する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-level-down-alt fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL05-BP01: グレースフルデグラデーションを実装する</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">高リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+                            <span>依存関係障害時の完全停止を防ぐ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chain-broken" aria-hidden="true"></i>
+                            <span>ハード依存関係をソフト依存関係に変換</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        部分的な機能低下で
+                        <br>
+                        全体停止を
+                        <br>
+                        <span class="keyword-tag">防止</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span>依存関係が不健全でも<span class="keyword-tag">コア機能継続</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line-down" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">劣化した状態</span>でも機能提供</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>障害モードを<span class="keyword-tag">通常運用</span>として扱う</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-redo" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">予測可能で復旧可能</span>な状態</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-database fa-lg" style="color: var(--ui-color-2);"></i>
+                        やや古いデータ、
+                        <br>
+                        代替データ、データなしでも
+                        <br>
+                        <span class="keyword-tag">機能継続</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- グレースフルデグラデーションの概念 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-stairs fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>グレースフルデグラデーション</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-heart" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">コアビジネス機能</span>の継続</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>システム全体の<span class="keyword-tag">可用性向上</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-minimize" aria-hidden="true"></i>
+                            <span>局所的障害による<span class="keyword-tag">影響最小化</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-gem" aria-hidden="true"></i>
+                            <span>中核的な<span class="keyword-tag">ビジネス価値</span>の提供</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        依存関係障害を検出し
+                        <br>
+                        影響を最小化して
+                        <br>
+                        <span class="keyword-tag">回避</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>アンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>必要な<span class="keyword-tag">コアビジネス機能</span>の未特定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span>エラー時に<span class="keyword-tag">データを提供しない</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>トランザクション部分失敗での<span class="keyword-tag">不整合状態</span>作成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-trash-alt" aria-hidden="true"></i>
+                            <span>更新失敗時の<span class="keyword-tag">ローカル状態無効化</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        中央パラメータストアへの
+                        <br>
+                        代替アクセス方法が
+                        <br>
+                        <span class="keyword-tag">ない</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-1); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>依存関係設計時の<span class="keyword-tag">潜在的障害モード</span>考慮</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>各障害に対する<span class="keyword-tag">回避策</span>の検討</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-vial" aria-hidden="true"></i>
+                            <span>依存関係障害時の<span class="keyword-tag">機能テスト</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-pie" aria-hidden="true"></i>
+                            <span>複数依存関係の一部利用不可時の<span class="keyword-tag">部分結果</span>返却</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-tools fa-lg" style="color: var(--ui-color-2);"></i>
+                        依存関係障害の影響を
+                        <br>
+                        コンポーネント機能で
+                        <br>
+                        <span class="keyword-tag">最小化</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>利点</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>システム全体の<span class="keyword-tag">可用性向上</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-star" aria-hidden="true"></i>
+                            <span>最重要機能の<span class="keyword-tag">継続性維持</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>障害時でも<span class="keyword-tag">機能性保持</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user-check" aria-hidden="true"></i>
+                            <span>顧客への<span class="keyword-tag">影響最小化</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        障害時でも
+                        <br>
+                        重要な機能を
+                        <br>
+                        <span class="keyword-tag">維持</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 AWS Well-Architected Framework グラフィックレコーディング</p>
+    </footer>
+</body>
+</html>

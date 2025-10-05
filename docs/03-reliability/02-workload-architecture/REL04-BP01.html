@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL04-BP01: 依存する分散システムの種類を特定する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-search fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL04-BP01: 依存する分散システムの種類を特定する</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_prevent_interaction_failure_identify.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">中リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+                            <span>依存関係の理解不足は設計上の問題を引き起こす</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chain" aria-hidden="true"></i>
+                            <span>不適切な通信パターンは可用性を低下させる</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        依存関係の特定は
+                        <br>
+                        適切な設計の
+                        <br>
+                        <span class="keyword-tag">第一歩</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 分散システムの種類 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-sitemap fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>分散システムの種類</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-sync" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">同期システム</span>: HTTP/S、REST、RPC</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exchange-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">非同期システム</span>: 中間サービス経由</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">バッチシステム</span>: 大量データ処理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span>人的介入なしの<span class="keyword-tag">自動化処理</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-clock fa-lg" style="color: var(--ui-color-2);"></i>
+                        同期システムは
+                        <br>
+                        可能な限り迅速に
+                        <br>
+                        <span class="keyword-tag">処理必要</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-sync" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">同期依存関係</span>との効果的な相互作用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exchange-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">非同期依存関係</span>との効果的な相互作用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">バッチ依存関係</span>との効果的な相互作用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>各依存関係の<span class="keyword-tag">中断に対する耐性</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        通信スタイルごとの
+                        <br>
+                        トレードオフを
+                        <br>
+                        <span class="keyword-tag">理解</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>アンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-hourglass-end" aria-hidden="true"></i>
+                            <span>依存関係からの応答を<span class="keyword-tag">無期限待機</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-link" aria-hidden="true"></i>
+                            <span>同期的に呼び出す<span class="keyword-tag">依存システムチェーン</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-copy" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">exactly-once配信</span>への過度な依存</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-times" aria-hidden="true"></i>
+                            <span>適切なバッチスケジューリングツールの<span class="keyword-tag">未使用</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        同じバッチジョブの
+                        <br>
+                        同時実行を
+                        <br>
+                        <span class="keyword-tag">許可しない</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-1); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>依存関係の<span class="keyword-tag">SLO</span>がワークロード要件を満たすか確認</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS可観測性サービス</span>で応答時間・エラー率監視</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>依存関係との通信で直面する<span class="keyword-tag">潜在的課題</span>を特定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                            <span>分散システムの<span class="keyword-tag">幅広い課題</span>を理解</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-tools fa-lg" style="color: var(--ui-color-2);"></i>
+                        パフォーマンスと信頼性の
+                        <br>
+                        サービスレベル目標を
+                        <br>
+                        <span class="keyword-tag">確認</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>利点</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span>通信スタイル別の<span class="keyword-tag">トレードオフ理解</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>依存関係の中断に対する<span class="keyword-tag">耐性向上</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+                            <span>複数の通信スタイルの<span class="keyword-tag">効果的実装</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>全体的な<span class="keyword-tag">可用性向上</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        一つのワークロードで
+                        <br>
+                        複数の通信スタイルを
+                        <br>
+                        <span class="keyword-tag">実装可能</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 AWS Well-Architected Framework グラフィックレコーディング</p>
+    </footer>
+</body>
+</html>

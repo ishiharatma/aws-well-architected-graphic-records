@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL13-BP01: ダウンタイムとデータ損失の復旧目標を定義する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-bullseye fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL13-BP01: ダウンタイムとデータ損失の復旧目標を定義する</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/rel_planning_for_recovery_objective_defined_recovery.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">高リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-question-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">復旧目標</span>の未定義</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-random" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">恣意的</span>な目標設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-dollar-sign" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">過剰投資</span>または<span class="keyword-tag">投資不足</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        目標なしに
+                        <br>
+                        <span class="keyword-tag">復旧計画</span>は立てられない！
+                    </span>
+                </div>
+            </div>
+
+            <!-- RTO・RPOの定義 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-clock fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>RTO・RPOの定義</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-stopwatch" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">RTO</span>: サービス中断から復旧までの最大許容時間</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">RPO</span>: 最後のデータ復旧ポイントからの最大許容時間</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ビジネス要件</span>に基づく設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">技術的考慮</span>とのバランス</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-ruler fa-lg" style="color: var(--ui-color-2);"></i>
+                        時間を測る
+                        <br>
+                        <span class="keyword-tag">2つの物差し</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 災害復旧マトリクス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-table fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>災害復旧マトリクス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-fire" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">クリティカル</span>: RTO < 1時間、RPO < 15分</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exclamation" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">高</span>: RTO < 4時間、RPO < 1時間</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-minus" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">中</span>: RTO < 24時間、RPO < 4時間</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">低</span>: RTO < 72時間、RPO < 24時間</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-layer-group fa-lg" style="color: var(--ui-color-5);"></i>
+                        重要度に応じて
+                        <br>
+                        <span class="keyword-tag">階層化</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- ビジネス影響分析 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-chart-pie fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>ビジネス影響分析</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-dollar-sign" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">財務影響</span>: 収益損失・コスト増加</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">評判影響</span>: 顧客信頼・ブランド価値</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">運用影響</span>: 生産性低下・業務停止</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-gavel" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">規制リスク</span>: 法的・契約的義務</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magnifying-glass fa-lg" style="color: var(--ui-color-1);"></i>
+                        影響を多角的に
+                        <br>
+                        <span class="keyword-tag">分析</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 重要な質問事項 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-question-circle fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>重要な質問事項</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">最大許容停止時間</span>はどの程度か？</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">最大許容データ損失</span>はどの程度か？</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-link" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">依存関係</span>の復旧目標は何か？</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">時期・イベント</span>による変動はあるか？</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-contract" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">契約・法的義務</span>はあるか？</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-clipboard-question fa-lg" style="color: var(--ui-color-2);"></i>
+                        質問で掘り下げて
+                        <br>
+                        <span class="keyword-tag">真のニーズ</span>を発見！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 依存関係の考慮 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-project-diagram fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>依存関係の考慮</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ダウンストリーム</span>: 依存先の復旧能力</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">アップストリーム</span>: 依存元の要求事項</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-route" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">回避策</span>・軽減策の検討</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chain" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">連鎖影響</span>の分析</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-network-wired fa-lg" style="color: var(--ui-color-5);"></i>
+                        つながりを意識して
+                        <br>
+                        <span class="keyword-tag">全体最適</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ステークホルダー</span>の特定・関与</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">重要度カテゴリ</span>の作成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ワークシート</span>での影響評価</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-tag" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">カテゴリ割り当て</span>と目標設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">定期見直し</span>と更新</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-ladder fa-lg" style="color: var(--ui-color-1);"></i>
+                        段階的に進めて
+                        <br>
+                        <span class="keyword-tag">確実な成果</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- データ復旧の考慮 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-database fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>データ復旧の考慮</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-copy" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">派生データ</span>の再作成可能性</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-source" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ソースデータ</span>のRPO考慮</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">データ整合性</span>要件</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-gavel" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">規制・コンプライアンス</span>要件</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-gem fa-lg" style="color: var(--ui-color-2);"></i>
+                        データは
+                        <br>
+                        <span class="keyword-tag">企業の宝</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>避けるべきアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-question" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">復旧目標</span>の未指定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-random" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">恣意的</span>な目標選択</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-magic" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">非現実的</span>な目標（ゼロダウンタイム等）</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-dollar-sign" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">過度に厳格</span>な目標設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-link-slash" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">依存関係</span>との不整合</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        これらを避けて
+                        <br>
+                        <span class="keyword-tag">現実的な目標</span>を！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

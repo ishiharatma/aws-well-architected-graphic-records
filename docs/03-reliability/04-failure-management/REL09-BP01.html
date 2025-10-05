@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL09-BP01: バックアップが必要なすべてのデータを特定してバックアップする - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-search-plus fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL09-BP01: バックアップが必要なすべてのデータを特定してバックアップする、またはソースからデータを再現する</h1>
+            <p class="header-description">
+                ワークロードで使用されるデータサービスとリソースのバックアップ機能を理解し、使用します。ほとんどのサービスは、ワークロードデータをバックアップする機能を提供します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_backing_up_data_identified_backups_data.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- リスクレベル -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-badge high">高リスク</div>
+                    <p>このベストプラクティスを確立しないと、データ損失時の復旧能力が大幅に制限され、ビジネス継続性に重大な影響を与える可能性があります。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 期待される成果 -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span>データソースが特定され、<span class="keyword-tag">重要度</span>に基づいて分類されている</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">RPO</span>に基づくデータ復旧戦略の確立</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-copy" aria-hidden="true"></i>
+                            <span>バックアップまたは他のソースからのデータ再現能力</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>定義された<span class="keyword-tag">RPO</span>と<span class="keyword-tag">RTO</span>内でのデータ復旧</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        データの重要度を正しく評価することで、<br>
+                        効率的なバックアップ戦略を構築できます！
+                        <br>
+                        <span class="keyword-tag">RPO/RTO</span>の定義が鍵です
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 一般的なアンチパターン -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-question-circle" aria-hidden="true"></i>
+                            <span>ワークロードのすべてのデータソースとその重要度を把握していない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                            <span>重要なデータソースのバックアップを取っていない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-random" aria-hidden="true"></i>
+                            <span>重要度を基準とせず、一部のデータソースのみバックアップ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">RPO</span>が未定義、またはバックアップ頻度がRPOを満たせない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>バックアップの必要性や他のソースからのデータ再現可能性を評価していない</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 実装ガイダンス -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-aws" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Backup</span>: 複数のAWSサービスにわたるデータ保護の一元化と自動化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon RDS</span>と<span class="keyword-tag">DynamoDB</span>: ポイントインタイム復旧（PITR）をサポート</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Elastic Disaster Recovery</span>: サーバーワークロード全体のコピーと継続的データ保護</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon S3</span>: セルフマネージドおよびAWSマネージドデータソースのバックアップ先</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-home" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Storage Gateway</span>や<span class="keyword-tag">AWS DataSync</span>: オンプレミスデータのクラウドバックアップ</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-info-circle fa-lg" style="color: var(--ui-color-1);"></i>
+                        データ再現の例：<br>
+                        <span class="keyword-tag">ElastiCache</span>レプリカや<br>
+                        <span class="keyword-tag">RDS</span>リードレプリカから<br>
+                        プライマリ損失時にデータを再現
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 実装手順 -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装手順</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><strong>1. ワークロードのすべてのデータソースを特定</strong></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sort-amount-down" aria-hidden="true"></i>
+                            <span><strong>2. 重要度に基づいてデータソースを分類</strong></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cloud-upload-alt" aria-hidden="true"></i>
+                            <span><strong>3. AWSまたはサードパーティサービスを使用してデータのバックアップを作成</strong></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-recycle" aria-hidden="true"></i>
+                            <span><strong>4. バックアップしないデータのデータ再現メカニズムを確立</strong></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-alt" aria-hidden="true"></i>
+                            <span><strong>5. データバックアップの頻度を確立</strong></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 利点 -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスを確立する利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>障害時のデータ復元と復旧能力の向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>定義されたRPO/RTO内での確実なデータ復旧</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-business-time" aria-hidden="true"></i>
+                            <span>ビジネス継続性の確保</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-dollar-sign" aria-hidden="true"></i>
+                            <span>データ損失によるビジネス損失の最小化</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        適切なバックアップ戦略は<br>
+                        ビジネスの<span class="keyword-tag">信頼性</span>と<br>
+                        <span class="keyword-tag">継続性</span>の基盤です！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>REL09に戻る</h3>
+                    <a href="REL09.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-database"></i> データのバックアップ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

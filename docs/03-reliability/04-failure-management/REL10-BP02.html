@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL10-BP02: 単一の場所に制約されるコンポーネントの復旧を自動化する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-robot fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL10-BP02: 単一の場所に制約されるコンポーネントの復旧を自動化する</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_fault_isolation_single_az_system.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">中リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+                            <span>単一場所制約時の代替回復力パスが必要</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span>技術的制約による複数場所デプロイ不可時</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        単一AZやオンプレミスでの
+                        <br>
+                        コンポーネント実行時は
+                        <br>
+                        <span class="keyword-tag">完全再構築</span>能力が必要！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-hammer" aria-hidden="true"></i>
+                            <span>必要なインフラの<span class="keyword-tag">再作成能力</span>の自動化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                            <span>アプリケーションの<span class="keyword-tag">再デプロイ</span>自動化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span>必要なデータの<span class="keyword-tag">再作成</span>自動化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>定義された<span class="keyword-tag">復旧目標</span>内でのワークロード完全再構築</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-business-time fa-lg" style="color: var(--ui-color-2);"></i>
+                        技術的制約で複数場所
+                        <br>
+                        デプロイが不可能な場合の
+                        <br>
+                        <span class="keyword-tag">代替回復力パス</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装例 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-lightbulb fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>実装例</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span><strong>Amazon EMR</strong>：同一AZ内でのクラスター実行による<span class="keyword-tag">パフォーマンス向上</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span>EMRでの<span class="keyword-tag">複数ノード</span>プロビジョニングによる冗長性</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-folder" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">EMRFS</span>によるAmazon S3でのデータ保存・複製</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><strong>Amazon Redshift</strong>：同一AZ内での<span class="keyword-tag">全クラスターノード</span>プロビジョニング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-life-ring" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Elastic Disaster Recovery</span>によるオンプレミス・クラウドワークロード保護</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-info-circle fa-lg" style="color: var(--ui-color-1);"></i>
+                        <span class="keyword-tag">継続的ブロックレベル複製</span>で
+                        <br>
+                        軽量ステージング領域への
+                        <br>
+                        高速・信頼性の高い復旧！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装手順 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装手順</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-heart" aria-hidden="true"></i>
+                            <span><strong>1. セルフヒーリングの実装</strong> - <span class="keyword-tag">Auto Scaling</span>による自動復旧</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><strong>2. EC2自動復旧</strong> - 単一インスタンスID・IPアドレス要件時</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                            <span><strong>3. ライフサイクルイベント活用</strong> - <span class="keyword-tag">EC2・ECSイベント</span>による自動化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><strong>4. ステートフルワークロード保護</strong> - <span class="keyword-tag">Elastic Disaster Recovery</span></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>REL10に戻る</h3>
+                    <a href="REL10.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-shield-alt"></i> 障害分離の活用
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

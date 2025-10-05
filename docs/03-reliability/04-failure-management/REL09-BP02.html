@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL09-BP02: バックアップを保護し、暗号化する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-shield-alt fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL09-BP02: バックアップを保護し、暗号化する</h1>
+            <p class="header-description">
+                認証と認可を使用してバックアップへのアクセスを制御し、検出します。暗号化を使用してバックアップのデータ整合性が損なわれることを防止し、検出します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_backing_up_data_secured_backups_data.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- リスクレベル -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-badge high">高リスク</div>
+                    <p>このベストプラクティスを確立しないと、バックアップデータが不正アクセスや改ざんの対象となり、復旧時にデータの整合性や機密性が保証されない可能性があります。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 一般的なアンチパターン -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-key" aria-hidden="true"></i>
+                            <span>バックアップと復元自動化に、データと同じアクセス権限を持たせる</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-unlock" aria-hidden="true"></i>
+                            <span>バックアップを暗号化していない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                            <span>削除や改ざんから保護するための<span class="keyword-tag">不変性</span>を実装していない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                            <span>本番システムとバックアップシステムで同じセキュリティドメインを使用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                            <span>定期的なテストによるバックアップ整合性の検証を行っていない</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 実装ガイダンス -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-lock fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>暗号化実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon S3</span>: サーバーサイド暗号化とクライアントサイド暗号化をサポート</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon RDS</span>: データベース暗号化時、バックアップも自動的に暗号化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-table" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">DynamoDB</span>: バックアップは常に暗号化される</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Elastic Disaster Recovery</span>: 転送中および保存時のすべてのデータを暗号化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-key" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS KMS</span>: データキーの作成、保存、アクセス制御</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        <span class="keyword-tag">AWS KMS</span>を使用することで、<br>
+                        データキーへのアクセスを<br>
+                        <span class="keyword-tag">IAM</span>で細かく制御できます！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- サイバーレジリエンス考慮事項 -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-shield-virus fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>サイバーレジリエンス考慮事項</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Backup Vault Lock</span>や<span class="keyword-tag">S3 Object Lock</span>による不変性の実装</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">論理的エアギャップ</span>による本番環境とバックアップ環境の分離</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-check-double" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Backup復元テスト</span>による定期的なバックアップ整合性検証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">多者承認</span>による重要な復旧操作の認可制御</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-virus-slash fa-lg" style="color: var(--ui-color-5);"></i>
+                        <span class="keyword-tag">ランサムウェア</span>対策として<br>
+                        不変性とエアギャップが<br>
+                        特に重要です！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 実装手順 -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装手順</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><strong>1. 各データストアで暗号化を使用</strong> - ソースデータが暗号化されていれば、バックアップも暗号化される</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-key" aria-hidden="true"></i>
+                            <span><strong>2. AWS KMSを使用したキー管理</strong> - 暗号化キーの作成、保存、アクセス制御</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+                            <span><strong>3. IAMによるアクセス制御</strong> - バックアップへの認証と認可の実装</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                            <span><strong>4. 不変性の実装</strong> - Vault LockやObject Lockによる改ざん防止</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                            <span><strong>5. 定期的な整合性検証</strong> - バックアップの復元テストと検証</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 利点 -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスを確立する利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>データの改ざん防止と機密性の保護</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-virus-slash" aria-hidden="true"></i>
+                            <span>ランサムウェアやサイバー脅威に対する強化された保護</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>サイバーインシデント後の復旧時間短縮</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-business-time" aria-hidden="true"></i>
+                            <span>セキュリティインシデント時のビジネス継続性向上</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        セキュアなバックアップは<br>
+                        <span class="keyword-tag">サイバーレジリエンス</span>の<br>
+                        基盤となります！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>REL09に戻る</h3>
+                    <a href="REL09.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-database"></i> データのバックアップ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

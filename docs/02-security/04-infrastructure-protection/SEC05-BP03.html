@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEC04-BP03 セキュリティベストプラクティス</title>
+    <title>SEC05-BP03: 検査ベースの保護を実装する</title>
     <link rel="stylesheet" type="text/css" href="../../css/style.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
@@ -13,256 +13,297 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <i class="fa-solid fa-server fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
-            <h1>SEC04-BP03 セキュリティベストプラクティス</h1>
-            <p class="header-description">
-                インフラストラクチャ保護における重要なベストプラクティスです。適切な実装により、セキュリティ態勢を大幅に向上させることができます。
-            </p>
-            <div class="header-link">
-                <a href="https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html" target="_blank">
-                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            <div class="header-left">
+                <i class="fa-solid fa-search fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                <div class="header-text">
+                    <h1>SEC05-BP03: 検査ベースの保護を実装する</h1>
+                    <p class="header-subtitle">ネットワークレイヤー間にトラフィック検査ポイントを設置し、転送中のデータが期待されるカテゴリとパターンに一致することを確認する</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <a href="https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/sec_network_protection_inspection.html" target="_blank" class="official-link">
+                    <i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>
+                    公式ドキュメント
                 </a>
             </div>
         </div>
     </header>
 
-    <main>
+    <main class="main-content">
         <div class="section-layout">
-            <!-- リスクレベル -->
+            <!-- リスクレベルカード -->
             <div class="section-card fade-in-scale">
                 <div class="mega-icon-container">
-                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
                     <h2>リスクレベル</h2>
                 </div>
+                
                 <div class="card-content">
-                    <div class="risk-level high">
-                        <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
-                        <span>高リスク</span>
-                    </div>
-                    <p>このベストプラクティスを確立しない場合、セキュリティ態勢に重大な影響を与える可能性があります。</p>
-                </div>
-                <div class="speech-bubble variant-1">
-                    <span class="handwritten">
-                        <i class="fa-solid fa-exclamation" style="color: var(--ui-color-5);"></i>
-                        適切な実装で<br>
-                        <span class="keyword-tag">リスク軽減</span>！
-                    </span>
-                </div>
-            </div>
-
-            <!-- 期待される成果 -->
-            <div class="section-card fade-in-scale">
-                <div class="mega-icon-container">
-                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
-                    <h2>期待される成果</h2>
-                </div>
-                <div class="card-content">
-                    <p>このベストプラクティスの実装により、インフラストラクチャ保護における以下の成果が期待されます：</p>
+                    <div class="risk-badge medium">中</div>
                     <ul class="keyword-list">
                         <li>
-                            <i class="fa-solid fa-shield-check" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">セキュリティ態勢</span>の大幅な向上</span>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-minimize" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">攻撃面</span>の効果的な削減</span>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">可視性</span>と監視能力の向上</span>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">自動化</span>による運用効率化</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="speech-bubble">
-                    <span class="handwritten">
-                        <i class="fa-solid fa-star" style="color: var(--ui-color-2);"></i>
-                        明確な<br>
-                        <span class="keyword-tag">目標設定</span>！
-                    </span>
-                </div>
-            </div>
-
-            <!-- 主要概念 -->
-            <div class="section-card fade-in-scale">
-                <div class="mega-icon-container">
-                    <i class="fa-solid fa-server fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
-                    <h2>主要概念</h2>
-                </div>
-                <div class="card-content">
-                    <p>インフラストラクチャ保護における重要な概念と原則：</p>
-                    <ul class="keyword-list">
-                        <li>
-                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">多層防御</span> - 複数のセキュリティレイヤーによる保護</span>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-minimize" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">最小権限の原則</span> - 必要最小限のアクセス権限</span>
+                            <i class="fa-solid fa-exclamation-circle" aria-hidden="true"></i>
+                            <span>検査ベース保護を確立しないと、高度な脅威の検出が困難になる</span>
                         </li>
                         <li>
                             <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">デフォルトセキュア</span> - 安全な初期設定</span>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-sync" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">継続的改善</span> - 定期的な見直しと更新</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="speech-bubble variant-2">
-                    <span class="handwritten">
-                        <i class="fa-solid fa-lightbulb" style="color: var(--ui-color-2);"></i>
-                        基本原則を<br>
-                        <span class="keyword-tag">理解</span>しよう！
-                    </span>
-                </div>
-            </div>
-
-            <!-- 実装アプローチ -->
-            <div class="section-card fade-in-scale">
-                <div class="mega-icon-container">
-                    <i class="fa-solid fa-route fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
-                    <h2>実装アプローチ</h2>
-                </div>
-                <div class="card-content">
-                    <p>効果的な実装のための段階的アプローチ：</p>
-                    <ul class="keyword-list">
-                        <li>
-                            <i class="fa-solid fa-search" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">現状評価</span> - 既存環境の詳細分析</span>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-map" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">計画策定</span> - 実装ロードマップの作成</span>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">段階実装</span> - リスクを最小化した展開</span>
+                            <span>ポート・プロトコルベースの制御のみでは<span class="keyword-tag">不十分な保護</span></span>
                         </li>
                         <li>
                             <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">効果測定</span> - 継続的な監視と改善</span>
+                            <span>ベースライン行動からの逸脱を検出できない</span>
                         </li>
                     </ul>
                 </div>
-                <div class="speech-bubble">
+                
+                <div class="speech-bubble variant-2">
                     <span class="handwritten">
-                        <i class="fa-solid fa-rocket" style="color: var(--ui-color-1);"></i>
-                        段階的な<br>
-                        <span class="keyword-tag">実装</span>が鍵！
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        単純なルールを超えた
+                        <br>
+                        <span class="keyword-tag">インテリジェント保護</span>！
+                        <br>
+                        脅威の進化に対応
                     </span>
                 </div>
             </div>
 
-            <!-- AWSサービス活用 -->
+            <!-- AWS Network Firewallカード -->
             <div class="section-card fade-in-scale">
                 <div class="mega-icon-container">
-                    <i class="fa-solid fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
-                    <h2>AWSサービス活用</h2>
+                    <i class="fa-solid fa-fire fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>AWS Network Firewall</h2>
                 </div>
+                
                 <div class="card-content">
-                    <p>インフラストラクチャ保護で活用できる主要AWSサービス：</p>
                     <ul class="keyword-list">
                         <li>
-                            <i class="fa-solid fa-shield" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">AWS Security Hub</span> - 統合セキュリティ管理</span>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ステートフル・ステートレス</span>両方のトラフィック制御</span>
                         </li>
                         <li>
+                            <i class="fa-solid fa-shield-virus" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Suricata互換</span>オープンソースIPS仕様サポート</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">柔軟な配置モデル</span>: VPC単位・集中検査・ハイブリッド</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lock-open" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">TLS終端</span>による深いパケット検査対応</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-2);"></i>
+                        マネージドサービスで
+                        <br>
+                        <span class="keyword-tag">高度な検査</span>を実現！
+                        <br>
+                        運用負荷も軽減
+                    </span>
+                </div>
+            </div>
+
+            <!-- Gateway Load Balancerカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-balance-scale fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>Gateway Load Balancer</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-store" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Marketplace</span>のファイアウォール・IPS製品統合</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-route" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">インライン検査</span>による透過的な保護</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
+                            <span>East-West・North-South両方向の<span class="keyword-tag">トラフィック検査</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>高可用性とスケーラビリティを提供</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-puzzle-piece fa-lg" style="color: var(--ui-color-2);"></i>
+                        サードパーティ製品も
+                        <br>
+                        <span class="keyword-tag">簡単統合</span>！
+                        <br>
+                        選択肢が豊富
+                    </span>
+                </div>
+            </div>
+
+            <!-- VPCトラフィックミラーリングカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-copy fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>VPCトラフィックミラーリング</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
                             <i class="fa-solid fa-eye" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">Amazon GuardDuty</span> - 脅威検出サービス</span>
+                            <span><span class="keyword-tag">アウトオブバンド検査</span>: pcap分析による詳細調査</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                            <span>プロミスキャスモードでの<span class="keyword-tag">パケットデータ取得</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-area" aria-hidden="true"></i>
+                            <span>帯域幅とデータ転送料金への<span class="keyword-tag">影響を考慮</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-tools" aria-hidden="true"></i>
+                            <span>既存のネットワーク分析ツールとの統合</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-microscope fa-lg" style="color: var(--ui-color-2);"></i>
+                        詳細分析が必要なら
+                        <br>
+                        <span class="keyword-tag">ミラーリング</span>！
+                        <br>
+                        フォレンジック調査に最適
+                    </span>
+                </div>
+            </div>
+
+            <!-- AWS WAFカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-globe fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>AWS WAF</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Webアプリケーション保護</span>: HTTP(S)リクエストの監視・ブロック</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">統合サービス</span>: API Gateway・CloudFront・ALB・AppSync</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Managed Rules</span>: 最新脅威インテリジェンス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                            <span>TLS終端による<span class="keyword-tag">深いパケット検査</span>対応</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        Webアプリには
+                        <br>
+                        <span class="keyword-tag">WAFが必須</span>！
+                        <br>
+                        OWASP Top 10対策
+                    </span>
+                </div>
+            </div>
+
+            <!-- インテリジェントルールカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-brain fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>インテリジェントルール</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">脅威インテリジェンス</span>: 最新の攻撃パターンに基づく判定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">異常検知</span>: ベースライン行動からの逸脱検出</span>
                         </li>
                         <li>
                             <i class="fa-solid fa-cogs" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">AWS Config</span> - 設定管理と監査</span>
+                            <span><span class="keyword-tag">条件ベース制御</span>: トラフィックデータ内の特定条件</span>
                         </li>
                         <li>
-                            <i class="fa-solid fa-trail" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">AWS CloudTrail</span> - API呼び出し記録</span>
+                            <i class="fa-solid fa-shield-check" aria-hidden="true"></i>
+                            <span>機密データに近づくほど<span class="keyword-tag">厳格な保護</span></span>
                         </li>
                     </ul>
                 </div>
+                
                 <div class="speech-bubble variant-1">
                     <span class="handwritten">
-                        <i class="fa-solid fa-magic" style="color: var(--ui-color-2);"></i>
-                        AWSサービスで<br>
-                        <span class="keyword-tag">効率化</span>！
+                        <i class="fa-solid fa-graduation-cap fa-lg" style="color: var(--ui-color-2);"></i>
+                        学習する保護システム！
+                        <br>
+                        <span class="keyword-tag">進化する脅威</span>に
+                        <br>
+                        自動で対応
                     </span>
                 </div>
             </div>
 
-            <!-- ベストプラクティス -->
+            <!-- 実装ガイダンスカード -->
             <div class="section-card fade-in-scale">
                 <div class="mega-icon-container">
-                    <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
-                    <h2>ベストプラクティス</h2>
+                    <i class="fa-solid fa-compass fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
                 </div>
+                
                 <div class="card-content">
-                    <p>実装時に考慮すべき重要なポイント：</p>
                     <ul class="keyword-list">
                         <li>
-                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">自動化優先</span> - 手動作業の最小化</span>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">配置戦略</span>: VPC単位・集中検査・ハイブリッドモデル</span>
                         </li>
                         <li>
                             <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">メトリクス監視</span> - 定量的な効果測定</span>
+                            <span><span class="keyword-tag">ベースライン確立</span>: 正常なトラフィックパターンの把握</span>
                         </li>
                         <li>
-                            <i class="fa-solid fa-users" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">チーム教育</span> - 継続的なスキル向上</span>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">マネージドルール活用</span>: AWS・パートナー提供ルール</span>
                         </li>
                         <li>
-                            <i class="fa-solid fa-book" aria-hidden="true"></i>
-                            <span><span class="keyword-tag">文書化</span> - 手順とプロセスの明文化</span>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span>パフォーマンスと<span class="keyword-tag">セキュリティのバランス</span></span>
                         </li>
                     </ul>
                 </div>
-                <div class="speech-bubble variant-2">
+                
+                <div class="speech-bubble variant-2 right">
                     <span class="handwritten">
-                        <i class="fa-solid fa-check-circle" style="color: var(--ui-color-2);"></i>
-                        ベストプラクティスで<br>
-                        <span class="keyword-tag">成功確率向上</span>！
-                    </span>
-                </div>
-            </div>
-
-            <!-- 関連リソース -->
-            <div class="section-card fade-in-scale">
-                <div class="mega-icon-container">
-                    <i class="fa-solid fa-link fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
-                    <h2>関連リソース</h2>
-                </div>
-                <div class="card-content">
-                    <h3><i class="fa-solid fa-book" aria-hidden="true"></i> 学習リソース</h3>
-                    <ul class="keyword-list">
-                        <li>
-                            <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
-                            <span>AWS Well-Architected Labs</span>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-video" aria-hidden="true"></i>
-                            <span>AWS re:Invent セッション</span>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
-                            <span>AWS公式ドキュメント</span>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-users" aria-hidden="true"></i>
-                            <span>AWSコミュニティフォーラム</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="speech-bubble">
-                    <span class="handwritten">
-                        <i class="fa-solid fa-graduation-cap" style="color: var(--ui-color-1);"></i>
-                        豊富な<br>
-                        <span class="keyword-tag">学習リソース</span>で<br>
-                        理解を深めよう！
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-2);"></i>
+                        段階的な導入で
+                        <br>
+                        <span class="keyword-tag">リスクを最小化</span>！
+                        <br>
+                        運用しながら最適化
                     </span>
                 </div>
             </div>

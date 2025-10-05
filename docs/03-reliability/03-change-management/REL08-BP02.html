@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL08-BP02: デプロイの一部として機能テストを統合する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-vial fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL08-BP02: デプロイの一部として機能テストを統合する</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_tracking_change_management_functional_testing.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">高リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bug" aria-hidden="true"></i>
+                            <span>テスト不備はバグのある本番リリースを招く</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                            <span>テスト失敗の無視は予期しない動作の原因</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        ユニットテストと統合テストで
+                        <br>
+                        <span class="keyword-tag">必要な機能</span>を検証！
+                        <br>
+                        <span class="keyword-tag">自動化</span>が鍵
+                    </span>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動化</span>によるユニット・統合テストの実行</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                            <span>コードが期待通りに動作することの<span class="keyword-tag">検証</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-pipeline" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">デプロイプロセス</span>へのテスト統合</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-stop-circle" aria-hidden="true"></i>
+                            <span>テスト失敗時の<span class="keyword-tag">デプロイ中止</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-business-time fa-lg" style="color: var(--ui-color-2);"></i>
+                        <span class="keyword-tag">TDD</span>アプローチで
+                        <br>
+                        テストケースを先に作成し、
+                        <br>
+                        コードを検証！
+                    </span>
+                </div>
+            </div>
+
+            <!-- テストの種類 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-layer-group fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>テストの種類</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-cube" aria-hidden="true"></i>
+                            <span><strong>ユニットテスト</strong>：<span class="keyword-tag">最小機能単位</span>の動作検証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+                            <span>アプリケーションの<span class="keyword-tag">一部を分離</span>してテスト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-link" aria-hidden="true"></i>
+                            <span><strong>統合テスト</strong>：<span class="keyword-tag">機能要件</span>に従った動作検証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exchange-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">副作用</span>（データ変更等）を考慮したテスト</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-info-circle fa-lg" style="color: var(--ui-color-1);"></i>
+                        <span class="keyword-tag">プレプロダクション環境</span>で
+                        <br>
+                        テストを実行し、
+                        <br>
+                        成功後に本番デプロイ！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-fast-forward" aria-hidden="true"></i>
+                            <span>デプロイ加速のための<span class="keyword-tag">テスト失敗無視</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-hand-paper" aria-hidden="true"></i>
+                            <span>デプロイパイプライン外での<span class="keyword-tag">手動テスト</span>実行</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>緊急ワークフローでの<span class="keyword-tag">テスト手順スキップ</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span>本番環境と<span class="keyword-tag">類似しない環境</span>でのテスト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-wrench" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">柔軟性不足</span>で保守困難なテストスイート</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-edit" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">テスト駆動開発（TDD）</span>アプローチの採用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span>機能コード作成前の<span class="keyword-tag">ユニットテスト</span>作成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">CI/CDパイプライン</span>への自動テスト統合</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-mobile-alt" aria-hidden="true"></i>
+                            <span>Web・モバイルアプリの<span class="keyword-tag">複数デバイステスト</span></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- AWS CodePipelineでの実装 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>AWS CodePipelineでの実装</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-code-branch" aria-hidden="true"></i>
+                            <span>開発者のコミット時に<span class="keyword-tag">自動変更検出</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-hammer" aria-hidden="true"></i>
+                            <span>アプリケーション<span class="keyword-tag">ビルド</span>とユニットテスト実行</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span>ユニットテスト成功後の<span class="keyword-tag">ステージングサーバー</span>デプロイ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">統合・負荷テスト</span>の実行</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                            <span>全テスト成功後の<span class="keyword-tag">本番デプロイ</span></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスを確立する利点</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>デプロイプロセス中の<span class="keyword-tag">早期問題発見</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>バグや予期しない動作での<span class="keyword-tag">本番リリースリスク削減</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                            <span>コードの期待動作と<span class="keyword-tag">APIコントラクト</span>の検証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-check-double" aria-hidden="true"></i>
+                            <span>システムの<span class="keyword-tag">仕様要件</span>に従った動作検証</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        自動テストにより
+                        <br>
+                        <span class="keyword-tag">品質保証</span>と
+                        <br>
+                        リリース信頼性を向上！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連ツール -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連ツールとサービス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-pipeline" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS CodePipeline</span> - CI/CDパイプライン</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS CodeDeploy</span> - アプリケーションデプロイ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon EC2</span> - 仮想サーバー</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Lambda</span> - サーバーレス関数</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-terminal" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS CLI</span> - コマンドラインインターフェース</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+            <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>REL08に戻る</h3>
+                    <a href="REL08.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-cogs"></i> 変更の実装
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

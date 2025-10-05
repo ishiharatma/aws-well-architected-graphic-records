@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL13-BP03: 実装を検証するためのディザスタリカバリ実装のテスト</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <i class="fa-solid fa-vial-circle-check fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                <div class="header-text">
+                    <h1>REL13-BP03: 実装を検証するためのディザスタリカバリ実装のテスト</h1>
+                    <p class="header-subtitle">復旧サイトへのフェイルオーバーを定期的にテストし、適切に動作することとRTO・RPOが満たされることを検証する</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <a href="https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/rel_planning_for_recovery_dr_tested.html" target="_blank" class="official-link">
+                    <i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>
+                    公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベルカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <div class="risk-badge high">高</div>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>定期的なDRテストを実施しないと、実際の災害時に計画が機能しない可能性が高い</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-question-circle" aria-hidden="true"></i>
+                            <span>未テストの復旧パスは <span class="keyword-tag">想定外の問題</span> を引き起こす</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>チームが復旧手順を理解していない場合、RTO目標を達成できない</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        テストしていない復旧パスは
+                        <br>
+                        <span class="keyword-tag">動かない</span>と思え！
+                        <br>
+                        経験則の鉄則
+                    </span>
+                </div>
+            </div>
+
+            <!-- テストの重要性カード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-flask fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>定期テストの重要性</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-check-double" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">頻繁にテスト</span>される復旧パスのみが実際に機能する</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span>セカンダリデータストアの容量・性能を定期的に検証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span>チームが復旧戦略の実行方法を確実に理解</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-minimize" aria-hidden="true"></i>
+                            <span>復旧パスの数を <span class="keyword-tag">最小限</span> に抑えて確実性を向上</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-repeat fa-lg" style="color: var(--ui-color-2);"></i>
+                        必要がなくても
+                        <br>
+                        <span class="keyword-tag">定期的にフェイルオーバー</span>！
+                        <br>
+                        これが成功の秘訣
+                    </span>
+                </div>
+            </div>
+
+            <!-- Recovery-Oriented Computingカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>復旧指向設計</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">分離と冗長性</span>: 障害の影響範囲を限定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-undo" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ロールバック機能</span>: システム全体での変更取り消し</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-heartbeat" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ヘルス監視</span>: システム状態の継続的な監視</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-stethoscope" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">診断機能</span>: 問題の迅速な特定と分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動復旧</span>: 人的介入なしでの回復</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cubes" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">モジュラー設計</span>: 独立した再起動可能なコンポーネント</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-university fa-lg" style="color: var(--ui-color-2);"></i>
+                        Berkeley/Stanford大学の
+                        <br>
+                        <span class="keyword-tag">ROC研究</span>に基づく
+                        <br>
+                        実証済みの原則
+                    </span>
+                </div>
+            </div>
+
+            <!-- テスト実装ステップカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-check fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-hammer" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">1. 復旧指向設計</span>: ワークロードを復旧しやすく設計</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-route" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">2. 復旧パステスト</span>: 定期的な復旧パスの実行</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-stopwatch" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">3. RTO/RPO検証</span>: 指定時間内での復旧確認</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-book" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">4. ランブック活用</span>: 手順書を使った復旧実行</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bug" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">5. 問題文書化</span>: テスト中の問題と解決策を記録</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-clipboard-check fa-lg" style="color: var(--ui-color-2);"></i>
+                        テストは<span class="keyword-tag">学習機会</span>！
+                        <br>
+                        問題を見つけて
+                        <br>
+                        改善につなげる
+                    </span>
+                </div>
+            </div>
+
+            <!-- AWS Elastic Disaster Recoveryドリルカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-drill fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>Elastic Disaster Recoveryドリル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-play-circle" aria-hidden="true"></i>
+                            <span>EC2ベースワークロード向けの <span class="keyword-tag">効率的なドリル実行</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">非破壊的テスト</span>: 本番トラフィックに影響なし</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                            <span>ドリル用インスタンスの迅速な起動</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-repeat" aria-hidden="true"></i>
+                            <span>頻繁なテスト実行でフェイルオーバー準備を強化</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-2);"></i>
+                        マネージドサービスで
+                        <br>
+                        <span class="keyword-tag">簡単ドリル</span>！
+                        <br>
+                        運用負荷を大幅軽減
+                    </span>
+                </div>
+            </div>
+
+            <!-- テストのベストプラクティスカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-star fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>テストのベストプラクティス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-calendar-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">定期スケジュール</span>: 計画的なテスト実行</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-industry" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">本番環境テスト</span>: 実際の環境での検証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">段階的負荷</span>: 実際の負荷条件での検証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users-cog" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">チーム訓練</span>: 全メンバーの手順習熟</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">結果記録</span>: テスト結果の詳細な文書化</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-trophy fa-lg" style="color: var(--ui-color-2);"></i>
+                        成功の鍵は
+                        <br>
+                        <span class="keyword-tag">継続的改善</span>！
+                        <br>
+                        テスト→学習→改善のサイクル
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連ツールカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-toolbox fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>関連AWSサービス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-virus" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Elastic Disaster Recovery</span>: EC2ワークロードのDRテスト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Fault Injection Simulator</span>: 障害注入テスト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-backup" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Backup</span>: バックアップ・リストア戦略のテスト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-route" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon Route 53</span>: DNSフェイルオーバーテスト</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-puzzle-piece fa-lg" style="color: var(--ui-color-2);"></i>
+                        AWSサービスを組み合わせて
+                        <br>
+                        <span class="keyword-tag">包括的テスト</span>を実現！
+                        <br>
+                        エンドツーエンドで検証
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

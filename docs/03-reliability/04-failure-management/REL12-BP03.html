@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL12-BP03: スケーラビリティとパフォーマンス要件をテストする - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-chart-line fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL12-BP03: スケーラビリティとパフォーマンス要件をテストする</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/rel_testing_resiliency_test_non_functional.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">高リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bottleneck" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ボトルネック</span>の本番発見</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ユーザー体験</span>の悪化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-dollar-sign" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">リソース配分</span>の最適化不足</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        本番で慌てるより
+                        <br>
+                        <span class="keyword-tag">事前テスト</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 本番規模テスト環境 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cloud fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>本番規模テスト環境</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-equals" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">本番同等</span>の環境構築</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-magic" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">オンデマンド</span>でのプロビジョニング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">縮小環境</span>での不正確な予測回避</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">実世界条件</span>での正確なシミュレーション</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-copy fa-lg" style="color: var(--ui-color-2);"></i>
+                        クラウドなら
+                        <br>
+                        <span class="keyword-tag">本物そっくり</span>を作れる！
+                    </span>
+                </div>
+            </div>
+
+            <!-- SLO定義 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>SLO（Service Level Objectives）定義</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">スループット</span>目標の設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">レイテンシ</span>ヒストグラムの定義</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-percentage" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">エラー率</span>の許容範囲</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ビジネス要件</span>に基づく目標</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-bullseye fa-lg" style="color: var(--ui-color-5);"></i>
+                        明確な目標なしに
+                        <br>
+                        <span class="keyword-tag">成功は測れない</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 負荷テストシナリオ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-weight-hanging fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>負荷テストシナリオ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">平均使用量</span>でのベースライン</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">急激なスパイク</span>への対応</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-mountain" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">持続的ピーク</span>負荷の処理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-fire" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ストレステスト</span>で限界突破</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-dumbbell fa-lg" style="color: var(--ui-color-1);"></i>
+                        様々な重さで
+                        <br>
+                        <span class="keyword-tag">筋力テスト</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- CI/CDパイプライン統合 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>CI/CDパイプライン統合</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動化</span>されたテスト実行</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">パフォーマンス回帰</span>の早期発見</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">品質ゲート</span>での自動判定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">継続的</span>なパフォーマンス検証</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-conveyor-belt fa-lg" style="color: var(--ui-color-2);"></i>
+                        ベルトコンベアで
+                        <br>
+                        <span class="keyword-tag">品質チェック</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 監視とアラート -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-radar fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>包括的監視とアラート</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">パフォーマンスメトリクス</span>の追跡</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">異常検出</span>アラートシステム</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-microscope" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">プロファイリング</span>ツールでの詳細分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">本番データ</span>での継続的改善</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-eye fa-lg" style="color: var(--ui-color-5);"></i>
+                        24時間体制で
+                        <br>
+                        <span class="keyword-tag">見張り番</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- テストツールと環境 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-toolbox fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>テストツールと環境</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">リアルなユーザートラフィック</span>生成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Infrastructure as Code</span>での環境構築</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cube" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">コンテナベース</span>アプリケーション</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-copy" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">再現可能</span>なセットアップ</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-hammer fa-lg" style="color: var(--ui-color-1);"></i>
+                        適切な道具で
+                        <br>
+                        <span class="keyword-tag">正確な測定</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 継続的最適化 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-sync-alt fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>継続的最適化</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">パフォーマンスデータ</span>の定期分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">新たな問題</span>の早期発見</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">スケーリング戦略</span>のテスト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">効率性改善</span>の実装</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-arrows-rotate fa-lg" style="color: var(--ui-color-2);"></i>
+                        改善に終わりなし
+                        <br>
+                        <span class="keyword-tag">常に進化</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>避けるべきアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-compress-arrows-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">縮小環境</span>でのテスト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-times" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">一回限り</span>の負荷テスト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-question" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">曖昧な</span>パフォーマンス要件</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-feather" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">不十分な負荷</span>シナリオ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-tools" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">不適切な</span>テストツール</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        これらを避けて
+                        <br>
+                        <span class="keyword-tag">正確なテスト</span>を！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

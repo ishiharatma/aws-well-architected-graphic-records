@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL06-08 変更管理 - ベストプラクティス一覧</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-cogs fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL06-08 変更管理</h1>
+            <p class="header-description">
+                ワークロードリソースの監視、需要の変化への適応、変更の実装を通じて、信頼性の高いシステムを構築します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/change-management.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 統計情報 -->
+        <div class="stats-section">
+            <h2><i class="fa-solid fa-chart-bar"></i> REL06-08 統計情報</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">16</span>
+                    <span class="stat-label">ベストプラクティス</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">高リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">13</span>
+                    <span class="stat-label">中リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">低リスク</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 個別セクションへのリンク -->
+        <div class="bp-grid" style="margin: 40px 0;">
+            <a href="./REL06.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-chart-line bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">REL06</h3>
+                </div>
+                <h4>ワークロードリソースの監視方法</h4>
+                <p class="bp-description">
+                    ログとメトリクスを使用してワークロードの健全性を把握し、閾値超過時の通知と自動復旧を実現します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-list"></i> 7つのベストプラクティス
+                </span>
+            </a>
+            
+            <a href="./REL07.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-expand-arrows-alt bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">REL07</h3>
+                </div>
+                <h4>需要の変化への適応方法</h4>
+                <p class="bp-description">
+                    スケーラブルなワークロードは、任意の時点で現在の需要に密接に一致するように、リソースを自動的に追加または削除する弾力性を提供します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-list"></i> 4つのベストプラクティス
+                </span>
+            </a>
+            
+            <a href="./REL08.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-cogs bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">REL08</h3>
+                </div>
+                <h4>変更の実装方法</h4>
+                <p class="bp-description">
+                    制御された変更は、新機能のデプロイと、既知の適切にパッチされたソフトウェアでワークロードと運用環境を実行するために必要です。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-list"></i> 5つのベストプラクティス
+                </span>
+            </a>
+        </div>
+        <div class="section-divider"></div>
+
+        <h2 class="section-title">
+            <i class="fa-solid fa-chart-line"></i> REL06: ワークロードリソースの監視方法
+        </h2>
+        <!-- ベストプラクティス一覧 -->
+        <div class="bp-grid">
+            <!-- REL06: ワークロードリソースの監視方法 -->
+            <a href="REL06-BP01.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-chart-line bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL06-BP01</h3>
+                        <p class="bp-subtitle">ワークロードのすべてのコンポーネントを監視する（生成）</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    フロントエンド、ビジネスロジック、ストレージ層を含むすべてのコンポーネントを監視し、合成トランザクションで外部エンドポイントを監視します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="REL06-BP02.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-calculator bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL06-BP02</h3>
+                        <p class="bp-subtitle">メトリクスを定義・計算する（集約）</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    ワークロードコンポーネントからメトリクスとログを収集し、関連する集約メトリクスを計算して包括的な可観測性を提供します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="REL06-BP03.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-bell bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL06-BP03</h3>
+                        <p class="bp-subtitle">通知を送信する（リアルタイム処理・アラーム）</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    重要なメトリクスの閾値超過時に適切な関係者に通知を送信し、迅速な対応を可能にします。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+
+            <a href="REL06-BP04.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-robot bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL06-BP04</h3>
+                        <p class="bp-subtitle">応答を自動化する（リアルタイム処理・アラーム）</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    アラーム発生時の自動応答を実装し、人的介入なしに問題を解決または軽減します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+
+            <a href="REL06-BP05.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-file-alt bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL06-BP05</h3>
+                        <p class="bp-subtitle">ログを分析する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    ログデータを定期的に分析して、パターンの識別、トレンドの把握、問題の根本原因分析を実行します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+
+            <a href="REL06-BP06.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-sync-alt bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL06-BP06</h3>
+                        <p class="bp-subtitle">監視範囲とメトリクスを定期的に見直す</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    ワークロード監視の実装方法を頻繁に見直し、ワークロードとそのアーキテクチャの進化に合わせて更新します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+
+            <a href="REL06-BP07.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-route bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL06-BP07</h3>
+                        <p class="bp-subtitle">システム全体でのリクエストのエンドツーエンドトレースを監視する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    サービスコンポーネントを通じてリクエストを処理する際にトレースし、問題をより簡単に分析・デバッグできるようにします。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+        </div>
+        <div class="section-divider"></div>
+        <h2 class="section-title">
+            <i class="fa-solid fa-expand-arrows-alt"></i> REL07: 需要の変化への適応方法
+        </h2>
+        <div class="bp-grid">
+        <!-- REL07: 需要の変化への適応方法 -->
+            <a href="REL07-BP01.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-robot bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL07-BP01</h3>
+                        <p class="bp-subtitle">リソースの取得やスケーリング時に自動化を使用する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    クラウドにおける信頼性の基盤は、インフラストラクチャとリソースのプログラム的な定義、プロビジョニング、管理です。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="REL07-BP02.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-heartbeat bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL07-BP02</h3>
+                        <p class="bp-subtitle">ワークロードの障害検出時にリソースを取得する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    可用性が影響を受けた場合に必要に応じてリソースを反応的にスケールし、ワークロードの可用性を復元します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+
+            <a href="REL07-BP03.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-chart-line bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL07-BP03</h3>
+                        <p class="bp-subtitle">ワークロードにより多くのリソースが必要であることを検出した際にリソースを取得する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    クラウドコンピューティングの最も価値ある機能の一つは、リソースを動的にプロビジョニングする能力です。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+
+            <a href="REL07-BP04.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-vial bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL07-BP04</h3>
+                        <p class="bp-subtitle">ワークロードの負荷テストを実行する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    スケーリング活動がワークロード要件を満たすかどうかを測定するための負荷テスト手法を採用します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+
+        </div>
+        <div class="section-divider"></div>
+        <h2 class="section-title">
+            <i class="fa-solid fa-cogs"></i> REL08: 変更の実装方法
+        </h2>
+        <div class="bp-grid">
+            <!-- REL08: 変更の実装方法 -->
+            <a href="REL08-BP01.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-book bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL08-BP01</h3>
+                        <p class="bp-subtitle">デプロイなどの標準的な活動にランブックを使用する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    ランブックは特定の成果を達成するための事前定義手順です。デプロイ、パッチ適用、DNS変更などの標準活動に使用します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="REL08-BP02.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-vial bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL08-BP02</h3>
+                        <p class="bp-subtitle">デプロイの一部として機能テストを統合する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    ユニットテストと統合テストを使用して必要な機能を検証し、デプロイプロセスに統合します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="REL08-BP03.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-shield-alt bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL08-BP03</h3>
+                        <p class="bp-subtitle">デプロイの一部として復旧力テストを統合する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    意図的に障害を導入してシステムの破壊的シナリオでの能力を測定し、復旧力を検証します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+
+            <a href="REL08-BP04.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-cube bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL08-BP04</h3>
+                        <p class="bp-subtitle">イミュータブルインフラストラクチャを使用してデプロイする</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    本番ワークロードでのインプレース変更を禁止し、新しいインフラ上にアーキテクチャを構築してデプロイします。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+
+            <a href="REL08-BP05.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-robot bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL08-BP05</h3>
+                        <p class="bp-subtitle">自動化を使用して変更をデプロイする</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    デプロイとパッチ適用を自動化して負の影響を排除し、人的エラーを最小化します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>信頼性の柱に戻る</h3>
+                    <a href="../03-reliability.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-shield-alt"></i> 信頼性の柱
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

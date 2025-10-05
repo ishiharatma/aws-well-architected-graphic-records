@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL11-BP03: すべてのレイヤーで自動復旧を実装する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-magic-wand-sparkles fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL11-BP03: すべてのレイヤーで自動復旧を実装する</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/rel_withstand_component_failures_auto_healing_system.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">高リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-hand-paper" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">手動復旧</span>による時間ロス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">MTTR</span>（平均復旧時間）の増大</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user-times" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">人的エラー</span>による復旧失敗</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        自動化で
+                        <br>
+                        <span class="keyword-tag">即座に復旧</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 自動復旧の原則 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-gears fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>自動復旧の原則</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">障害検出</span>→自動修復アクション</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-refresh" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">リソース再起動</span>・削除による復旧</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cube" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ステートレス</span>設計で安全な再起動</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">リトライ機構</span>で一時的障害対応</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-robot fa-lg" style="color: var(--ui-color-2);"></i>
+                        機械が24時間
+                        <br>
+                        <span class="keyword-tag">見守ってくれる</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- Auto Scaling活用 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-expand-arrows-alt fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>Auto Scaling活用</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Auto Scaling Group</span>でティア単位の自動復旧</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-heartbeat" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ヘルスチェック</span>で異常インスタンス検出</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-plus-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動置換</span>で健全なインスタンス追加</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ELB連携</span>で負荷分散と復旧</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-5);"></i>
+                        壊れたら自動で
+                        <br>
+                        <span class="keyword-tag">新しいのと交換</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- Kubernetes自動復旧 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-dharmachakra fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>Kubernetes自動復旧</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-copy" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ReplicaSet</span>で最小・最大レプリカ数設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ノードグループ</span>の最小クラスターサイズ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-crown" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">コントロールプレーン</span>による自動修復</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">継続処理</span>リソースの確保</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-ship fa-lg" style="color: var(--ui-color-1);"></i>
+                        Kubernetesが
+                        <br>
+                        <span class="keyword-tag">舵取り</span>してくれる！
+                    </span>
+                </div>
+            </div>
+
+            <!-- データベース自動復旧 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-database fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>データベース自動復旧</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-arrows-turn-right" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">RDS自動フェイルオーバー</span>でスタンバイ昇格</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-copy" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">リードレプリカ</span>のプライマリ昇格自動化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-link" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">エンドポイント</span>の自動切り替え</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">RPO・RTO</span>要件に基づく設定</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-2);"></i>
+                        データの心臓も
+                        <br>
+                        <span class="keyword-tag">自動で守る</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- イベント駆動復旧 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bolt fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>イベント駆動復旧</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">EventBridge</span>でイベント監視・フィルタリング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">CloudWatchアラーム</span>連携</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lambda" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Lambda</span>でカスタム修復ロジック</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Systems Manager</span>で自動化ワークフロー</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-zap fa-lg" style="color: var(--ui-color-5);"></i>
+                        イベントが起きたら
+                        <br>
+                        <span class="keyword-tag">即座に対応</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- リトライ戦略 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-redo fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リトライ戦略</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ネットワークタイムアウト</span>への対応</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">指数バックオフ</span>でリトライ間隔調整</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-random" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ジッター</span>で同時リトライ回避</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-stop-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">制限付きリトライ</span>で無限ループ防止</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-repeat fa-lg" style="color: var(--ui-color-1);"></i>
+                        諦めずに
+                        <br>
+                        <span class="keyword-tag">賢くリトライ</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>避けるべきアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">オートスケーリング</span>なしのリソース</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">手動デプロイ</span>での個別管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-map-marker" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">単一場所</span>のみの配置</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-hand-paper" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">手動復旧</span>への依存</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">DB自動フェイルオーバー</span>未設定</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        これらを避けて
+                        <br>
+                        <span class="keyword-tag">完全自動化</span>を！
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>REL11に戻る</h3>
+                    <a href="REL11.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-shield-alt"></i> コンポーネント障害への耐性設計 
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

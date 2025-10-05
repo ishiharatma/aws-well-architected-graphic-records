@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL03-05 ワークロードアーキテクチャ - ベストプラクティス一覧</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-sitemap fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL03-05 ワークロードアーキテクチャ</h1>
+            <p class="header-description">
+                サービスアーキテクチャを設計し、分散システムでの相互作用を設計して、障害を防止・軽減します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/workload-architecture.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 統計情報 -->
+        <div class="stats-section">
+            <h2><i class="fa-solid fa-chart-bar"></i> REL03-05 統計情報</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">11</span>
+                    <span class="stat-label">ベストプラクティス</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">8</span>
+                    <span class="stat-label">高リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">中リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">低リスク</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 個別セクションへのリンク -->
+        <div class="bp-grid" style="margin: 40px 0;">
+            <a href="./REL03.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-cubes bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">REL03</h3>
+                </div>
+                <h4>サービスアーキテクチャの設計方法</h4>
+                <p class="bp-description">
+                    ワークロードサービスアーキテクチャを設計し、可用性目標を達成します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-list"></i> 3つのベストプラクティス
+                </span>
+            </a>
+            
+            <a href="./REL04.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-project-diagram bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">REL04</h3>
+                </div>
+                <h4>分散システムでの相互作用の設計方法</h4>
+                <p class="bp-description">
+                    分散システムでの相互作用を設計して、障害を防止・軽減します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-list"></i> 4つのベストプラクティス
+                </span>
+            </a>
+            
+            <a href="./REL05.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-shield-alt bp-icon" aria-hidden="true"></i>
+                    <h3 class="bp-title">REL05</h3>
+                </div>
+                <h4>分散システムでの相互作用の設計方法（障害軽減）</h4>
+                <p class="bp-description">
+                    分散システムでの相互作用を設計して、障害の影響を軽減します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-list"></i> 4つのベストプラクティス
+                </span>
+            </a>
+        </div>
+        <div class="section-divider"></div>
+
+        <h2 class="section-title">
+            <i class="fa-solid fa-shield-alt"></i> REL03: サービスアーキテクチャの設計方法
+        </h2>
+        <!-- ベストプラクティス一覧 -->
+        <div class="bp-grid">
+            <!-- REL03: サービスアーキテクチャの設計方法 -->
+            <a href="REL03-BP01.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-cubes bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL03-BP01</h3>
+                        <p class="bp-subtitle">可用性目標を達成するためにワークロードをセグメント化する方法を選択する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    可用性要件に基づいてワークロードをセグメント化し、各セグメントに適切な戦略を適用します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="REL03-BP02.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-layer-group bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL03-BP02</h3>
+                        <p class="bp-subtitle">サービス指向アーキテクチャまたはマイクロサービスアーキテクチャを構築する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    疎結合なサービス指向またはマイクロサービスアーキテクチャを構築して、可用性を向上させます。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="REL03-BP03.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-server bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL03-BP03</h3>
+                        <p class="bp-subtitle">サーバーレスアーキテクチャを適切に使用する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    サーバーレスアーキテクチャを使用して、可用性を向上させ、運用負荷を軽減します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+        </div>
+        <div class="section-divider"></div>
+        <h2 class="section-title">
+            <i class="fa-solid fa-shield-alt"></i> REL04: 分散システムでの相互作用の設計方法（障害防止）
+        </h2>
+        <div class="bp-grid">
+        <!-- REL04: 分散システムでの相互作用の設計方法（障害防止） -->
+            <a href="REL04-BP01.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-unlink bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL04-BP01</h3>
+                        <p class="bp-subtitle">疎結合の依存関係を特定・実装する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    疎結合により、コンポーネント間の依存関係を最小化し、障害の伝播を防ぎます。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="REL04-BP02.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-balance-scale bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL04-BP02</h3>
+                        <p class="bp-subtitle">すべてのレイヤーで一定のワークパターンを実装する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    一定のワークパターンにより、システムの予測可能性を向上させ、障害を防ぎます。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="REL04-BP03.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-sync-alt bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL04-BP03</h3>
+                        <p class="bp-subtitle">冪等性を実装する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    冪等性により、同じ操作を複数回実行しても安全であることを保証します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="REL04-BP04.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-handshake bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL04-BP04</h3>
+                        <p class="bp-subtitle">サービスは、クライアントが適切に呼び出すことができるように設計する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    クライアントが適切にサービスを呼び出せるよう、明確なインターフェースと契約を提供します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+        </div>
+        <div class="section-divider"></div>
+        <h2 class="section-title">
+            <i class="fa-solid fa-shield-alt"></i> REL05: 分散システムでの相互作用の設計方法（障害軽減）
+        </h2>
+        <div class="bp-grid">
+            <!-- REL05: 分散システムでの相互作用の設計方法（障害軽減） -->
+            <a href="REL05-BP01.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-level-down-alt bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL05-BP01</h3>
+                        <p class="bp-subtitle">グレースフルデグラデーションを実装して可用性を向上させる</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    依存関係が利用できない場合でも、機能を制限して継続的にサービスを提供します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+
+            <a href="REL05-BP02.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-tachometer-alt bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL05-BP02</h3>
+                        <p class="bp-subtitle">クライアント側でリクエストを調整する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    クライアント側でリクエストレートを制御し、サービスの過負荷を防ぎます。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="REL05-BP03.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-redo bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL05-BP03</h3>
+                        <p class="bp-subtitle">再試行を制御し、適応的または指数バックオフを使用する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    適切な再試行戦略により、一時的な障害から回復し、システムの安定性を保ちます。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="REL05-BP04.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-bolt bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL05-BP04</h3>
+                        <p class="bp-subtitle">フェイルファストと制限ブレーカーを実装する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    フェイルファストと制限ブレーカーにより、障害の連鎖を防ぎ、システムを保護します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>信頼性の柱に戻る</h3>
+                    <a href="../03-reliability.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-shield-alt"></i> 信頼性の柱
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

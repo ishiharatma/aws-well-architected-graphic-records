@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL07-BP04: ワークロードの負荷テストを実行する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-vial fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL07-BP04: ワークロードの負荷テストを実行する</h1>
+            <p class="header-description">
+                スケーリング活動がワークロード要件を満たすかどうかを測定するための負荷テスト手法を採用します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_adapt_to_changes_load_tested_adapt.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- リスクレベル -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-badge medium">中リスク</div>
+                    <p>このベストプラクティスを確立しないと、負荷下でどのコンポーネントが故障するかを把握できず、障害の影響を防ぐことができません。</p>
+                </div>
+            </div>
+
+        <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>負荷下で故障するアーキテクチャコンポーネントの<span class="keyword-tag">特定</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>負荷接近を示す<span class="keyword-tag">監視メトリクス</span>の識別</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>問題対処のための<span class="keyword-tag">十分な時間</span>確保</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                            <span>障害の影響の<span class="keyword-tag">事前防止</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        <span class="keyword-tag">持続的負荷テスト</span>により<br>
+                        破綻点を発見し、<br>
+                        ワークロードパフォーマンスをテスト！
+                    </span>
+                </div>
+            </div>
+
+        <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span>本番環境と<span class="keyword-tag">異なる設定</span>でのデプロイに対する負荷テスト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+                            <span>ワークロード全体ではなく<span class="keyword-tag">個別コンポーネント</span>のみの負荷テスト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-random" aria-hidden="true"></i>
+                            <span>実際のリクエストを代表しない<span class="keyword-tag">サブセットリクエスト</span>での負荷テスト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>予想負荷を<span class="keyword-tag">わずかに上回る程度</span>の小さな安全係数での負荷テスト</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                            <span>本番規模の<span class="keyword-tag">テスト環境</span>をオンデマンドで作成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-dollar-sign" aria-hidden="true"></i>
+                            <span>実行時のみ課金により<span class="keyword-tag">コスト効率的</span>なテスト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ゲームデイ</span>の一環として本番環境での負荷テスト検討</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span>顧客使用量の少ない時間帯での実施</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-info-circle fa-lg" style="color: var(--ui-color-1);"></i>
+                        AWSでは<span class="keyword-tag">一時的テスト環境</span>を<br>
+                        簡単にセットアップし、<br>
+                        テスト完了後に廃棄可能！
+                    </span>
+                </div>
+            </div>
+
+        <!-- 実装手順 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装手順</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-pie" aria-hidden="true"></i>
+                            <span><strong>1. リクエストミックスの特定</strong> - 様々な時間枠でのトラフィックミックス分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span><strong>2. 負荷ドライバーの実装</strong> - カスタムコード、オープンソース、商用ソフトウェア</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><strong>3. 小容量での初期負荷テスト</strong> - 1つのインスタンスやコンテナから開始</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-expand" aria-hidden="true"></i>
+                            <span><strong>4. 大容量での負荷テスト</strong> - 本番環境に可能な限り近い環境でテスト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><strong>5. メトリクス監視</strong> - リソース追加・削除のタイミング指標を特定</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスを確立する利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>負荷下での<span class="keyword-tag">故障コンポーネント</span>の事前特定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>負荷接近を示す<span class="keyword-tag">重要メトリクス</span>の識別</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>問題対処のための<span class="keyword-tag">十分な時間</span>確保</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>障害影響の<span class="keyword-tag">事前防止</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                            <span>ワークロード<span class="keyword-tag">パフォーマンス最適化</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        負荷テストにより<br>
+                        <span class="keyword-tag">破綻点</span>を事前発見し、<br>
+                        障害を予防！
+                    </span>
+                </div>
+            </div>
+
+        <!-- 関連ツール -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連ツールとサービス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS分散負荷テストソリューション</span> - 数千の接続ユーザーをシミュレート</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon CloudWatch</span> - メトリクス監視とアラート</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">カスタム負荷ドライバー</span> - 独自コードによる負荷生成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-open-source" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">オープンソースツール</span> - JMeter、Gatling等</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shopping-cart" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">商用負荷テストツール</span> - LoadRunner、BlazeMeter等</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>REL07に戻る</h3>
+                    <a href="REL07.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-expand-arrows-alt"></i> 需要の変化への適応
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

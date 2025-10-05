@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL09-BP03: データバックアップを自動的に実行する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-robot fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL09-BP03: データバックアップを自動的に実行する</h1>
+            <p class="header-description">
+                復旧ポイント目標（RPO）に基づく定期的なスケジュール、またはデータセットの変更に基づいて、バックアップが自動的に実行されるように設定します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_backing_up_data_automated_backups_data.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- リスクレベル -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-badge medium">中リスク</div>
+                    <p>このベストプラクティスを確立しないと、手動バックアップの失敗や忘れによりデータ損失のリスクが高まり、RPOを満たせない可能性があります。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 期待される成果 -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                            <span>確立された頻度でデータソースのバックアップを作成する<span class="keyword-tag">自動化プロセス</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">RPO</span>に基づく定期的なバックアップの実行</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                            <span>バックアップが実行されない場合のアラート機能</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>人的エラーの排除による信頼性の向上</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        自動化により<span class="keyword-tag">一貫性</span>と<br>
+                        <span class="keyword-tag">信頼性</span>が大幅に向上します！<br>
+                        手動作業のリスクを排除
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 一般的なアンチパターン -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-hand-paper" aria-hidden="true"></i>
+                            <span>バックアップを手動で実行している</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span>バックアップ機能を持つリソースを使用しているが、自動化に含めていない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-times" aria-hidden="true"></i>
+                            <span>不規則なバックアップスケジュール</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bell-slash" aria-hidden="true"></i>
+                            <span>バックアップ失敗時の監視やアラートがない</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 実装ガイダンス -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>自動バックアップサービス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-aws" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Backup</span>: 複数のAWSサービスにわたる一元的な自動バックアップ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon RDS</span>: 5分間隔の継続的バックアップとPITR</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon S3</span>: 15分間隔の継続的バックアップとバージョニング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-table" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">DynamoDB</span>: 継続的バックアップとポイントインタイム復旧</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-hdd" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon Data Lifecycle Manager</span>: EBSスナップショットの自動化</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-info-circle fa-lg" style="color: var(--ui-color-1);"></i>
+                        <span class="keyword-tag">PITR</span>（ポイントインタイム復旧）<br>
+                        により、特定の時点への<br>
+                        精密な復旧が可能です！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- バックアップ頻度ガイド -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-stopwatch fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>バックアップ頻度ガイド</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation" aria-hidden="true"></i>
+                            <span><strong>重要なデータセット</strong>: 低データ損失要件 → <span class="keyword-tag">高頻度</span>バックアップ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-info" aria-hidden="true"></i>
+                            <span><strong>一般的なデータ</strong>: 一部の損失が許容可能 → <span class="keyword-tag">低頻度</span>バックアップ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><strong>継続的バックアップ</strong>: RDS（5分）、S3（15分）</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-alt" aria-hidden="true"></i>
+                            <span><strong>定期バックアップ</strong>: EBS、DynamoDB、FSx（1時間間隔から）</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 実装手順 -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装手順</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><strong>1. 手動バックアップ中のデータソースを特定</strong></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+                            <span><strong>2. ワークロードのRPOを決定</strong></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><strong>3. 自動バックアップソリューションまたはマネージドサービスを使用</strong></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                            <span><strong>4. バックアップ計画とルールの作成</strong></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                            <span><strong>5. 監視とアラートの設定</strong></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 利点 -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスを確立する利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                            <span>RPOに基づく定期的なバックアップの保証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user-slash" aria-hidden="true"></i>
+                            <span>人的エラーの排除</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                            <span>バックアップ失敗時の即座のアラート</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>一貫性と信頼性の向上</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        自動化は<span class="keyword-tag">信頼性</span>の<br>
+                        基本原則です！<br>
+                        手動作業を排除しましょう
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>REL09に戻る</h3>
+                    <a href="REL09.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-database"></i> データのバックアップ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

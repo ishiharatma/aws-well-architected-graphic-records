@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL12-BP02: インシデント後分析を実施する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-search fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL12-BP02: インシデント後分析を実施する</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/rel_testing_resiliency_rca_resiliency.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">高リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-redo" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">同一障害</span>の再発</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">根本原因</span>の見落とし</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-brain" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">組織知識</span>の蓄積不足</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        失敗から学ばなければ
+                        <br>
+                        <span class="keyword-tag">同じ過ち</span>を繰り返す！
+                    </span>
+                </div>
+            </div>
+
+            <!-- COEプロセス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-clipboard-check fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>COE（Correction of Error）プロセス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">根本原因</span>の特定・理解</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-wrench" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">対処メカニズム</span>の構築</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ガードレール</span>の設置</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">再発防止</span>の仕組み化</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-tools fa-lg" style="color: var(--ui-color-2);"></i>
+                        修正は一時的
+                        <br>
+                        <span class="keyword-tag">改善は永続的</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- ブレームフリー文化 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-handshake fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>ブレームフリー文化</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">学習重視</span>で責任追及回避</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">心理的安全性</span>の確保</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-comments" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">オープンな対話</span>促進</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">チーム協力</span>の強化</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heart fa-lg" style="color: var(--ui-color-5);"></i>
+                        犯人探しより
+                        <br>
+                        <span class="keyword-tag">原因究明</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 5つのなぜ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-question-circle fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>5つのなぜ（Five Whys）</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">深掘り分析</span>で根本原因特定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">表面的原因</span>を超えた調査</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chain" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">因果関係</span>の連鎖追跡</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">真の問題</span>への到達</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magnifying-glass fa-lg" style="color: var(--ui-color-1);"></i>
+                        なぜ？を5回繰り返して
+                        <br>
+                        <span class="keyword-tag">真実に迫る</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 標準化された文書構造 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-file-alt fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>標準化された文書構造</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-question" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">何が起こったか？</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">顧客・ビジネス影響</span>は？</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">根本原因</span>は何か？</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">裏付けデータ</span>（メトリクス・グラフ）</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">学んだ教訓</span>は？</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-tasks" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">是正措置</span>は何か？</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-clipboard-list fa-lg" style="color: var(--ui-color-2);"></i>
+                        テンプレートで
+                        <br>
+                        <span class="keyword-tag">漏れなく記録</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 知識管理システム -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-brain fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>知識管理システム</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">教訓リポジトリ</span>の構築</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">検索可能</span>な知識ベース</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-share" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">組織横断</span>での知識共有</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">パターン分析</span>で予防策立案</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-5);"></i>
+                        知識は共有してこそ
+                        <br>
+                        <span class="keyword-tag">価値を生む</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- テスト改善 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-vial fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>テスト改善</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-question-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">既存テスト</span>で発見できなかった理由</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">新テストケース</span>の追加</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">テストカバレッジ</span>の拡充</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動テスト</span>への組み込み</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-microscope fa-lg" style="color: var(--ui-color-1);"></i>
+                        見つからなかった問題を
+                        <br>
+                        <span class="keyword-tag">次は必ず発見</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 継続的改善 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-sync-alt fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>継続的改善</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-feedback" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">フィードバック</span>に基づく改善</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">プロセス</span>の継続的見直し</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">効果測定</span>と改善サイクル</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">チーム学習</span>の促進</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-arrows-rotate fa-lg" style="color: var(--ui-color-2);"></i>
+                        改善に終わりなし
+                        <br>
+                        <span class="keyword-tag">常に進化</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>避けるべきアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-stop" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">表面的分析</span>での調査終了</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user-times" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">人的エラー</span>のみに焦点</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-gavel" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">責任追及</span>重視の文化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">知見共有</span>の不足</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">組織知識</span>の蓄積不足</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        これらを避けて
+                        <br>
+                        <span class="keyword-tag">真の学習</span>を！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

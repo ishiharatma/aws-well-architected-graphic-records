@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL07-BP01: リソースの取得やスケーリング時に自動化を使用する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-robot fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL07-BP01: リソースの取得やスケーリング時に自動化を使用する</h1>
+            <p class="header-description">
+                クラウドにおける信頼性の基盤は、インフラストラクチャとリソースのプログラム的な定義、プロビジョニング、管理です。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_adapt_to_changes_autoscale_adapt.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- リスクレベル -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-badge high">高リスク</div>
+                    <p>このベストプラクティスを確立しないと、手動エラーや遅延により、アプリケーションやワークロード要件の変化への対応が困難になります。</p>
+                </div>
+            </div>
+
+        <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Infrastructure as Code (IaC)</span>によるインフラ管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code-branch" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">バージョン管理システム（VCS）</span>でのインフラコード定義・維持</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span>自動化メカニズムへの<span class="keyword-tag">AWSリソースプロビジョニング</span>の委任</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ALB、NLB、Auto Scaling</span>などのマネージドサービス活用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">CI/CDパイプライン</span>によるリソースプロビジョニング</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        <span class="keyword-tag">IaC</span>により<br>
+                        一貫性と再現性を確保し、<br>
+                        手動エラーのリスクを削減！
+                    </span>
+                </div>
+            </div>
+
+        <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-mouse-pointer" aria-hidden="true"></i>
+                            <span>コマンドラインやAWSマネジメントコンソールでの手動リソースデプロイ（<span class="keyword-tag">click-ops</span>）</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-link" aria-hidden="true"></i>
+                            <span>アプリケーションコンポーネントやリソースの<span class="keyword-tag">密結合</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                            <span>ビジネス要件や新しいリソースタイプに適応しない<span class="keyword-tag">柔軟性のないスケーリングポリシー</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calculator" aria-hidden="true"></i>
+                            <span>予想される需要に対する<span class="keyword-tag">手動キャパシティ見積もり</span></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-code-branch" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Git</span>などのバージョン管理システムでIaCテンプレートを保存</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-aws" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS CloudFormation</span>でインフラコンポーネントを定義</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-pipeline" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS CodePipeline</span>またはサードパーティCI/CDソリューションとの統合</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Auto Scaling</span>の設定（EC2、ECS、データベースレプリカ）</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                            <span>テンプレートの<span class="keyword-tag">リント・検証</span>、ステージング環境へのデプロイ</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-info-circle fa-lg" style="color: var(--ui-color-1);"></i>
+                        自動化パイプラインにより<br>
+                        デプロイを高速化し、<br>
+                        環境間の<span class="keyword-tag">一貫性</span>を確保！
+                    </span>
+                </div>
+            </div>
+
+        <!-- 実装手順 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装手順</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-folder" aria-hidden="true"></i>
+                            <span><strong>1. ソースコードリポジトリの作成</strong> - インフラ設定コードを保存</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                            <span><strong>2. IaCソリューションの選択</strong> - AWS CloudFormationで一貫性を保持</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-link" aria-hidden="true"></i>
+                            <span><strong>3. CI/CDパイプラインとの統合</strong> - デプロイの自動化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><strong>4. 適切なメトリクスの決定・収集</strong> - 自動スケーリング用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-expand" aria-hidden="true"></i>
+                            <span><strong>5. 自動スケーリングの設定</strong> - スケールアウト・インポリシー</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span><strong>6. デプロイの監視</strong> - 障害検出とロールバック機能</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスを確立する利点</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-sync" aria-hidden="true"></i>
+                            <span>アプリケーション変更と同じ<span class="keyword-tag">ソフトウェア開発ライフサイクル</span>でインフラ変更を管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">一貫性と再現性</span>の促進、手動エラーリスクの削減</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                            <span>自動化デリバリーパイプラインによる<span class="keyword-tag">効率的なリソース更新</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">動的な自動リソーススケーリング</span>の実現</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-dollar-sign" aria-hidden="true"></i>
+                            <span>パフォーマンスと<span class="keyword-tag">コスト効率</span>の改善</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                            <span>レスポンシブで回復力のある<span class="keyword-tag">クラウドインフラ</span>の維持</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        <span class="keyword-tag">IaC + CI/CD + Auto Scaling</span><br>
+                        の組み合わせで<br>
+                        信頼性の高いインフラを実現！
+                    </span>
+                </div>
+            </div>
+
+        <!-- 関連ツール -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連ツールとサービス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS CloudFormation</span> - Infrastructure as Code</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-pipeline" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS CodePipeline</span> - CI/CDパイプライン</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Auto Scaling</span> - 自動スケーリング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon EC2 Auto Scaling</span> - EC2インスタンス自動スケーリング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Elastic Load Balancing</span> - 負荷分散</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">DynamoDB Auto Scaling</span> - データベース自動スケーリング</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>REL07に戻る</h3>
+                    <a href="REL07.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-expand-arrows-alt"></i> 需要の変化への適応
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

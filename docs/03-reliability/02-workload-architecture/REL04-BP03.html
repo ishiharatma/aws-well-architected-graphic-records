@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL04-BP03: 一定の作業を行う - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-clock fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL04-BP03: 一定の作業を行う</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_prevent_interaction_failure_constant_work.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">中リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+                            <span>負荷の急激な変化がシステム障害を引き起こす</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>一定作業により安定性を確保</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        大きく急激な変化は
+                        <br>
+                        システム安定性への
+                        <br>
+                        <span class="keyword-tag">脅威</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 一定作業の概念 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-equals fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>一定作業の概念</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span>負荷の<span class="keyword-tag">大きく急激な変化</span>でシステム障害</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">同じサイズのペイロード</span>を毎回送信</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-camera" aria-hidden="true"></i>
+                            <span>現在の状態の<span class="keyword-tag">完全なスナップショット</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>障害数に関係なく<span class="keyword-tag">一定の作業量</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-heartbeat fa-lg" style="color: var(--ui-color-2);"></i>
+                        ヘルスチェックシステムは
+                        <br>
+                        サーバー数に関係なく
+                        <br>
+                        <span class="keyword-tag">一定作業</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実例：ヘルスチェックシステム -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-heartbeat fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>実例：ヘルスチェックシステム</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">100,000台</span>のサーバーを監視</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line-down" aria-hidden="true"></i>
+                            <span>通常時は<span class="keyword-tag">軽い障害率</span>で負荷は軽微</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>大規模イベントで<span class="keyword-tag">半数が不健全</span>になった場合</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">12.5KB</span>のペイロード（100,000ビット）</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-route fa-lg" style="color: var(--ui-color-2);"></i>
+                        Amazon Route 53は
+                        <br>
+                        この方式でエンドポイントの
+                        <br>
+                        <span class="keyword-tag">ヘルスチェック</span>を実行
+                    </span>
+                </div>
+            </div>
+
+            <!-- 問題のあるアプローチ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>問題のあるアプローチ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>障害数に応じて<span class="keyword-tag">負荷が変動</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                            <span>通知システムの<span class="keyword-tag">更新処理</span>で圧迫</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span>クライアントへの<span class="keyword-tag">状態通信</span>で圧迫</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>大規模イベント時に<span class="keyword-tag">システム圧迫</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        障害が増えるほど
+                        <br>
+                        システム負荷が増加し
+                        <br>
+                        <span class="keyword-tag">圧迫される</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-1); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-equals" aria-hidden="true"></i>
+                            <span>負荷の大きく急激な変化でシステムが<span class="keyword-tag">失敗しない</span>よう一定作業</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-unlink" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">疎結合な依存関係</span>を実装</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span>成功・失敗数に関係なく<span class="keyword-tag">ペイロードサイズ一定</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>復旧力と<span class="keyword-tag">俊敏性向上</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-tools fa-lg" style="color: var(--ui-color-2);"></i>
+                        キューイング、ストリーミング、
+                        <br>
+                        ワークフロー、ロードバランサーは
+                        <br>
+                        <span class="keyword-tag">疎結合</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>利点</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">システム安定性</span>の向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>負荷変動に対する<span class="keyword-tag">予測可能性</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span>大きく急激な変化が<span class="keyword-tag">脅威にならない</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span>コンポーネントの動作<span class="keyword-tag">分離</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        サーバーが全て正常でも
+                        <br>
+                        全て障害でも
+                        <br>
+                        <span class="keyword-tag">一定作業</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Amazon Route 53の例 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-route fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 2s;" aria-hidden="true"></i>
+                    <h2>Amazon Route 53の実装</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                            <span>エンドポイント（IPアドレス）の<span class="keyword-tag">ヘルスチェック</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span>エンドユーザーの<span class="keyword-tag">ルーティング決定</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-equals" aria-hidden="true"></i>
+                            <span>障害状況に関係なく<span class="keyword-tag">一定の作業量</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-camera" aria-hidden="true"></i>
+                            <span>現在状態の<span class="keyword-tag">完全スナップショット</span>送信</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-aws fa-lg" style="color: var(--ui-color-2);"></i>
+                        AWSの実際の実装例として
+                        <br>
+                        Route 53が
+                        <br>
+                        <span class="keyword-tag">この方式を採用</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 AWS Well-Architected Framework グラフィックレコーディング</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL05 分散システムでの障害軽減・耐性設計 - ベストプラクティス一覧</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-shield-alt fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL05 分散システムでの障害軽減・耐性設計</h1>
+            <p class="header-description">
+                分散システムでストレスや障害に耐え、迅速に復旧し、影響を軽減してMTTR（平均復旧時間）を改善します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-interactions-in-a-distributed-system-to-mitigate-or-withstand-failures.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 統計情報 -->
+        <div class="stats-section">
+            <h2><i class="fa-solid fa-chart-bar"></i> REL05 統計情報</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">7</span>
+                    <span class="stat-label">ベストプラクティス</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">高リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">中リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">低リスク</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ベストプラクティス一覧 -->
+        <div class="bp-grid">
+            <a href="#" class="bp-card" style="opacity: 0.7;">
+                <div class="bp-header">
+                    <i class="fa-solid fa-level-down-alt bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL05-BP01</h3>
+                        <p class="bp-subtitle">グレースフルデグラデーションを実装する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    ハード依存関係をソフト依存関係に変換し、部分的な機能低下で全体の停止を防ぎます。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="#" class="bp-card" style="opacity: 0.7;">
+                <div class="bp-header">
+                    <i class="fa-solid fa-tachometer-alt bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL05-BP02</h3>
+                        <p class="bp-subtitle">リクエストをスロットルする</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    システムの処理能力を超えるリクエストを制限し、過負荷による障害を防止します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="#" class="bp-card" style="opacity: 0.7;">
+                <div class="bp-header">
+                    <i class="fa-solid fa-redo bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL05-BP03</h3>
+                        <p class="bp-subtitle">リトライ呼び出しを制御・制限する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    適切なリトライ戦略を実装し、過度なリトライによるシステム負荷を防止します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="#" class="bp-card" style="opacity: 0.7;">
+                <div class="bp-header">
+                    <i class="fa-solid fa-bolt bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL05-BP04</h3>
+                        <p class="bp-subtitle">フェイルファストとキュー制限</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    迅速な失敗とキューサイズ制限により、システムリソースの枯渇を防止します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+
+            <a href="#" class="bp-card" style="opacity: 0.7;">
+                <div class="bp-header">
+                    <i class="fa-solid fa-clock bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL05-BP05</h3>
+                        <p class="bp-subtitle">クライアントタイムアウトを設定する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    適切なタイムアウト値を設定し、応答しないサービスによるリソース枯渇を防止します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="#" class="bp-card" style="opacity: 0.7;">
+                <div class="bp-header">
+                    <i class="fa-solid fa-memory bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL05-BP06</h3>
+                        <p class="bp-subtitle">可能な限りシステムをステートレスにする</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    状態を持たない設計により、スケーラビリティと復旧性を向上させます。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+
+            <a href="#" class="bp-card" style="opacity: 0.7;">
+                <div class="bp-header">
+                    <i class="fa-solid fa-power-off bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL05-BP07</h3>
+                        <p class="bp-subtitle">緊急レバーを実装する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    緊急時に迅速にシステムを制御・停止できる仕組みを実装し、被害拡大を防止します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>信頼性の柱に戻る</h3>
+                    <a href="../03-reliability.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-shield-alt"></i> 信頼性の柱
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

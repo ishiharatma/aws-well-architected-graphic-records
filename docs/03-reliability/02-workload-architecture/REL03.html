@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL03 ワークロードアーキテクチャの設計 - ベストプラクティス一覧</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-sitemap fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL03 ワークロードアーキテクチャの設計</h1>
+            <p class="header-description">
+                信頼性の高いワークロードは事前設計から始まり、ソフトウェアとインフラのアーキテクチャ選択が重要です。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/workload-architecture.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 統計情報 -->
+        <div class="stats-section">
+            <h2><i class="fa-solid fa-chart-bar"></i> REL03 統計情報</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">ベストプラクティス</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">1</span>
+                    <span class="stat-label">高リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">2</span>
+                    <span class="stat-label">中リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">低リスク</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ベストプラクティス一覧 -->
+        <div class="bp-grid">
+            <a href="REL03-BP01.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-cubes bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL03-BP01</h3>
+                        <p class="bp-subtitle">ワークロードのセグメント化方法を選択する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    モノリシック、SOA、マイクロサービスアーキテクチャから適切な選択を行い、利益と複雑さのバランスを考慮します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="REL03-BP02.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-building bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL03-BP02</h3>
+                        <p class="bp-subtitle">特定のビジネスドメインと機能に焦点を当てたサービスを構築する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    ドメイン駆動設計を使用して境界コンテキストを定義し、ビジネス要件に最適化されたサービスを構築します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="REL03-BP03.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-file-contract bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL03-BP03</h3>
+                        <p class="bp-subtitle">API毎にサービス契約を提供する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    機械可読なAPI定義とバージョニング戦略により、サービス間の安定した統合を実現します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-circle"></i> 中リスク
+                </span>
+            </a>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>信頼性の柱に戻る</h3>
+                    <a href="../03-reliability.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-shield-alt"></i> 信頼性の柱
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL05-BP04: フェイルファストとキュー制限 - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-bolt fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL05-BP04: フェイルファストとキュー制限</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_fail_fast.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">中リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+                            <span>長いキューバックログが陳腐化リクエスト処理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>迅速な失敗でリソース解放とシステム復旧</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        サービスが正常応答できない時は
+                        <br>
+                        迅速に失敗して
+                        <br>
+                        <span class="keyword-tag">リソース解放</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- フェイルファストの概念 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-forward fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>フェイルファストの概念</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-memory" aria-hidden="true"></i>
+                            <span>リクエスト関連<span class="keyword-tag">リソースの解放</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-heart" aria-hidden="true"></i>
+                            <span>リソース不足時の<span class="keyword-tag">サービス復旧</span>許可</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                            <span>クラウドでの<span class="keyword-tag">高信頼性ワークロード</span>構築</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">迅速なシステム復旧</span>を可能にする</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-cogs fa-lg" style="color: var(--ui-color-2);"></i>
+                        確立されたソフトウェア
+                        <br>
+                        設計パターンを
+                        <br>
+                        <span class="keyword-tag">活用</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- キューイングの概念 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>キューイングの概念</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>負荷の<span class="keyword-tag">平滑化</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">非同期処理</span>許容時のクライアントリソース解放</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-buffer" aria-hidden="true"></i>
+                            <span>リクエスト率が高すぎる時の<span class="keyword-tag">バッファリング</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-trash-alt" aria-hidden="true"></i>
+                            <span>クライアントが諦めた<span class="keyword-tag">陳腐化リクエスト</span>処理回避</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        確立されたエンタープライズ
+                        <br>
+                        統合パターンで
+                        <br>
+                        <span class="keyword-tag">負荷平滑化</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>アンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-skull" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">デッドレターキュー</span>未設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>キュー内メッセージの<span class="keyword-tag">経過時間未測定</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sort-numeric-down" aria-hidden="true"></i>
+                            <span>LIFO適用すべき場面での<span class="keyword-tag">FIFO設定</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span>複数作業リクエストタイプの<span class="keyword-tag">単一キュー結合</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        内部キューをクライアントに
+                        <br>
+                        直接公開せず
+                        <br>
+                        <span class="keyword-tag">API経由で管理</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>利点</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">迅速なシステム復旧</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>トラフィックスパイクの<span class="keyword-tag">吸収</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>信頼性の<span class="keyword-tag">向上</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>クライアントの<span class="keyword-tag">迅速リクエスト解放</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        リソース競合、タイムアウト、
+                        <br>
+                        例外時にSLO達成不可能なら
+                        <br>
+                        <span class="keyword-tag">フェイルファスト</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 AWS Well-Architected Framework グラフィックレコーディング</p>
+    </footer>
+</body>
+</html>

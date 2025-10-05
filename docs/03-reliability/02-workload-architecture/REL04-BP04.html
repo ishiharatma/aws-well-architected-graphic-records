@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL04-BP04: 変更操作を冪等にする - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-redo fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL04-BP04: 変更操作を冪等にする</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_prevent_interaction_failure_idempotent.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">中リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+                            <span>重複処理により意図しない副作用が発生</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-copy" aria-hidden="true"></i>
+                            <span>重複レコードや不整合状態を防ぐ</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        同じリクエストを複数回実行しても
+                        <br>
+                        単一リクエストと
+                        <br>
+                        <span class="keyword-tag">同じ効果</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 冪等性の概念 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-equals fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>冪等性の概念</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                            <span>各リクエストが<span class="keyword-tag">正確に一度</span>処理される保証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-copy" aria-hidden="true"></i>
+                            <span>複数の同一リクエストが<span class="keyword-tag">単一リクエスト</span>と同じ効果</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-key" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">冪等性トークン</span>でAPIリクエスト発行</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-redo" aria-hidden="true"></i>
+                            <span>クライアントが恐れることなく<span class="keyword-tag">リトライ実装</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-shield-alt fa-lg" style="color: var(--ui-color-2);"></i>
+                        冪等サービスAPIは
+                        <br>
+                        システム状態が変化しても
+                        <br>
+                        <span class="keyword-tag">同一応答</span>を返す
+                    </span>
+                </div>
+            </div>
+
+            <!-- 分散システムでの課題 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-network-wired fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>分散システムでの課題</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">最大一回</span>: クライアントが一回のみリクエスト（簡単）</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">最低一回</span>: 成功確認まで継続リクエスト（簡単）</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-equals" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">正確に一回</span>: 複数同一リクエストが単一と同効果（困難）</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-key" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">冪等性トークン</span>で重複レコード・副作用なし</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        分散システムでは
+                        <br>
+                        「正確に一回」の実装が
+                        <br>
+                        <span class="keyword-tag">最も困難</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-check-double" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">一貫性のある</span>冪等性アプローチ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">十分に文書化</span>された手法</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span>全コンポーネント・サービスで<span class="keyword-tag">広く採用</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+                            <span>すべてのコンポーネントとサービスで<span class="keyword-tag">冪等性確保</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-handshake fa-lg" style="color: var(--ui-color-2);"></i>
+                        クライアントとサーバー間の
+                        <br>
+                        契約を簡素化し
+                        <br>
+                        <span class="keyword-tag">恐れを軽減</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>アンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-random" aria-hidden="true"></i>
+                            <span>不要な場合でも<span class="keyword-tag">無差別に冪等性適用</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>冪等性キーとして<span class="keyword-tag">タイムスタンプ使用</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span>冪等性のために<span class="keyword-tag">ペイロード全体保存</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-key" aria-hidden="true"></i>
+                            <span>サービス間での<span class="keyword-tag">キー生成不整合</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        過度に複雑な
+                        <br>
+                        冪等性実装ロジックは
+                        <br>
+                        <span class="keyword-tag">避ける</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">冪等操作の特定</span>: POST、PUT、DELETE</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-fingerprint" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">一意識別子使用</span>: UUID、KSUID</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">状態追跡・管理</span>: トークンと状態を永続化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">冪等操作実装</span>: 重複チェックと応答</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-vial fa-lg" style="color: var(--ui-color-2);"></i>
+                        包括的なテストスイートで
+                        <br>
+                        冪等性を
+                        <br>
+                        <span class="keyword-tag">検証</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- AWSストレージオプション -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cloud fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 2s;" aria-hidden="true"></i>
+                    <h2>AWSストレージオプション</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-table" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon DynamoDB</span>: 低レイテンシ、高可用性NoSQL</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-memory" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon ElastiCache</span>: 高スループット、低レイテンシ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon RDS</span>: リレーショナルデータベース</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-archive" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon S3</span>: 高スケーラブル、耐久性オブジェクトストレージ</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-clock fa-lg" style="color: var(--ui-color-2);"></i>
+                        DynamoDBとElastiCacheは
+                        <br>
+                        TTL値で自動的に
+                        <br>
+                        <span class="keyword-tag">トークン期限切れ</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>利点</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
+                            <span>より高い<span class="keyword-tag">スケーラビリティ</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>強化された<span class="keyword-tag">信頼性</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span>改善された<span class="keyword-tag">データ整合性</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span>運用の<span class="keyword-tag">透明性</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        エラーハンドリングが
+                        <br>
+                        より簡単になり
+                        <br>
+                        <span class="keyword-tag">安全にリトライ</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 AWS Well-Architected Framework グラフィックレコーディング</p>
+    </footer>
+</body>
+</html>

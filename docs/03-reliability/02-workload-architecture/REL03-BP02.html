@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL03-BP02: 特定のビジネスドメインと機能に焦点を当てたサービスを構築する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-building fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL03-BP02: 特定のビジネスドメインと機能に焦点を当てたサービスを構築する</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_service_architecture_business_domains.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">高リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+                            <span>ドメイン境界が不明確だと保守性が低下</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chain" aria-hidden="true"></i>
+                            <span>複数ドメインにまたがるサービスは複雑化</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        ビジネスドメインに基づく
+                        <br>
+                        明確な境界設定が重要！
+                        <br>
+                        <span class="keyword-tag">保守性向上</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                            <span>エンジニアとビジネス関係者が<span class="keyword-tag">共同定義</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-border-all" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">境界コンテキスト</span>を使用したシステム設計</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+                            <span>明確な境界と<span class="keyword-tag">疎結合</span>な新アプリケーション</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-recycle" aria-hidden="true"></i>
+                            <span>モノリスの<span class="keyword-tag">境界コンテキスト</span>への分解</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-users fa-lg" style="color: var(--ui-color-2);"></i>
+                        イベントストーミングで
+                        <br>
+                        要件を定義し
+                        <br>
+                        <span class="keyword-tag">共通理解</span>を構築
+                    </span>
+                </div>
+            </div>
+
+            <!-- ドメイン駆動設計 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-project-diagram fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>ドメイン駆動設計（DDD）</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-sticky-note" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">イベントストーミング</span>でドメイン識別</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-border-all" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">境界コンテキスト</span>でサービス境界を定義</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-language" aria-hidden="true"></i>
+                            <span>共通の<span class="keyword-tag">ドメイン言語</span>を使用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">腐敗防止層</span>で外部影響から保護</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        Amazon.comの例：
+                        <br>
+                        配送コンテキスト vs 価格コンテキスト
+                        <br>
+                        <span class="keyword-tag">明確な分離</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装アプローチ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-1); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>実装アプローチ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-vial" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">TDD/BDD</span>でビジネスルールをテスト</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Serverless</span>でドメインロジックに集中</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cube" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Containers at AWS</span>でインフラ管理簡素化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">目的別データベース</span>でドメイン要件に最適化</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-hexagon fa-lg" style="color: var(--ui-color-2);"></i>
+                        ヘキサゴナルアーキテクチャで
+                        <br>
+                        ビジネスロジックと
+                        <br>
+                        <span class="keyword-tag">インターフェース分離</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>アンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">技術ドメイン</span>中心のチーム編成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
+                            <span>複数ドメインに<span class="keyword-tag">またがる</span>アプリケーション</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-share-alt" aria-hidden="true"></i>
+                            <span>サービス間での<span class="keyword-tag">ドメイン依存関係</span>共有</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-language" aria-hidden="true"></i>
+                            <span>一貫性のない<span class="keyword-tag">ドメイン言語</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        UI/UX、ミドルウェア、
+                        <br>
+                        データベース中心の
+                        <br>
+                        <span class="keyword-tag">チーム編成は避ける</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>利点</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">独立した</span>サービス設計</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-vial" aria-hidden="true"></i>
+                            <span>独立した<span class="keyword-tag">テスト可能性</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                            <span>独立した<span class="keyword-tag">デプロイ可能性</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>ドメイン固有の<span class="keyword-tag">復旧要件</span>対応</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-language fa-lg" style="color: var(--ui-color-2);"></i>
+                        共通のビジネス言語で
+                        <br>
+                        ビジネスドメインに
+                        <br>
+                        <span class="keyword-tag">境界設定</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 分解パターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-puzzle-piece fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 2s;" aria-hidden="true"></i>
+                    <h2>分解パターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-briefcase" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ビジネス機能</span>による分解</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sitemap" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">サブドメイン</span>による分解</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exchange-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">トランザクション</span>による分解</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">バブルコンテキスト</span>で段階的導入</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-tools fa-lg" style="color: var(--ui-color-2);"></i>
+                        レガシーシステムでも
+                        <br>
+                        事前書き換えなしで
+                        <br>
+                        <span class="keyword-tag">DDD導入可能</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- ドメイン特性 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-atom fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>ドメイン指向サービス特性</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-memory" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">状態を共有しない</span>プロセス実行</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>需要変動に<span class="keyword-tag">独立対応</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>ドメイン固有要件での<span class="keyword-tag">障害処理</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span>ビジネスロジックと<span class="keyword-tag">インターフェース分離</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        ドメイン機能に集中し
+                        <br>
+                        ソフトウェア品質を
+                        <br>
+                        <span class="keyword-tag">向上</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 AWS Well-Architected Framework グラフィックレコーディング</p>
+    </footer>
+</body>
+</html>

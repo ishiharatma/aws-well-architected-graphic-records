@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL08-BP03: デプロイの一部として復旧力テストを統合する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-shield-alt fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL08-BP03: デプロイの一部として復旧力テストを統合する</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_tracking_change_management_resiliency_testing.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">中リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
+                            <span>未知の問題が本番で気づかれずダウンタイムを招く</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user" aria-hidden="true"></i>
+                            <span>人的解決への依存は障害対応を遅延</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        意図的に障害を導入して
+                        <br>
+                        <span class="keyword-tag">破壊的シナリオ</span>での
+                        <br>
+                        システム能力を測定！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 期待される成果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>期待される成果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>本番での劣化に耐える<span class="keyword-tag">システム能力</span>への信頼構築</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>障害につながる<span class="keyword-tag">弱点の特定</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span>障害と劣化の<span class="keyword-tag">自動的・効率的軽減</span>の改善</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ゲームデイ</span>の一環として本番実装を目標</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-business-time fa-lg" style="color: var(--ui-color-2);"></i>
+                        復旧力テストは
+                        <br>
+                        <span class="keyword-tag">予期しない障害</span>の
+                        <br>
+                        特定に焦点！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 一般的なアンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>一般的なアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
+                            <span>デプロイプロセスでの<span class="keyword-tag">可観測性・監視不足</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user-cog" aria-hidden="true"></i>
+                            <span>システム障害解決の<span class="keyword-tag">人的依存</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">品質分析メカニズム</span>の不備</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>既知問題への集中と<span class="keyword-tag">未知発見実験</span>の欠如</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span>発見とランブックの<span class="keyword-tag">文書化不備</span></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 復旧力テストの種類 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>復旧力テストの種類</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-life-ring" aria-hidden="true"></i>
+                            <span><strong>災害復旧テスト</strong>：<span class="keyword-tag">DR計画とSOP</span>の更新・検証</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-random" aria-hidden="true"></i>
+                            <span><strong>カオスエンジニアリング</strong>：<span class="keyword-tag">制御された障害</span>の導入</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                            <span>ネットワーク停止や<span class="keyword-tag">サービス障害</span>のシミュレーション</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Resilience Hub</span>による継続的復旧力評価</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-info-circle fa-lg" style="color: var(--ui-color-1);"></i>
+                        プレプロダクションから開始し、
+                        <br>
+                        最終的に<span class="keyword-tag">本番環境</span>での
+                        <br>
+                        実装を目標に！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span>重要なデプロイでの<span class="keyword-tag">DR計画・SOP更新</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-pipeline" aria-hidden="true"></i>
+                            <span>自動デプロイパイプラインへの<span class="keyword-tag">信頼性テスト統合</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-aws" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Resilience Hub</span>でのアプリケーション定義</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-vial" aria-hidden="true"></i>
+                            <span>DR計画・SOP更新後の<span class="keyword-tag">災害復旧テスト</span>実行</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Fault Injection Service</span>での制御された障害シミュレーション</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 災害復旧戦略 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-life-ring fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>災害復旧戦略</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-save" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">バックアップ・復元</span> - 最もコスト効率的</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">パイロットライト</span> - 最小限のリソースで待機</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-snowflake" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">コールドスタンバイ</span> - 停止状態で待機</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-thermometer-half" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ウォームスタンバイ</span> - 縮小規模で稼働</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-fire" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ホットスタンバイ</span> - フル規模で待機</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">アクティブ-アクティブ</span> - 最高の可用性</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>このベストプラクティスを確立する利点</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>気づかれない<span class="keyword-tag">未知の問題</span>の特定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>本番での<span class="keyword-tag">ダウンタイム防止</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span>発見の<span class="keyword-tag">文書化</span>とCI/CDプロセスへの統合</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-book" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ランブック構築</span>による効率的・反復可能な軽減</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        復旧力テストにより
+                        <br>
+                        <span class="keyword-tag">システムの脆弱性</span>を
+                        <br>
+                        事前発見・改善！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 関連ツール -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>関連ツールとサービス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Resilience Hub</span> - 復旧力評価・管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Fault Injection Service</span> - カオスエンジニアリング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-life-ring" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Elastic Disaster Recovery</span> - 災害復旧</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS Systems Manager</span> - 復旧手順文書</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon CloudWatch</span> - 監視・アラーム</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+            <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>REL08に戻る</h3>
+                    <a href="REL08.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-cogs"></i> 変更の実装
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

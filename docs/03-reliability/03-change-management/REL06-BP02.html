@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL06-BP02: メトリクスを定義・計算する（集約） - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-calculator fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL06-BP02: メトリクスを定義・計算する（集約）</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_notification_aggregation.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">高リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+                            <span>適切な集約なしでは異常検出が困難</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+                            <span>コンポーネント間の相関関係が不明</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        メトリクス集約で
+                        <br>
+                        ワークロード全体の
+                        <br>
+                        <span class="keyword-tag">包括的理解</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">中央集約</span>されたログとメトリクス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">高精度タイムスタンプ</span>付きログ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-fingerprint" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">トレース識別子</span>、ユーザーID、IPアドレス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>ワークロード動作を表す<span class="keyword-tag">集約メトリクス</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-search fa-lg" style="color: var(--ui-color-2);"></i>
+                        集約ログのクエリで
+                        <br>
+                        深い洞察と
+                        <br>
+                        <span class="keyword-tag">問題識別</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 可観測性の概念 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-eye fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>可観測性の概念</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span>メトリクス収集以上の<span class="keyword-tag">包括的理解</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+                            <span>すべてのコンポーネントからの<span class="keyword-tag">行動情報</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                            <span>依存する<span class="keyword-tag">クラウドサービス</span>を含む</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-microscope" aria-hidden="true"></i>
+                            <span>細かいレベルでの<span class="keyword-tag">相互作用理解</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        ワークロード全体の動作と
+                        <br>
+                        各コンポーネントの
+                        <br>
+                        <span class="keyword-tag">詳細把握</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- テレメトリデータソース -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-satellite-dish fa-5x" style="color: var(--ui-color-1); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>テレメトリデータソース</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-desktop" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">オペレーティングシステム</span>メトリクス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-coffee" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">アプリケーションランタイム</span>（Java等）</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">アプリケーションログ</span>とクラウドサービスログ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Webサーバーログ</span>: リクエスト詳細情報</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-info-circle fa-lg" style="color: var(--ui-color-2);"></i>
+                        タイムスタンプ、レイテンシ、
+                        <br>
+                        ユーザーID、パス、
+                        <br>
+                        <span class="keyword-tag">クエリ文字列</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>アンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span>コンピュートインスタンスからの<span class="keyword-tag">ログ未収集</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>ビジネス<span class="keyword-tag">KPI関連</span>ログ・メトリクス見落とし</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-island-tropical" aria-hidden="true"></i>
+                            <span>テレメトリの<span class="keyword-tag">孤立分析</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-hourglass-end" aria-hidden="true"></i>
+                            <span>メトリクス・ログの<span class="keyword-tag">早期期限切れ</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        集約と相関なしでは
+                        <br>
+                        ワークロード関連テレメトリの
+                        <br>
+                        <span class="keyword-tag">分析が困難</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>利点</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search-plus" aria-hidden="true"></i>
+                            <span>より多くの<span class="keyword-tag">異常検出</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-link" aria-hidden="true"></i>
+                            <span>コンポーネント間の<span class="keyword-tag">イベント・メトリクス相関</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+                            <span>メトリクス単体では得られない<span class="keyword-tag">洞察創出</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-tachometer-alt" aria-hidden="true"></i>
+                            <span>大規模ログクエリによる<span class="keyword-tag">迅速原因特定</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-chart-line fa-lg" style="color: var(--ui-color-2);"></i>
+                        トレンド分析と
+                        <br>
+                        繰り返し問題の
+                        <br>
+                        <span class="keyword-tag">識別向上</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 AWS Well-Architected Framework グラフィックレコーディング</p>
+    </footer>
+</body>
+</html>

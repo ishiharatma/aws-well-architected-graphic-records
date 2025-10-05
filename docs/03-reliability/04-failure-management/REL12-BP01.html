@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL12-BP01: プレイブックを使用して障害を調査する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-book-open fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL12-BP01: プレイブックを使用して障害を調査する</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/rel_testing_resiliency_playbook_resiliency.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">高リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-question-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">調査プロセス</span>の未定義</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">対応遅延</span>による影響拡大</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user-times" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">人的エラー</span>による調査ミス</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        事前準備が
+                        <br>
+                        <span class="keyword-tag">迅速対応</span>の鍵！
+                    </span>
+                </div>
+            </div>
+
+            <!-- プレイブックとは -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-scroll fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>プレイブックとは</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-list-ol" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">事前定義</span>された調査手順書</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">障害要因</span>特定のためのステップ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrows-turn-right" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">結果に基づく</span>次ステップ決定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-fire-extinguisher" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">インシデント対応</span>の標準化</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-map fa-lg" style="color: var(--ui-color-2);"></i>
+                        迷子にならない
+                        <br>
+                        <span class="keyword-tag">道しるべ</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- プレイブック vs ランブック -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-balance-scale fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>プレイブック vs ランブック</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-book-open" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">プレイブック</span>: 特定インシデントへの対応</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-book" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ランブック</span>: 特定結果を達成する手順</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-times" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">プレイブック</span>: 非定型イベント用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ランブック</span>: 定型活動用</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-theater-masks fa-lg" style="color: var(--ui-color-5);"></i>
+                        緊急時と日常の
+                        <br>
+                        <span class="keyword-tag">使い分け</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- プレイブック作成要素 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-puzzle-piece fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>プレイブック作成要素</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">情報収集</span>手順の明確化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">障害源特定</span>のガイダンス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cut" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">障害分離</span>の手法</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">要因分析</span>のプロセス</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-toolbox fa-lg" style="color: var(--ui-color-1);"></i>
+                        調査に必要な
+                        <br>
+                        <span class="keyword-tag">全ての道具</span>を準備！
+                    </span>
+                </div>
+            </div>
+
+            <!-- コード化の重要性 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-code fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>プレイブックのコード化</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動化</span>で一貫性確保</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">手動エラー</span>の削減</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">対応時間</span>の短縮</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-copy" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">再現可能</span>な調査プロセス</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magic fa-lg" style="color: var(--ui-color-2);"></i>
+                        コードにすれば
+                        <br>
+                        <span class="keyword-tag">魔法のように</span>正確！
+                    </span>
+                </div>
+            </div>
+
+            <!-- AWS Systems Manager活用 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cogs fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>AWS Systems Manager活用</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-play" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Run Command</span>でリモート実行</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Automation</span>でワークフロー自動化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lambda" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Lambda</span>でカスタムロジック</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">EventBridge</span>でイベント駆動</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-wrench fa-lg" style="color: var(--ui-color-5);"></i>
+                        AWSの道具で
+                        <br>
+                        <span class="keyword-tag">プロ級の自動化</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- プレイブック更新プロセス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-sync-alt fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>プレイブック更新プロセス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-fire-extinguisher" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">まず消火</span>: 問題の即座対応</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">振り返り</span>: 対応手順の分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">追加</span>: 新エントリの作成</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">継続改善</span>: プレイブックの進化</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-seedling fa-lg" style="color: var(--ui-color-1);"></i>
+                        経験を糧に
+                        <br>
+                        <span class="keyword-tag">成長し続ける</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- データ保持戦略 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-database fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>データ保持戦略</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">メトリクス</span>の長期保存</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-file-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ログ</span>の適切な保持期間</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calendar-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">イベント履歴</span>の管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">調査時</span>のデータ可用性確保</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-hourglass fa-lg" style="color: var(--ui-color-2);"></i>
+                        過去のデータが
+                        <br>
+                        <span class="keyword-tag">未来を救う</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>避けるべきアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-question" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">診断プロセス</span>未定義でのデプロイ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-random" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">場当たり的</span>なログ・メトリクス収集</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">データ保持期間</span>不足</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-hand-paper" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">手動プロセス</span>への過度な依存</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        これらを避けて
+                        <br>
+                        <span class="keyword-tag">確実な調査</span>を！
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

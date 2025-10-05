@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL05-BP02: リクエストをスロットルする - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-tachometer-alt fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL05-BP02: リクエストをスロットルする</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_throttle_requests.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">高リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+                            <span>予期しない需要増加によるリソース枯渇</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>大量スパイクからシステムを保護</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        スロットル制限以下は処理
+                        <br>
+                        制限超過は拒否して
+                        <br>
+                        <span class="keyword-tag">メッセージ返却</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 望ましい結果 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-target fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>望ましい結果</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span>突然の<span class="keyword-tag">顧客トラフィック増加</span>への対応</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">フラッディング攻撃</span>の軽減</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-redo" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">リトライストーム</span>の軽減</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span>サポートされるリクエスト量の<span class="keyword-tag">通常処理継続</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-chart-line fa-lg" style="color: var(--ui-color-2);"></i>
+                        大量スパイクを軽減し
+                        <br>
+                        ワークロードの
+                        <br>
+                        <span class="keyword-tag">通常処理継続</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- トークンバケットアルゴリズム -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bucket fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>トークンバケットアルゴリズム</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-coins" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">トークン</span>がリクエストをカウント</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>毎秒<span class="keyword-tag">スロットル率</span>でトークン補充</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-minus-circle" aria-hidden="true"></i>
+                            <span>リクエスト毎に<span class="keyword-tag">非同期で1トークン</span>消費</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span>既知の<span class="keyword-tag">処理能力</span>に基づく設計</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        リクエスト到着率が
+                        <br>
+                        制限を超えた場合
+                        <br>
+                        <span class="keyword-tag">スロットル信号</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- AWSサービス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cloud fa-5x" style="color: var(--ui-color-1); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>AWSサービス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-gateway" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon API Gateway</span>: トークンバケット実装</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-queue" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon SQS</span>: リクエストバッファリング</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-stream" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon Kinesis</span>: リクエスト率平滑化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">AWS WAF</span>: IPアドレス別レート制限</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-tools fa-lg" style="color: var(--ui-color-2);"></i>
+                        API Gatewayは使用プランで
+                        <br>
+                        クライアント毎に
+                        <br>
+                        <span class="keyword-tag">設定可能</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-ban fa-5x" style="color: var(--ui-color-5); animation: fa-shake 2s;" aria-hidden="true"></i>
+                    <h2>アンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
+                            <span>APIエンドポイントスロットルの<span class="keyword-tag">未実装・デフォルト値</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-vial" aria-hidden="true"></i>
+                            <span>APIエンドポイントの<span class="keyword-tag">負荷テスト未実施</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-weight" aria-hidden="true"></i>
+                            <span>リクエストサイズや複雑さを<span class="keyword-tag">考慮しない</span>スロットル</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span>A2A APIコンシューマーの<span class="keyword-tag">使用プラン未設定</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        最大リクエスト率と
+                        <br>
+                        最大リクエストサイズを
+                        <br>
+                        <span class="keyword-tag">同時テストしない</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップ -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-pulse 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-gateway" aria-hidden="true"></i>
+                            <span>API Gatewayで<span class="keyword-tag">スロットル制限設定</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                            <span>制限超過時に<span class="keyword-tag">429 Too Many Requests</span>エラー</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>AWS WAFで<span class="keyword-tag">IPアドレス別</span>レート制限</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lambda" aria-hidden="true"></i>
+                            <span>Lambda SQSイベントソースで<span class="keyword-tag">最大同時実行数設定</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-clock fa-lg" style="color: var(--ui-color-2);"></i>
+                        非同期処理可能な場合は
+                        <br>
+                        キューやストリームで
+                        <br>
+                        <span class="keyword-tag">応答高速化</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- 利点 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-thumbs-up fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>利点</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>予期しない量スパイクでの<span class="keyword-tag">通常運用継続</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                            <span>受け入れられたリクエスト負荷の<span class="keyword-tag">成功処理</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                            <span>APIとキューへの急激・持続スパイクの<span class="keyword-tag">スロットル</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span>個別リクエスタの<span class="keyword-tag">レート制限</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        単一IPやAPIコンシューマーの
+                        <br>
+                        大量トラフィックが他に
+                        <br>
+                        <span class="keyword-tag">影響しない</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 AWS Well-Architected Framework グラフィックレコーディング</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL11-BP01: ワークロードのすべてのコンポーネントを監視して障害を検出する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-heartbeat fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL11-BP01: ワークロードのすべてのコンポーネントを監視して障害を検出する</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/rel_withstand_component_failures_monitoring_health.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">高リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
+                            <span>障害の<span class="keyword-tag">検出遅延</span>が復旧時間に直結</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">MTTD</span>（平均検出時間）の増大</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bell-slash" aria-hidden="true"></i>
+                            <span>通知なしでの<span class="keyword-tag">サイレント障害</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        早期発見が
+                        <br>
+                        <span class="keyword-tag">迅速復旧</span>の鍵！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 監視戦略 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-radar fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>包括的監視戦略</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">全レイヤー</span>の監視（アプリ・プラットフォーム・インフラ・ネットワーク）</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">KPI</span>（重要業績指標）の継続監視</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-stopwatch" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">RTO</span>に基づく監視間隔の設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user-check" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ユーザー体験</span>メトリクスの測定</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-telescope fa-lg" style="color: var(--ui-color-2);"></i>
+                        見えないものは
+                        <br>
+                        <span class="keyword-tag">管理できない</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- 詳細監視設定 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-microscope fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>詳細監視設定</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">EC2詳細監視</span>: 1分間隔メトリクス</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">RDS拡張監視</span>: プロセス・スレッド情報</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lambda" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Lambda監視</span>: 実行時間・エラー率</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ロードバランサー</span>: レスポンス時間・ヘルスチェック</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-magnifying-glass fa-lg" style="color: var(--ui-color-5);"></i>
+                        詳細が見えれば
+                        <br>
+                        <span class="keyword-tag">問題も見える</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- ビジネスKPI監視 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-chart-pie fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>ビジネスKPI監視</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-shopping-cart" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">注文完了率</span>・取引成功率</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ユーザー満足度</span>・離脱率</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-dollar-sign" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">収益影響</span>・コンバージョン率</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-gauge" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">カスタムメトリクス</span>でビジネス価値を測定</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-target fa-lg" style="color: var(--ui-color-1);"></i>
+                        技術指標だけでなく
+                        <br>
+                        <span class="keyword-tag">ビジネス価値</span>も監視！
+                    </span>
+                </div>
+            </div>
+
+            <!-- グレー障害対策 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cloud-rain fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>グレー障害対策</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-question-circle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">部分的障害</span>の検出と対応</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-percentage" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">成功率低下</span>の早期発見</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">レイテンシ増加</span>パターンの監視</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ネットワーク品質</span>の継続監視</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-eye fa-lg" style="color: var(--ui-color-2);"></i>
+                        完全に壊れていない
+                        <br>
+                        <span class="keyword-tag">微妙な障害</span>も見逃さない！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アラート設定 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-bell fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>効果的なアラート設定</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">適切な閾値</span>で反応時間を確保</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">段階的アラート</span>（警告→重要→緊急）</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-filter" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ノイズ削減</span>で重要アラートに集中</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">自動対応</span>可能なアラートの設定</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-volume-up fa-lg" style="color: var(--ui-color-5);"></i>
+                        適切なタイミングで
+                        <br>
+                        <span class="keyword-tag">適切な人</span>に通知！
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>避けるべきアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-bell-slash" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">アラーム未設定</span>での運用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-hourglass-end" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">不適切な閾値</span>での遅延検出</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">表面的監視</span>のみの実装</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">技術指標</span>のみでビジネス指標なし</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">過剰監視</span>によるアラート疲れ</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        これらを避けて
+                        <br>
+                        <span class="keyword-tag">効果的な監視</span>を！
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>REL11に戻る</h3>
+                    <a href="REL11.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-shield-alt"></i> コンポーネント障害への耐性設計 
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL10-BP03: バルクヘッドアーキテクチャを使用して影響範囲を制限する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <h1><i class="fa-solid fa-shield-halved fa-6x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i> REL10-BP03: バルクヘッドアーキテクチャを使用して影響範囲を制限する</h1>
+                <p class="header-description">
+                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                    <a href="https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/rel_fault_isolation_use_bulkhead.html" target="_blank">
+                        公式ドキュメント
+                    </a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">高リスク</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-virus" aria-hidden="true"></i>
+                            <span>障害が全体に波及する可能性</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code-branch" aria-hidden="true"></i>
+                            <span>不正なデプロイメントの影響拡大</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bug" aria-hidden="true"></i>
+                            <span>ポイズンピルリクエストの影響</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        バルクヘッドがないと、
+                        <br>
+                        一つの障害が全体に
+                        <br>
+                        <span class="keyword-tag">波及</span>してしまう！
+                    </span>
+                </div>
+            </div>
+
+            <!-- セルベースアーキテクチャの概念 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cubes fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>セルベースアーキテクチャ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-cube" aria-hidden="true"></i>
+                            <span>ワークロードを<span class="keyword-tag">独立したセル</span>に分割</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                            <span>セル間で<span class="keyword-tag">状態を共有しない</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-route" aria-hidden="true"></i>
+                            <span>各セルがリクエストの<span class="keyword-tag">サブセット</span>を処理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-percentage" aria-hidden="true"></i>
+                            <span>10セル構成なら障害影響は<span class="keyword-tag">10%</span>に限定</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-ship fa-lg" style="color: var(--ui-color-2);"></i>
+                        船の隔壁と同じ原理！
+                        <br>
+                        一つの区画が浸水しても
+                        <br>
+                        <span class="keyword-tag">他は安全</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- パーティションキーの設計 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-key fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>パーティションキー設計</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-user" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">顧客ID</span>や<span class="keyword-tag">リソースID</span>を使用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-grain" aria-hidden="true"></i>
+                            <span>サービスの<span class="keyword-tag">粒度</span>に合わせる</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrows-cross" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">セル間相互作用</span>を最小化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>すべてのリクエストで<span class="keyword-tag">利用可能</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-puzzle-piece fa-lg" style="color: var(--ui-color-5);"></i>
+                        適切なキー選択が
+                        <br>
+                        <span class="keyword-tag">成功の鍵</span>！
+                    </span>
+                </div>
+            </div>
+
+            <!-- ルーターレイヤー -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-route fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>ルーターレイヤー</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+                            <span>セル間で<span class="keyword-tag">共有される</span>コンポーネント</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-calculator" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ハッシュ関数</span>でセルを決定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-feather" aria-hidden="true"></i>
+                            <span>可能な限り<span class="keyword-tag">シンプル</span>に保つ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                            <span>複雑な<span class="keyword-tag">ビジネスロジック</span>は避ける</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-traffic-light fa-lg" style="color: var(--ui-color-1);"></i>
+                        交通整理の役割！
+                        <br>
+                        <span class="keyword-tag">シンプル</span>が一番
+                    </span>
+                </div>
+            </div>
+
+            <!-- セルサイズ管理 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-ruler-combined fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>セルサイズ管理</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-limit" aria-hidden="true"></i>
+                            <span>セルの<span class="keyword-tag">最大サイズ</span>を設定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-vial" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">負荷テスト</span>で限界を特定</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                            <span>スケールは<span class="keyword-tag">セル追加</span>で対応</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">安全マージン</span>を確保</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-balance-scale fa-lg" style="color: var(--ui-color-2);"></i>
+                        適切なサイズ設定で
+                        <br>
+                        <span class="keyword-tag">安定運用</span>を実現！
+                    </span>
+                </div>
+            </div>
+
+            <!-- デプロイメント戦略 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-rocket fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>段階的デプロイメント</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-stairs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">段階的</span>なコードデプロイ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                            <span>全セル<span class="keyword-tag">同時更新</span>は避ける</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bug" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">不正デプロイ</span>の影響を最小化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">人的エラー</span>のリスク軽減</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-clock fa-lg" style="color: var(--ui-color-5);"></i>
+                        急がば回れ！
+                        <br>
+                        <span class="keyword-tag">安全第一</span>のデプロイ
+                    </span>
+                </div>
+            </div>
+
+            <!-- 多層防御戦略 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-layer-group fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>多層防御戦略</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-building" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">マルチAZ</span>で高可用性</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">マルチリージョン</span>で災害対策</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>複数の<span class="keyword-tag">防御層</span>を構築</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-balance-scale" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">複雑性</span>とのバランス</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-castle fa-lg" style="color: var(--ui-color-1);"></i>
+                        城の多重防御と同じ！
+                        <br>
+                        <span class="keyword-tag">層を重ねて</span>守る
+                    </span>
+                </div>
+            </div>
+
+            <!-- アンチパターン -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-times-circle fa-5x" style="color: var(--ui-color-5); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>避けるべきアンチパターン</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
+                            <span>セルの<span class="keyword-tag">無制限拡張</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                            <span>全セル<span class="keyword-tag">同時更新</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-share" aria-hidden="true"></i>
+                            <span>セル間での<span class="keyword-tag">状態共有</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span>ルーターの<span class="keyword-tag">複雑化</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-arrows-cross" aria-hidden="true"></i>
+                            <span>過度な<span class="keyword-tag">セル間相互作用</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-exclamation-triangle fa-lg" style="color: var(--ui-color-5);"></i>
+                        これらを避けることで
+                        <br>
+                        <span class="keyword-tag">真の隔離</span>を実現！
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>REL10に戻る</h3>
+                    <a href="REL10.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-shield-alt"></i> 障害分離の活用
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

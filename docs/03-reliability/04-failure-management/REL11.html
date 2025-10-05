@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL11 コンポーネント障害への耐性設計 - ベストプラクティス一覧</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+        
+        .bp-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .bp-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .bp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .bp-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .bp-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+            color: var(--ui-color-1);
+        }
+        
+        .bp-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--ui-color-4);
+            margin: 0;
+        }
+        
+        .bp-description {
+            color: #666;
+            line-height: 1.5;
+            margin: 10px 0;
+        }
+        
+        .risk-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .risk-high {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        
+        .risk-medium {
+            background-color: #fff3e0;
+            color: #ef6c00;
+            border: 1px solid #ffcc02;
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, var(--ui-color-1), var(--ui-color-2));
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-cogs fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL11 コンポーネント障害への耐性設計</h1>
+            <p class="header-description">
+                高可用性と低MTTR要件を持つワークロードは回復力のあるアーキテクチャで設計する必要があります。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/rel-11.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 統計情報 -->
+        <div class="stats-section">
+            <h2><i class="fa-solid fa-chart-bar"></i> REL11 統計情報</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">7</span>
+                    <span class="stat-label">ベストプラクティス</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">高リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">中リスク</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">低リスク</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ベストプラクティス一覧 -->
+        <div class="bp-grid">
+            <a href="REL11-BP01.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-heartbeat bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL11-BP01</h3>
+                        <p class="bp-subtitle">ワークロードのすべてのコンポーネントを監視して障害を検出する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    継続的な健全性監視により、障害や劣化を即座に検出し、KPIに基づく包括的な監視戦略を実装します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="REL11-BP02.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-route bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL11-BP02</h3>
+                        <p class="bp-subtitle">正常なリソースへのフェイルオーバー</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    リソース障害発生時に正常なリソースが継続してリクエストを処理し、場所障害に対する自動切り替えを実装します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="REL11-BP03.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-magic-wand-sparkles bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL11-BP03</h3>
+                        <p class="bp-subtitle">すべてのレイヤーで自動復旧を実装する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    障害検出時に自動修復機能を使用して修復アクションを実行し、リソースの再起動や削除による復旧を自動化します。
+                </p>
+                <span class="risk-badge risk-high">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 高リスク
+                </span>
+            </a>
+
+            <a href="REL11-BP04.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-layer-group bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL11-BP04</h3>
+                        <p class="bp-subtitle">復旧時はコントロールプレーンではなくデータプレーンに依存する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    復旧や軽減対応時は最小限のコントロールプレーン操作に焦点を当て、データプレーンアクションを優先します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 中リスク
+                </span>
+            </a>
+
+            <a href="REL11-BP05.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-mountain bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL11-BP05</h3>
+                        <p class="bp-subtitle">静的安定性を使用してバイモーダル動作を防ぐ</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    ワークロードは静的に安定し、単一の正常モードでのみ動作するよう設計し、予測可能な動作を保証します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 中リスク
+                </span>
+            </a>
+
+            <a href="REL11-BP06.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-bell bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL11-BP06</h3>
+                        <p class="bp-subtitle">可用性に影響するイベント発生時に通知を送信する</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    閾値違反検出時に通知を送信し、自動解決された場合でも適切なチームに問題パターンを報告します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 中リスク
+                </span>
+            </a>
+
+            <a href="REL11-BP07.html" class="bp-card">
+                <div class="bp-header">
+                    <i class="fa-solid fa-target bp-icon" aria-hidden="true"></i>
+                    <div>
+                        <h3 class="bp-title">REL11-BP07</h3>
+                        <p class="bp-subtitle">可用性目標とアップタイムSLAを満たすプロダクト設計</p>
+                    </div>
+                </div>
+                <p class="bp-description">
+                    可用性目標とSLAを満たすプロダクト設計を行い、アーキテクチャと運用プロセスがそれらをサポートするよう検証します。
+                </p>
+                <span class="risk-badge risk-medium">
+                    <i class="fa-solid fa-exclamation-triangle"></i> 中リスク
+                </span>
+            </a>
+        </div>
+    </main>
+</body>
+</html>

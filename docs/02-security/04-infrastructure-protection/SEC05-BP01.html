@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEC04-BP01 ネットワークレイヤーで境界保護を実行する</title>
+    <title>SEC05-BP01: ネットワークレイヤーを作成する</title>
     <link rel="stylesheet" type="text/css" href="../../css/style.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
@@ -13,126 +13,217 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <i class="fa-solid fa-shield-halved fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
-            <h1>SEC04-BP01 ネットワークレイヤーで境界保護を実行する</h1>
-            <p class="header-description">
-                ネットワークレベルでの多層防御により、不正なトラフィックをブロックし、セキュリティ境界を確立します。
-            </p>
-            <div class="header-link">
-                <a href="https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html" target="_blank">
-                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+            <div class="header-left">
+                <i class="fa-solid fa-layer-group fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                <div class="header-text">
+                    <h1>SEC05-BP01: ネットワークレイヤーを作成する</h1>
+                    <p class="header-subtitle">データの機密性とアクセス要件に基づいてワークロードコンポーネントを論理的にグループ化し、ネットワークトポロジを異なるレイヤーにセグメント化する</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <a href="https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/sec_network_protection_create_layers.html" target="_blank" class="official-link">
+                    <i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>
+                    公式ドキュメント
                 </a>
             </div>
         </div>
     </header>
 
-    <main>
+    <main class="main-content">
         <div class="section-layout">
-            <!-- リスクレベル -->
+            <!-- リスクレベルカード -->
             <div class="section-card fade-in-scale">
                 <div class="mega-icon-container">
-                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
                     <h2>リスクレベル</h2>
                 </div>
+                
                 <div class="card-content">
-                    <div class="risk-level high">
-                        <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
-                        <span>高リスク</span>
-                    </div>
-                    <p>このベストプラクティスを確立しない場合のリスクレベルです。</p>
-                </div>
-                <div class="speech-bubble variant-1">
-                    <span class="handwritten">
-                        <i class="fa-solid fa-exclamation" style="color: var(--ui-color-5);"></i>
-                        適切な実装で<br>
-                        <span class="keyword-tag">リスク軽減</span>！
-                    </span>
-                </div>
-            </div>
-
-            <!-- 期待される成果 -->
-            <div class="section-card fade-in-scale">
-                <div class="mega-icon-container">
-                    <i class="fa-solid fa-bullseye fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
-                    <h2>期待される成果</h2>
-                </div>
-                <div class="card-content">
-                    <p>ネットワークレベルでの包括的な境界保護により、不正アクセスを防止し、トラフィックを制御します。</p>
-                </div>
-                <div class="speech-bubble">
-                    <span class="handwritten">
-                        <i class="fa-solid fa-star" style="color: var(--ui-color-2);"></i>
-                        明確な<br>
-                        <span class="keyword-tag">目標設定</span>！
-                    </span>
-                </div>
-            </div>
-
-            <!-- ネットワーク制御 -->
-            <div class="section-card fade-in-scale">
-                <div class="mega-icon-container">
-                    <i class="fa-solid fa-network-wired fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
-                    <h2>ネットワーク制御</h2>
-                </div>
-                <div class="card-content">
+                    <div class="risk-badge high">高</div>
                     <ul class="keyword-list">
                         <li>
-                            <i class="fa-solid fa-shield" aria-hidden="true"></i>
-                            <span>VPCセキュリティグループ</span>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-list" aria-hidden="true"></i>
-                            <span>ネットワークACL</span>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-fire" aria-hidden="true"></i>
-                            <span>AWS WAF</span>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>ネットワークレイヤーを確立しないと、不正アクセスや横移動のリスクが高まる</span>
                         </li>
                         <li>
                             <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
-                            <span>AWS Shield</span>
+                            <span>多層防御の欠如により、<span class="keyword-tag">セキュリティ境界</span>が不十分になる</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span>検査システムの誤検知や処理オーバーヘッドが増加</span>
                         </li>
                     </ul>
                 </div>
-                <div class="speech-bubble">
+                
+                <div class="speech-bubble variant-2">
                     <span class="handwritten">
-                        <i class="fa-solid fa-star" style="color: var(--ui-color-2);"></i>
-                        多層防御で<br><span class="keyword-tag">境界保護</span>！
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        レイヤー化は
+                        <br>
+                        <span class="keyword-tag">防御の第一歩</span>！
+                        <br>
+                        境界を明確に
                     </span>
                 </div>
             </div>
 
-            <!-- 実装ガイダンス -->
+            <!-- 3層アーキテクチャカード -->
             <div class="section-card fade-in-scale">
                 <div class="mega-icon-container">
-                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
-                    <h2>実装ガイダンス</h2>
+                    <i class="fa-solid fa-sitemap fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>3層Webアプリケーション</h2>
                 </div>
+                
                 <div class="card-content">
                     <ul class="keyword-list">
                         <li>
-                            <i class="fa-solid fa-search" aria-hidden="true"></i>
-                            <span>現状の評価と分析</span>
+                            <i class="fa-solid fa-desktop" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">プレゼンテーション層</span>: Amazon S3 + CloudFront CDN</span>
                         </li>
                         <li>
-                            <i class="fa-solid fa-map" aria-hidden="true"></i>
-                            <span>実装計画の策定</span>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">アプリケーション層</span>: ALB + パブリックサブネット（DMZ）</span>
                         </li>
                         <li>
-                            <i class="fa-solid fa-cog" aria-hidden="true"></i>
-                            <span>段階的な実装</span>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">データ層</span>: プライベートサブネットのDB・ファイルシステム</span>
                         </li>
                         <li>
-                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
-                            <span>効果測定と改善</span>
+                            <i class="fa-solid fa-shield-check" aria-hidden="true"></i>
+                            <span>各レイヤー境界で<span class="keyword-tag">認可されたトラフィック</span>のみ通過</span>
                         </li>
                     </ul>
                 </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-layer-group fa-lg" style="color: var(--ui-color-2);"></i>
+                        機能別の責任分離で
+                        <br>
+                        <span class="keyword-tag">明確な境界</span>を作る！
+                        <br>
+                        セキュリティの基本
+                    </span>
+                </div>
+            </div>
+
+            <!-- データ機密性による分離カード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-lock fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>データ機密性による分離</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">機密レベル別</span>のサブネット・VPC分離</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-users" aria-hidden="true"></i>
+                            <span>異なるAWSアカウントでの<span class="keyword-tag">強力な分離</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-virus" aria-hidden="true"></i>
+                            <span>高リスクサービス（ファイルアップロード等）の<span class="keyword-tag">独立レイヤー</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                            <span>検査システムの<span class="keyword-tag">誤検知防止</span>と処理効率化</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-graduation-cap fa-lg" style="color: var(--ui-color-2);"></i>
+                        データの価値に応じて
+                        <br>
+                        <span class="keyword-tag">保護レベル</span>を調整！
+                        <br>
+                        適切な分離が鍵
+                    </span>
+                </div>
+            </div>
+
+            <!-- AWSマネージドサービスの考慮カード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-cloud fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>AWSマネージドサービス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">VPC Lattice</span>: レイヤー間の相互運用性向上</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Lambda</span>: 特別な理由がない限りVPCサブネットに配置</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-link" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">VPCエンドポイント・PrivateLink</span>: プライベート接続</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-route" aria-hidden="true"></i>
+                            <span>マネージドサービスがネットワークトポロジに与える<span class="keyword-tag">影響を考慮</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
                 <div class="speech-bubble variant-2">
                     <span class="handwritten">
-                        <i class="fa-solid fa-check-circle" style="color: var(--ui-color-2);"></i>
-                        段階的な<br>
-                        <span class="keyword-tag">実装</span>で確実に！
+                        <i class="fa-solid fa-puzzle-piece fa-lg" style="color: var(--ui-color-2);"></i>
+                        AWSサービスを活用して
+                        <br>
+                        <span class="keyword-tag">効率的な設計</span>を！
+                        <br>
+                        統合を意識する
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ガイダンスカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-compass fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-sitemap" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">機能別レイヤー</span>: プレゼンテーション・アプリケーション・データ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">機密性別レイヤー</span>: データ感度レベルに応じた分離</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">動作別レイヤー</span>: 高リスク処理の独立配置</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span>各境界での<span class="keyword-tag">適切な制御</span>実装</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        多角的な視点で
+                        <br>
+                        <span class="keyword-tag">最適なレイヤー</span>設計！
+                        <br>
+                        セキュリティと効率の両立
                     </span>
                 </div>
             </div>

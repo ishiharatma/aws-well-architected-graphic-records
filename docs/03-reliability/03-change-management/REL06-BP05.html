@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL06-BP05: ログを分析する - AWS Well-Architected Framework</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <i class="fa-solid fa-search fa-6x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+            <h1>REL06-BP05: ログを分析する</h1>
+            <p class="header-description">
+                ログファイルとメトリクス履歴を収集し、より広範なトレンドとワークロードの洞察を得るためにこれらを分析します。
+            </p>
+            <div class="header-link">
+                <a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_storage_analytics.html" target="_blank">
+                    <i class="fa-solid fa-external-link-alt"></i> 公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- リスクレベル -->
+        <div class="section-layout">
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-exclamation-triangle fa-5x" style="color: var(--ui-color-2); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                <div class="card-content">
+                    <div class="risk-badge medium">中リスク</div>
+                    <p>このベストプラクティスを確立しないと、システムの傾向や潜在的な問題を見逃し、予防的な対策を講じる機会を失う可能性があります。</p>
+                </div>
+            </div>
+
+        <!-- ログ分析の重要性 -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-chart-line fa-5x" style="color: var(--ui-color-1); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>ログ分析の重要性</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-trend-up" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">広範なトレンド</span>の特定と分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                            <span>ワークロードの<span class="keyword-tag">深い洞察</span>の獲得</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search-plus" aria-hidden="true"></i>
+                            <span>潜在的な問題の<span class="keyword-tag">早期発見</span></span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">予防的対策</span>の実施機会の提供</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        ログは<span class="keyword-tag">宝の山</span>！<br>
+                        適切な分析により<br>
+                        システムの健全性を把握
+                    </span>
+                </div>
+            </div>
+
+        <!-- AWS ログ分析サービス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-aws fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>AWS ログ分析サービス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">CloudWatch Logs Insights</span>: シンプルで強力なクエリ言語によるログデータ分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon S3</span>: ログデータの長期保存とライフサイクル管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon Athena</span>: S3に保存されたログデータのSQLクエリ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Amazon EMR</span>: ペタバイト規模のログファイル分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">S3 Intelligent-Tiering</span>: コスト効率的なデータ階層化</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-info-circle fa-lg" style="color: var(--ui-color-1);"></i>
+                        <span class="keyword-tag">CloudWatch Logs</span>から<br>
+                        <span class="keyword-tag">S3</span>へのサブスクリプションで<br>
+                        シームレスなデータフロー！
+                    </span>
+                </div>
+            </div>
+
+        <!-- サードパーティツール -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-tools fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>サードパーティツール</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-bar" aria-hidden="true"></i>
+                            <span><strong>New Relic</strong>: アプリケーションパフォーマンス監視</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search-plus" aria-hidden="true"></i>
+                            <span><strong>Splunk</strong>: 機械データの検索、監視、分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                            <span><strong>Loggly</strong>: クラウドベースのログ管理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><strong>Logstash</strong>: データ処理パイプライン</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-heartbeat" aria-hidden="true"></i>
+                            <span><strong>Nagios</strong>: システム監視とアラート</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        <!-- データ管理とライフサイクル -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-recycle fa-5x" style="color: var(--ui-color-2); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>データ管理とライフサイクル</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-calendar-alt" aria-hidden="true"></i>
+                            <span><strong>保持要件の決定</strong>: 監視データの保持期間を定義</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span><strong>S3ライフサイクル管理</strong>: バケットレベルでの自動階層化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-snowflake" aria-hidden="true"></i>
+                            <span><strong>S3 Glacier移行</strong>: 長期保存のためのコスト効率的なストレージ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-trash-alt" aria-hidden="true"></i>
+                            <span><strong>自動削除</strong>: 保持期間終了後の自動データ削除</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-brain" aria-hidden="true"></i>
+                            <span><strong>Intelligent-Tiering</strong>: アクセスパターンに基づく自動最適化</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        <!-- 実装ガイダンス -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-ol fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>実装ガイダンス</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><strong>CloudWatch Logs Insights</strong>: インタラクティブなログデータ検索と分析</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><strong>S3 + Athena連携</strong>: CloudWatch LogsからS3へのデータ送信とAthenaクエリ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-recycle" aria-hidden="true"></i>
+                            <span><strong>S3ライフサイクルポリシー</strong>: サーバーアクセスログの定期的な削除</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span><strong>サンプルクエリ活用</strong>: CloudWatch Logs Insightsのサンプルクエリを参考</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble top">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        ログ分析により<br>
+                        <span class="keyword-tag">運用の可視性</span>と<br>
+                        <span class="keyword-tag">予防保守</span>を実現！
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="section-layout" style="margin-top: 50px;">
+            <div class="section-card">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-arrow-left fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                </div>
+                <div class="card-content" style="text-align: center;">
+                    <h3>REL06に戻る</h3>
+                    <a href="REL06.html" class="keyword-tag" style="display: inline-block; margin-top: 10px; padding: 10px 20px; text-decoration: none;">
+                        <i class="fa-solid fa-chart-line"></i> ワークロードリソースの監視
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

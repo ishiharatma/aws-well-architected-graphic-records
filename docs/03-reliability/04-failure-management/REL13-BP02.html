@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REL13-BP02: 復旧目標を満たすための定義された復旧戦略の使用</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <i class="fa-solid fa-shield-halved fa-3x" style="color: var(--ui-color-1);" aria-hidden="true"></i>
+                <div class="header-text">
+                    <h1>REL13-BP02: 復旧目標を満たすための定義された復旧戦略の使用</h1>
+                    <p class="header-subtitle">ワークロードの復旧目標を満たすディザスタリカバリ（DR）戦略を定義する</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <a href="https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/rel_planning_for_recovery_disaster_recovery.html" target="_blank" class="official-link">
+                    <i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>
+                    公式ドキュメント
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="section-layout">
+            <!-- リスクレベルカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x" style="color: var(--ui-color-5); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>リスクレベル</h2>
+                </div>
+                
+                <div class="card-content">
+                    <div class="risk-badge high">高</div>
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>計画・実装・テストされたDR戦略がない場合、災害時に復旧目標を達成できない可能性が高い</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            <span>アドホックな復旧手順では <span class="keyword-tag">RTO/RPO</span> 目標を満たせない</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-ban" aria-hidden="true"></i>
+                            <span>災害復旧計画の欠如は事業継続性に重大な影響</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-lightbulb fa-lg" style="color: var(--ui-color-2);"></i>
+                        計画なしの災害対応は
+                        <br>
+                        必ず失敗する！
+                        <br>
+                        <span class="keyword-tag">事前準備</span>が鍵
+                    </span>
+                </div>
+            </div>
+
+            <!-- DR戦略の種類カード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-route fa-5x" style="color: var(--ui-color-1); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>4つのDR戦略</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">バックアップ＆リストア</span>: RPO数時間、RTO24時間以内</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">パイロットライト</span>: RPO数分、RTO数十分</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-fire" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">ウォームスタンバイ</span>: RPO数秒、RTO数分</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">マルチサイトアクティブ</span>: RPOほぼゼロ、RTOゼロ</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-balance-scale fa-lg" style="color: var(--ui-color-2);"></i>
+                        コストと復旧時間の
+                        <br>
+                        トレードオフを理解！
+                        <br>
+                        <span class="keyword-tag">要件に応じた選択</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- バックアップ＆リストア戦略カード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-archive fa-5x" style="color: var(--ui-color-2); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>バックアップ＆リストア</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-copy" aria-hidden="true"></i>
+                            <span>データとアプリケーションを復旧リージョンにバックアップ</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">継続的バックアップ</span>でPITR（ポイントインタイム復旧）を実現</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-hammer" aria-hidden="true"></i>
+                            <span>災害時にインフラ展開、コード配置、データ復元を実行</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">Infrastructure as Code</span>でRTO短縮</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-rocket fa-lg" style="color: var(--ui-color-2);"></i>
+                        シンプルで始めやすい！
+                        <br>
+                        <span class="keyword-tag">AWS Backup</span>で
+                        <br>
+                        一元管理
+                    </span>
+                </div>
+            </div>
+
+            <!-- パイロットライト戦略カード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-lightbulb fa-5x" style="color: var(--ui-color-1); animation: fa-beat 2s;" aria-hidden="true"></i>
+                    <h2>パイロットライト</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-server" aria-hidden="true"></i>
+                            <span>コアワークロードインフラを復旧リージョンに事前配置</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sync" aria-hidden="true"></i>
+                            <span>データレプリケーションとバックアップリソースは常時稼働</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-power-off" aria-hidden="true"></i>
+                            <span>アプリケーションサーバーやコンピュートは未配置</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-play" aria-hidden="true"></i>
+                            <span>災害時に必要なリソースを起動・設定</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-fire fa-lg" style="color: var(--ui-color-2);"></i>
+                        最小限の炎を維持して
+                        <br>
+                        必要時に点火！
+                        <br>
+                        <span class="keyword-tag">コスト効率的</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- ウォームスタンバイ戦略カード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-fire fa-5x" style="color: var(--ui-color-5); animation: fa-bounce 2s;" aria-hidden="true"></i>
+                    <h2>ウォームスタンバイ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            <span>縮小版だが完全機能するワークロードを常時稼働</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-copy" aria-hidden="true"></i>
+                            <span>重要システムは完全複製、縮小フリートで運用</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-database" aria-hidden="true"></i>
+                            <span>データはレプリケートされ復旧リージョンでライブ状態</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-expand-arrows-alt" aria-hidden="true"></i>
+                            <span>復旧時は迅速にスケールアップして本番負荷に対応</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-tachometer-alt fa-lg" style="color: var(--ui-color-2);"></i>
+                        フルスケールなら
+                        <br>
+                        <span class="keyword-tag">ホットスタンバイ</span>！
+                        <br>
+                        最速復旧を実現
+                    </span>
+                </div>
+            </div>
+
+            <!-- マルチサイトアクティブ戦略カード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-globe fa-5x" style="color: var(--ui-color-1); animation: fa-spin 3s;" aria-hidden="true"></i>
+                    <h2>マルチサイトアクティブ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                            <span>複数AWSリージョンでワークロードを同時稼働</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-traffic-light" aria-hidden="true"></i>
+                            <span>全リージョンからトラフィックを積極的に処理</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-sync-alt" aria-hidden="true"></i>
+                            <span>リージョン間でのデータ同期が必要</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+                            <span>書き込み競合の回避・処理が複雑</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-1">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-crown fa-lg" style="color: var(--ui-color-2);"></i>
+                        最高レベルの可用性！
+                        <br>
+                        ただし<span class="keyword-tag">複雑性</span>も
+                        <br>
+                        最高レベル
+                    </span>
+                </div>
+            </div>
+
+            <!-- AWS Elastic Disaster Recoveryカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-magic fa-5x" style="color: var(--ui-color-2); animation: fa-beat-fade 2s;" aria-hidden="true"></i>
+                    <h2>AWS Elastic Disaster Recovery</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+                            <span>パイロットライトのコストでウォームスタンバイのRPO/RTO</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-shield-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">継続的データ保護</span>でRPO数秒を実現</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                            <span>復旧時のコンピュートリソース調整・オーケストレーションを自動化</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-undo" aria-hidden="true"></i>
+                            <span>フェイルバックプロセスも自動化支援</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble variant-2 right">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-star fa-lg" style="color: var(--ui-color-2);"></i>
+                        いいとこ取りの
+                        <br>
+                        <span class="keyword-tag">マネージドサービス</span>！
+                        <br>
+                        運用負荷も軽減
+                    </span>
+                </div>
+            </div>
+
+            <!-- 実装ステップカード -->
+            <div class="section-card fade-in-scale">
+                <div class="mega-icon-container">
+                    <i class="fa-solid fa-list-check fa-5x" style="color: var(--ui-color-1); animation: fa-flip 2s;" aria-hidden="true"></i>
+                    <h2>実装ステップ</h2>
+                </div>
+                
+                <div class="card-content">
+                    <ul class="keyword-list">
+                        <li>
+                            <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">1. DR戦略決定</span>: 復旧要件を満たす戦略選択</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-search" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">2. パターン確認</span>: 選択戦略の実装方法理解</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-cogs" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">3. リソース評価</span>: 復旧リージョンでの構成設計</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">4. フェイルオーバー準備</span>: 災害時の復旧手順定義</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-route" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">5. トラフィック切替</span>: Route 53等での経路変更</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-undo-alt" aria-hidden="true"></i>
+                            <span><span class="keyword-tag">6. フェイルバック計画</span>: プライマリリージョン復帰手順</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="speech-bubble">
+                    <span class="handwritten">
+                        <i class="fa-solid fa-book fa-lg" style="color: var(--ui-color-2);"></i>
+                        全手順を<span class="keyword-tag">プレイブック</span>
+                        <br>
+                        として文書化！
+                        <br>
+                        定期的な見直しも重要
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
